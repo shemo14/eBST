@@ -63,7 +63,7 @@ class FooterSection extends Component {
 
                         {  this.renderFooterTabs('offers') }
 
-                        <Button style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 45 , height: 45, alignItems: 'center', justifyContent: 'center', right: 4       }}>
+                        <Button style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 45 , height: 45, alignItems: 'center', justifyContent: 'center', right: 4 }}>
                             <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
                         </Button>
 
