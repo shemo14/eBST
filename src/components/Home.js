@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, Dimensions, I18nManager } from "react-native";
-import { Container, Content, Button, Footer, Icon } from 'native-base'
+import { Container, Content, Button, Footer, Icon, Header } from 'native-base'
 import Swiper from 'react-native-swiper';
+import FooterSection from './Footer';
+
 
 const width = Dimensions.get('window').width;
 class Home extends Component {
@@ -20,18 +22,20 @@ class Home extends Component {
     render() {
         return (
             <Container>
-                <Content>
+                <Header style={{zIndex: 999, top: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
+                    <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
+                        <TouchableOpacity>
+                            <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
+                        </TouchableOpacity>
+                        <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 }}>الرئيسية</Text>
+                        <TouchableOpacity>
+                            <Image source={require('../../assets/images/notification.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                        </TouchableOpacity>
+                    </View>
+                </Header>
+                <Content style={{ zIndex: -99, top: -25 }}>
                     <View>
-                        <View style={{position: 'absolute', zIndex: 999, top: 30, width: '100%', height: 70, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20}}>
-                            <TouchableOpacity>
-                                <Image source={require('../../assets/images/menu.png')} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
-                            </TouchableOpacity>
-                            <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 }}>الرئيسية</Text>
-                            <TouchableOpacity>
-                                <Image source={require('../../assets/images/notification.png')} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
-                            </TouchableOpacity>
-                        </View>
-                        <Swiper dotStyle={{ backgroundColor: '#fff', width: 10, height: 10, borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
+                        <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
                             <View style={styles.slide}>
                                 <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
                                 <Image source={require('../../assets/images/photo.png')} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
@@ -70,30 +74,7 @@ class Home extends Component {
                         </TouchableOpacity>
                     </View>
                 </Content>
-                <Footer style={{ backgroundColor: 'transparent' }}>
-                    <ImageBackground style={{ width: width + 15, height: 65, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingTop: 5 }} resizeMode={'stretch'} source={require('../../assets/images/footer.png')} >
-                        <Button transparent>
-                            <Image source={require('../../assets/images/border_blue.png')} style={{ width: 40, height: 40 }} resizeMode={'contain'}/>
-                            <Image style={{ width: 24, height: 24, position: 'absolute', left: 8 }} resizeMode={'contain'} source={require('../../assets/images/blue_home.png')}/>
-                        </Button>
-
-                        <Button transparent>
-                            <Image style={{ width: 30, height: 30 }} resizeMode={'contain'} source={require('../../assets/images/gray_offers.png')}/>
-                        </Button>
-
-                        <Button style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 43, height: 43, alignItems: 'center', justifyContent: 'center', right: 4       }}>
-                            <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
-                        </Button>
-
-                        <Button transparent>
-                            <Image style={{ width: 30, height: 30 }} resizeMode={'contain'} source={require('../../assets/images/gray_ads.png')}/>
-                        </Button>
-
-                        <Button transparent>
-                            <Image style={{ width: 30, height: 30 }} resizeMode={'contain'} source={require('../../assets/images/gray_fav.png')}/>
-                        </Button>
-                    </ImageBackground>
-                </Footer>
+                <FooterSection pageRoute={'home'} navigation={this.props.navigation}/>
             </Container>
         );
     }

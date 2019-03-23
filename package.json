@@ -14,6 +14,7 @@
     "prop-types": "^15.7.2",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native-masonry-list": "^2.10.0",
     "react-native-modal": "^9.0.0",
     "react-native-swiper": "^1.5.14",
     "react-navigation": "^3.3.2"
