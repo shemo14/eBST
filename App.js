@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, I18nManager } from 'react-native';
 import Routes from './src/routes'
 import { Font } from 'expo';
 
@@ -12,6 +12,7 @@ export default class App extends React.Component {
       fontLoaded: false
     };
   }
+
 
   async loadFontAsync() {
     try {

@@ -17,6 +17,7 @@ import Login from "../components/Login";
 import ForgetPassword from "../components/ForgetPassword";
 import Verify from "../components/verify";
 import Register from "../components/Register";
+import Categories from "../components/Categories";
 
 
 const DrawerNavigator = createDrawerNavigator({
@@ -27,18 +28,13 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
-    addAds:{
-        screen: AddAds,
+    categories:{
+        screen: Categories,
         navigationOptions: {
             header: null
         }
     },
-    register:{
-        screen: Register,
-        navigationOptions: {
-            header: null
-        }
-    },language:{
+    language:{
         screen: Language,
         navigationOptions: {
             header: null
@@ -46,6 +42,12 @@ const AppNavigator = createStackNavigator({
     },
     login:{
         screen: Login,
+        navigationOptions: {
+            header: null
+        }
+    },
+    register:{
+        screen: Register,
         navigationOptions: {
             header: null
         }
@@ -74,7 +76,12 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
-
+    addAds:{
+        screen: AddAds,
+        navigationOptions: {
+            header: null
+        }
+    },
     offers:{
         screen: Offers,
         navigationOptions: {

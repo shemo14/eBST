@@ -57,19 +57,19 @@ class Home extends Component {
                         <TouchableOpacity onPress={() => alert('ops')} style={{ right: 50 }}>
                             <Image source={require('../../assets/images/border_blue.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#4fb7c3', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 }}>مبادلة</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 }}>متاجر</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ left: 50, top: -50 }}>
                             <Image source={require('../../assets/images/shape_yellow.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#e1b82b', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18  }}>مبادلة</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18  }}>اسر منتجة</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ right: 50, top: -100 }}  >
                             <Image source={require('../../assets/images/border_blue.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View transparent style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#4fb7c3', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18  }}>مبادلة</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18  }}>مبادلات</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
