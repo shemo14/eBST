@@ -12,6 +12,11 @@ import Ads from '../components/Ads';
 import Offers from "../components/Offers";
 import Fav from "../components/Fav";
 import AddAds from "../components/AddAds";
+import Language from "../components/Language";
+import Login from "../components/Login";
+import ForgetPassword from "../components/ForgetPassword";
+import Verify from "../components/verify";
+import Register from "../components/Register";
 
 
 const DrawerNavigator = createDrawerNavigator({
@@ -28,6 +33,35 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+    register:{
+        screen: Register,
+        navigationOptions: {
+            header: null
+        }
+    },language:{
+        screen: Language,
+        navigationOptions: {
+            header: null
+        }
+    },
+    login:{
+        screen: Login,
+        navigationOptions: {
+            header: null
+        }
+    },
+    forgetPassword:{
+        screen: ForgetPassword,
+        navigationOptions: {
+            header: null
+        }
+    },
+    verify:{
+        screen: Verify,
+        navigationOptions: {
+            header: null
+        }
+    },
     DrawerNavigator: {
         screen: DrawerNavigator,
         navigationOptions: {
@@ -40,6 +74,7 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+
     offers:{
         screen: Offers,
         navigationOptions: {

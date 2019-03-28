@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "expo": "^31.0.2",
+    "expo-multiple-imagepicker": "^1.0.6",
     "native-base": "^2.12.0",
     "prop-types": "^15.7.2",
     "react": "16.5.0",

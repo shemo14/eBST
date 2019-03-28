@@ -86,7 +86,7 @@ class Ads extends Component {
                 </View>
 
                 <View style={{ position: 'absolute', bottom: 5, flex: 1, width: '100%' }}>
-                    <Button style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 43, height: 43, alignItems: 'center', justifyContent: 'center', right: 4, alignSelf: 'center'       }}>
+                    <Button onPress={() => this.props.navigate.navigation('addAds')} style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 43, height: 43, alignItems: 'center', justifyContent: 'center', right: 4, alignSelf: 'center'       }}>
                         <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
                     </Button>
                 </View>
