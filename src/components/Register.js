@@ -151,9 +151,7 @@ class Register extends Component {
                                             <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                         </Button>
                                     </View>
-
                                 </View>
-
                         </ImageBackground>
                     </KeyboardAvoidingView>
 

@@ -17,8 +17,10 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-masonry-list": "^2.10.0",
     "react-native-modal": "^9.0.0",
+    "react-native-swipe-gestures": "^1.0.3",
     "react-native-swiper": "^1.5.14",
     "react-native-tab-view": "^2.0.3",
+    "react-native-star-rating": "^1.1.0",
     "react-navigation": "^3.3.2"
   },
   "devDependencies": {

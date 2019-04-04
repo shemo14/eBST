@@ -18,18 +18,44 @@ import ForgetPassword from "../components/ForgetPassword";
 import Verify from "../components/verify";
 import Register from "../components/Register";
 import Categories from "../components/Categories";
+import CustomDrawer from "../components/CustomDrawer";
+import Notifications from "../components/Notifications";
+import AboutApp from "../components/AboutApp";
+import CategoryProducts from "../components/CategoryProducts";
+import Rotate from "../components/Rotate";
+import ProductDetails from "../components/ProductDetails";
+import MyProducts from "../components/MyProducts";
 
 
+const width = Dimensions.get('window').width;
+const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
 const DrawerNavigator = createDrawerNavigator({
     home: Home,
+    categories: Categories,
+    offers: Offers,
+    notifications: Notifications,
+    aboutApp: AboutApp,
 
 }, {
-    drawerPosition: 'right' ,
+    nitialRouteName: 'home',
+    drawerPosition: 'right',
+    contentComponent: CustomDrawerContentComponent,
+    drawerOpenRoute: 'DrawerOpen',
+    drawerCloseRoute: 'DrawerClose',
+    gesturesEnabled: false,
+    drawerToggleRoute: 'DrawerToggle',
+    drawerWidth: (width*85)/100
 });
 
 const AppNavigator = createStackNavigator({
-    categories:{
-        screen: Categories,
+    myProducts :{
+        screen: MyProducts,
+        navigationOptions: {
+            header: null
+        }
+    },
+    product:{
+        screen: ProductDetails,
         navigationOptions: {
             header: null
         }
@@ -70,6 +96,24 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+    categories:{
+        screen: Categories,
+        navigationOptions: {
+            header: null
+        }
+    },
+    notifications:{
+        screen: Notifications,
+        navigationOptions: {
+            header: null
+        }
+    },
+    aboutApp:{
+        screen: AboutApp,
+        navigationOptions: {
+            header: null
+        }
+    },
     ads:{
         screen: Ads,
         navigationOptions: {
@@ -90,6 +134,13 @@ const AppNavigator = createStackNavigator({
     },
     fav:{
         screen: Fav,
+        navigationOptions: {
+            header: null
+        }
+    },
+    
+    categoryProducts:{
+        screen: CategoryProducts,
         navigationOptions: {
             header: null
         }
