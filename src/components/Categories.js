@@ -45,13 +45,9 @@ class Categories extends Component {
 
                     <View style={{ alignItems: 'center', padding: 15, width: '100%' }}>
                         <List style={{  width: '100%' }}>
-                            <ListItem style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 100 }}>
+                            <ListItem style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80 }}>
                                 <Right style={{ flex: 1 }}>
-                                    <View style={{ borderColor: '#f00', borderWidth: 5, transform: [{ rotate: '30deg'}], width: 80, height: 80, overflow: 'hidden' }}>
-                                        <ImageBackground source={require('../../assets/images/photo.png')} style={{ width: 80, height: 80 }} resizeMode={'cover'}>
-
-                                        </ImageBackground>
-                                    </View>
+                                    <Image source={require('../../assets/images/photo.png')} style={{ width: 80, height: 80, transform: [{ rotate: '15deg'}], borderRadius: 5, left: -25 }} resizeMode={'cover'} />
                                 </Right>
                                 <Body>
                                     <Text>ops</Text>
@@ -67,6 +63,5 @@ class Categories extends Component {
         );
     }
 }
-
 
 export default Categories;
