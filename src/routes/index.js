@@ -51,14 +51,14 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
-    editProfile:{
-        screen: EditProfile,
+    profile:{
+        screen: Profile,
         navigationOptions: {
             header: null
         }
     },
-    profile:{
-        screen: Profile,
+    editProfile:{
+        screen: EditProfile,
         navigationOptions: {
             header: null
         }
