@@ -12,7 +12,9 @@ class Home extends Component {
     }
 
     static navigationOptions = () => ({
-       header: null
+        header: null,
+        drawerLabel: 'الرئيسية',
+        drawerIcon: ( <Image source={require('../../assets/images/white_home.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
     componentWillMount(){
@@ -22,18 +24,17 @@ class Home extends Component {
     render() {
         return (
             <Container>
-                <Header style={{zIndex: 999, top: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
+                <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent'}} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()}>
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 }}>الرئيسية</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('notifications')}>
                             <Image source={require('../../assets/images/notification.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>
                 </Header>
-                <Content style={{ zIndex: -99, top: -25 }}>
+                <Content style={{ zIndex: -99, marginTop: -50 }}>
                     <View>
                         <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
                             <View style={styles.slide}>
@@ -54,22 +55,22 @@ class Home extends Component {
                         </View>
                     </View>
                     <View style={{ alignItems: 'center', top: -140, position: 'relative', height: 210, left: 10 }}>
-                        <TouchableOpacity onPress={() => alert('ops')} style={{ right: 50 }}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('categories')} style={{ right: 50 }}>
                             <Image source={require('../../assets/images/border_blue.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#4fb7c3', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 }}>متاجر</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18, fontFamily: 'cairo', color: '#acabae' }}>متاجر</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ left: 50, top: -50 }}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('categories')} style={{ left: 50, top: -50 }}>
                             <Image source={require('../../assets/images/shape_yellow.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#e1b82b', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18  }}>اسر منتجة</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 , fontFamily: 'cairo', color: '#acabae' }}>اسر منتجة</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ right: 50, top: -100 }}  >
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('categories')} style={{ right: 50, top: -100 }}  >
                             <Image source={require('../../assets/images/border_blue.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View transparent style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#4fb7c3', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18  }}>مبادلات</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 , fontFamily: 'cairo', color: '#acabae' }}>مبادلات</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

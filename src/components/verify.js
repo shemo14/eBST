@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, Dimensions } from "react-native";
+import { View, Text, Image, ImageBackground, Dimensions } from "react-native";
 import {Container, Content, Form, Item, Input, Label, Button} from 'native-base'
 
-const height = Dimensions.get('window').height;
+
 class Verify extends Component {
     constructor(props){
         super(props);

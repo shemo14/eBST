@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { View, Text, Image, Dimensions, ImageBackground, FlatList, ImageStore, TouchableOpacity } from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
+import { Permissions } from "expo";
+
 
 
 const height = Dimensions.get('window').height;
@@ -20,6 +22,11 @@ class AddAds extends Component {
     static navigationOptions = () => ({
         header: null
     });
+    
+    async componentDidMount(){
+        await Permissions.askAsync(Permissions.CAMERA);
+		await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    }
 
     _keyExtractor = (item, index) => item.id;
 
@@ -52,8 +59,6 @@ class AddAds extends Component {
                 </View>
             );
         }
-
-        console.log('this is md5 here.....', item.md5, this.state.imageId);
 
         return(
             <View style={{ margin: 2, flex: 1 }}>
