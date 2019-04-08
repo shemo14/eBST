@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, Dimensions } from "react-native";
+import { View, Text, Image, TouchableOpacity, ImageBackground, I18nManager } from "react-native";
 import {Container, Content, Form, Item, Input, Label, Button} from 'native-base'
+import styles from '../../assets/styles'
+import i18n from '../../locale/i18n'
 
-const height = Dimensions.get('window').height;
 class Login extends Component {
     constructor(props){
         super(props);
@@ -10,6 +11,15 @@ class Login extends Component {
             phoneStatus: 0,
             passwordStatus: 0,
             lang:this.props.navigation.state.params.lang
+        }
+    }
+
+    componentWillMount() {
+        if (this.state.lang === 'ar'){
+            I18nManager.forceRTL(true)
+        }
+        else {
+            I18nManager.forceRTL(false)
         }
     }
 
@@ -54,14 +64,14 @@ class Login extends Component {
         return (
             <Container>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
-                    <ImageBackground source={require('../../assets/images/background.png')} resizeMode={'cover'} style={{ width: null, height: null, flex: 1, alignItems: 'center' }}>
-                        <Image source={require('../../assets/images/logo.png')} style={{ width: 130, height: 130, top: 75 }} resizeMode={'contain'} />
+                    <ImageBackground source={require('../../assets/images/background.png')} resizeMode={'cover'} style={styles.imageBackgroundStyle}>
+                        <Image source={require('../../assets/images/logo.png')} style={styles.logoStyle} resizeMode={'contain'} />
 
-                        <View style={{width: '100%', marginTop: 100, alignItems: 'center', padding: 20 }}>
+                        <View style={styles.loginFormContainerStyle}>
                             <Form style={{ width: '100%' }}>
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row'  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>رقم الجوال</Label>
+                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('phoneNumber') }</Label>
                                         <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
                                     </Item>
 

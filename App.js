@@ -1,7 +1,11 @@
 import React from 'react';
 import { View, I18nManager } from 'react-native';
 import Routes from './src/routes'
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistedStore } from './src/store';
 import { Font } from 'expo';
+import { Root } from 'native-base'
 
 export default class App extends React.Component {
   constructor(props){
@@ -30,7 +34,13 @@ export default class App extends React.Component {
     }
 
     return (
-      <Routes/>
+        <Provider store={store}>
+          <PersistGate persistor={persistedStore}>
+            <Root>
+              <Routes/>
+            </Root>
+          </PersistGate>
+        </Provider>
     );
   }
 }

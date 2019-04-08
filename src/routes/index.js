@@ -27,6 +27,9 @@ import ProductDetails from "../components/ProductDetails";
 import MyProducts from "../components/MyProducts";
 import Profile from "../components/Profile";
 import EditProfile from "../components/EditProfile";
+import Policy from "../components/Policy";
+import ContactUs from "../components/ContactUs";
+import Settings from "../components/Settings";
 
 
 const width = Dimensions.get('window').width;
@@ -38,6 +41,9 @@ const DrawerNavigator = createDrawerNavigator({
     notifications: Notifications,
     myProducts: MyProducts,
     aboutApp: AboutApp,
+    policy: Policy,
+    contactUs: ContactUs,
+    settings: Settings,
 
 }, {
     nitialRouteName: 'home',
@@ -51,18 +57,7 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
-    profile:{
-        screen: Profile,
-        navigationOptions: {
-            header: null
-        }
-    },
-    editProfile:{
-        screen: EditProfile,
-        navigationOptions: {
-            header: null
-        }
-    },
+
     language:{
         screen: Language,
         navigationOptions: {
@@ -155,6 +150,36 @@ const AppNavigator = createStackNavigator({
     },
     product:{
         screen: ProductDetails,
+        navigationOptions: {
+            header: null
+        }
+    },
+    profile:{
+        screen: Profile,
+        navigationOptions: {
+            header: null
+        }
+    },
+    editProfile:{
+        screen: EditProfile,
+        navigationOptions: {
+            header: null
+        }
+    },
+    policy:{
+        screen: Policy,
+        navigationOptions: {
+            header: null
+        }
+    },
+    contactUs:{
+        screen: ContactUs,
+        navigationOptions: {
+            header: null
+        }
+    },
+    settings:{
+        screen: Settings,
         navigationOptions: {
             header: null
         }

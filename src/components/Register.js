@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity, ImageBackground, Dimensions , KeyboardAvoidingView } from "react-native";
 import {Container, Content, Form, Item, Input, Label, Button, CheckBox} from 'native-base'
+import styles from '../../assets/styles'
 
 const height = Dimensions.get('window').height;
 class Register extends Component {
@@ -86,9 +87,10 @@ class Register extends Component {
             <Container>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <KeyboardAvoidingView behavior={'position'} style={{width:'100%', height: null, flex: 1,}}>
-                        <ImageBackground source={require('../../assets/images/background.png')} resizeMode={'cover'} style={{width: null, height, flex: 1, alignItems: 'center'}}>
-                            <Image source={require('../../assets/images/logo.png')} style={{width: 130, height: 130, top: 75}} resizeMode={'contain'}/>
-                            <View style={{width: '100%', marginTop: 80, alignItems: 'center', padding: 20}}>
+                        <ImageBackground source={require('../../assets/images/background.png')} resizeMode={'cover'} style={styles.imageBackgroundStyle}>
+                            <Image source={require('../../assets/images/logo.png')} style={styles.logoStyle} resizeMode={'contain'}/>
+
+                            <View style={styles.registerFormContainerStyle}>
                                 <Form style={{width: '100%'}}>
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row' }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>

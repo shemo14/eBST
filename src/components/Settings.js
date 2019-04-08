@@ -53,12 +53,9 @@ class Settings extends Component {
     };
 
     static navigationOptions = () => ({
-        header: null
+        drawerLabel: 'الاعدادات',
+        drawerIcon: ( <Image source={require('../../assets/images/white_setting.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
-
-    componentWillMount(){
-        I18nManager.forceRTL(true)
-    }
 
 
     render() {

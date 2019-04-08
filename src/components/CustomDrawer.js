@@ -24,10 +24,10 @@ class CustomDrawer extends Component {
             <Container style={{ overflow: 'visible' }}>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <ImageBackground source={require('../../assets/images/bg_side_bar.png')} resizeMode={'stretch'} style={{ width: null, height: null, flex: 1 }}>
-                        <View style={{ height:150, alignItems: 'center', justifyContent: 'center', marginTop: 40, marginLeft: 10 }}>
+                        <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate('profile')} style={{ height:150, alignItems: 'center', justifyContent: 'center', marginTop: 40, marginLeft: 10 }}>
                             <Image source={require('../../assets/images/img_two.png')} style={{ width: 140, height: 140, position: 'absolute', zIndex: 999 }} resizeMode={'contain'} />
                             <Image source={require('../../assets/images/profile.jpg')} style={{ width: 140, height: 140 }} resizeMode={'contain'} />
-                        </View>
+                        </TouchableOpacity>
                         <Text style={{ color: '#acabae', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, top: -5, marginLeft: 10 }}>محمد شمس</Text>
                         <View style={{ marginTop: 50 }}>
                             <DrawerItems {...this.props} labelStyle={{color: '#fff', marginTop: 10, fontSize: 16, marginHorizontal: 5, fontFamily: 'cairo', fontWeight: 'normal'}} onItemPress={
@@ -40,6 +40,11 @@ class CustomDrawer extends Component {
                                 }
                             }
                             />
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <TouchableOpacity>
+                                <Image source={require('../../assets/images/white_logout.png')} style={{ height: 40, width: 40, alignSelf: 'flex-end', marginHorizontal: 20 }} resizeMode={'contain'}  />
+                            </TouchableOpacity>
                         </View>
                     </ImageBackground>
                 </Content>

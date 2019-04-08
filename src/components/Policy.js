@@ -1,21 +1,18 @@
 import React, { Component } from "react";
-import { View, Text, Image, Dimensions, I18nManager, ImageBackground , TouchableOpacity} from "react-native";
-import { Container, Content, Button, Header, Left, Right, Body , List, ListItem , Icon } from 'native-base'
+import { View, Text, Image, ImageBackground } from "react-native";
+import { Container, Content, Button, Header, Left, Right, Body } from 'native-base'
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
+
 class Policy extends Component {
     constructor(props){
         super(props);
     }
 
     static navigationOptions = () => ({
-        header: null
+        drawerLabel: 'الشروط و الاحكام',
+        drawerIcon: ( <Image source={require('../../assets/images/white_terms.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
-    componentWillMount(){
-        I18nManager.forceRTL(true)
-    }
 
 
     render() {

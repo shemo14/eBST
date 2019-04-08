@@ -10,12 +10,10 @@ class ContactUs extends Component {
     }
 
     static navigationOptions = () => ({
-        header: null
+        drawerLabel: 'تواصل معنا',
+        drawerIcon: ( <Image source={require('../../assets/images/white_contact_us.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
-    componentWillMount(){
-        I18nManager.forceRTL(true)
-    }
 
 
     render() {
