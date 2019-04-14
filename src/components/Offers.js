@@ -76,7 +76,7 @@ class Offers extends Component {
                             <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18, fontFamily: 'cairo' }}>العروض</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>

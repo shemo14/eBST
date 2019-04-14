@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, I18nManager } from "react-native";
+import { View, Text, Image, TouchableOpacity, ImageBackground } from "react-native";
 import {Container, Content, Form, Item, Input, Label, Button} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from '../../locale/i18n'
@@ -9,19 +9,10 @@ class Login extends Component {
         super(props);
         this.state = {
             phoneStatus: 0,
-            passwordStatus: 0,
-            lang:this.props.navigation.state.params.lang
+            passwordStatus: 0
         }
     }
 
-    componentWillMount() {
-        if (this.state.lang === 'ar'){
-            I18nManager.forceRTL(true)
-        }
-        else {
-            I18nManager.forceRTL(false)
-        }
-    }
 
     activeInput(type){
         if (type === 'phone'){
@@ -59,8 +50,6 @@ class Login extends Component {
 
 
     render() {
-        console.log(this.state.lang);
-
         return (
             <Container>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
@@ -81,7 +70,7 @@ class Login extends Component {
 
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.passwordStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>كلمة المرور</Label>
+                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('password') }</Label>
                                         <Input secureTextEntry onBlur={() => this.unActiveInput('password')} onFocus={() => this.activeInput('password')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                                     </Item>
 
@@ -91,24 +80,24 @@ class Login extends Component {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 17, width: '100%', paddingHorizontal: 15 }}>
                                 <TouchableOpacity onPress={()=> this.props.navigation.navigate('forgetPassword')}>
-                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>نسيت كلمة المرور ؟</Text>
+                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>{ i18n.t('forgetPass') }</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>الدخول كزائر</Text>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
+                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>{ i18n.t('visitor') }</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <View style={{ marginTop: 50 }}>
                                 <Button onPress={() => this.props.navigation.navigate('home')} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>دخول</Text>
+                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('loginButton') }</Text>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                 </Button>
                             </View>
 
                             <View style={{ marginTop: 50 }}>
                                 <Button onPress={() => this.props.navigation.navigate('register')} bordered style={{ borderRadius: 25, width: 110, height: 40,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center', borderColor: '#e2b705', borderWidth: 1}}>
-                                    <Text style={{color:'#e2b705' , fontSize:15, fontFamily: 'cairoBold' }}>تسجيل</Text>
+                                    <Text style={{color:'#e2b705' , fontSize:15, fontFamily: 'cairoBold' }}>{ i18n.t('registerButton') }</Text>
                                 </Button>
                             </View>
                         </View>

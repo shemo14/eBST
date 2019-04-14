@@ -30,6 +30,10 @@ import EditProfile from "../components/EditProfile";
 import Policy from "../components/Policy";
 import ContactUs from "../components/ContactUs";
 import Settings from "../components/Settings";
+import AddProduct from "../components/AddProduct";
+import AcceptedOrders from "../components/AcceptedOrders";
+import BiddingOrderDetails from "../components/BiddingOrderDetails";
+import BuyOrderDetails from "../components/BuyOrderDetails";
 
 
 const width = Dimensions.get('window').width;
@@ -58,38 +62,45 @@ const DrawerNavigator = createDrawerNavigator({
 
 const AppNavigator = createStackNavigator({
 
-    language:{
-        screen: Language,
-        navigationOptions: {
-            header: null
-        }
-    },
-    login:{
-        screen: Login,
-        navigationOptions: {
-            header: null
-        }
-    },
-    register:{
-        screen: Register,
-        navigationOptions: {
-            header: null
-        }
-    },
-    forgetPassword:{
-        screen: ForgetPassword,
-        navigationOptions: {
-            header: null
-        }
-    },
-    verify:{
-        screen: Verify,
-        navigationOptions: {
-            header: null
-        }
-    },
+    // language:{
+    //     screen: Language,
+    //     navigationOptions: {
+    //         header: null
+    //     }
+    // },
+    // login:{
+    //     screen: Login,
+    //     navigationOptions: {
+    //         header: null
+    //     }
+    // },
+    // register:{
+    //     screen: Register,
+    //     navigationOptions: {
+    //         header: null
+    //     }
+    // },
+    // forgetPassword:{
+    //     screen: ForgetPassword,
+    //     navigationOptions: {
+    //         header: null
+    //     }
+    // },
+    // verify:{
+    //     screen: Verify,
+    //     navigationOptions: {
+    //         header: null
+    //     }
+    // },
+    
     DrawerNavigator: {
         screen: DrawerNavigator,
+        navigationOptions: {
+            header: null
+        }
+    },
+    addProduct: {
+        screen: AddProduct,
         navigationOptions: {
             header: null
         }
@@ -180,6 +191,24 @@ const AppNavigator = createStackNavigator({
     },
     settings:{
         screen: Settings,
+        navigationOptions: {
+            header: null
+        }
+    },
+    acceptedOrders: {
+        screen: AcceptedOrders,
+        navigationOptions: {
+            header: null
+        }
+    },
+    buyOrderDetails: {
+        screen: BuyOrderDetails,
+        navigationOptions: {
+            header: null
+        }
+    },
+    biddingOrderDetails: {
+        screen: BiddingOrderDetails,
         navigationOptions: {
             header: null
         }

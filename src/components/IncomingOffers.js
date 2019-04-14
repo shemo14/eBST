@@ -43,7 +43,7 @@ class IncomingOffers extends Component {
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 , fontFamily:'cairo'}}>تفاصيل المنتج</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>

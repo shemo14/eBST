@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions } from "react-native";
 import {Container, Content, Button, Header, Right, Body, Left, Icon, Input } from 'native-base';
+import i18n from '../../locale/i18n'
 
 const categories = [
     { name: 'mobiles' },
@@ -59,7 +60,7 @@ class Categories extends Component {
                     <Image source={require('../../assets/images/img.png')} style={{ width: 130, height: 130, position: 'absolute', zIndex: 999 }}/>
                     <Image source={require('../../assets/images/photo.png')} resizeMode={'cover'} style={{ width: 130, height: 130 }}/>
                 </View>
-                <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 17 }}>جوالات</Text>
+                <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 17 }}>{ i18n.t('tours') }</Text>
             </TouchableOpacity>
         );
     }
@@ -75,7 +76,7 @@ class Categories extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                        <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>الاقسام</Text>
+                        <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>{ i18n.t('categories') }</Text>
                         </Body>
                         <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: 32, position: 'absolute', borderColor: '#e2b705', marginLeft: 10 }}>
                             <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
@@ -88,7 +89,7 @@ class Categories extends Component {
                                 <Button transparent onPress={() => this.setAnimate()}>
                                     <Image source={require('../../assets/images/white_search.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </Button>
-                                <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                                <Button transparent onPress={() => this.props.navigation.goBack()}>
                                     <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </Button>
                             </View>

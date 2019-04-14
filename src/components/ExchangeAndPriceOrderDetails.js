@@ -32,7 +32,7 @@ class ExchangeAndPriceOrderDetails extends Component {
                             <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>تفاصيل الطلب</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('incomingOffers')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>

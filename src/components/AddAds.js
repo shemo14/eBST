@@ -3,6 +3,7 @@ import { View, Text, Image, Dimensions, ImageBackground, FlatList, ImageStore, T
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
+import i18n from '../../locale/i18n'
 
 
 
@@ -105,10 +106,10 @@ class AddAds extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18 }}>اضافة اعلان</Text>
+                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18 , fontFamily:'cairoBold' }}>{ i18n.t('addAds') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name={'ios-arrow-back'} type='Ionicons' style={{ color: '#fff' }} />
                             </Button>
                         </Left>
@@ -127,7 +128,7 @@ class AddAds extends Component {
                 <View>
                     <Button style={{ borderRadius: 25, width: 130, height: 40,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#15b5c5' , position:'absolute' , bottom:-25}}>
                         <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-12}}></View>
-                        <Text style={{color:'#fff' , fontSize:17}}>اضافة</Text>
+                        <Text style={{color:'#fff' , fontSize:17}}>{ i18n.t('add') }</Text>
                         <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-12}}></View>
                     </Button>
                 </View>

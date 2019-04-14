@@ -19,7 +19,7 @@ class Fav extends Component {
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                         <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 }}>الاعلانات</Text>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={require('../../assets/images/notification.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>

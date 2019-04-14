@@ -47,10 +47,10 @@ class Ads extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18 }}>الاعلانات</Text>
+                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18 , fontFamily:'cairoBold'}}>{ i18n.t('ads') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name={'ios-arrow-back'} type='Ionicons' style={{ color: '#fff' }} />
                             </Button>
                         </Left>
@@ -86,7 +86,7 @@ class Ads extends Component {
                 </View>
 
                 <View style={{ position: 'absolute', bottom: 5, flex: 1, width: '100%' }}>
-                    <Button onPress={() => this.props.navigate.navigation('addAds')} style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 43, height: 43, alignItems: 'center', justifyContent: 'center', right: 4, alignSelf: 'center'       }}>
+                    <Button onPress={() => this.props.navigation.navigate('addAds')} style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 43, height: 43, alignItems: 'center', justifyContent: 'center', right: 4, alignSelf: 'center'       }}>
                         <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
                     </Button>
                 </View>

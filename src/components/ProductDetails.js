@@ -4,6 +4,7 @@
     import Swiper from 'react-native-swiper';
     import StarRating from 'react-native-star-rating';
     import Modal from "react-native-modal";
+    import i18n from '../../locale/i18n'
 
     const height = Dimensions.get('window').height;
     const width = Dimensions.get('window').width;
@@ -46,18 +47,18 @@
         render() {
             return (
                 <Container>
-                    <Header style={{ zIndex: 999, top: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
+                    <Header style={{ zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
                         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center' }}>
                             <TouchableOpacity >
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                             </TouchableOpacity>
-                            <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo' }}>تفاصيل المنتج</Text>
-                            <TouchableOpacity>
+                            <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo' }}>{i18n.t('productDet')}</Text>
+                            <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </TouchableOpacity>
                         </View>
                     </Header>
-                    <Content style={{ zIndex: -99, top: -25 }}>
+                    <Content style={{ zIndex: -99, marginTop: -50 }}>
                         <View>
                             <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
                                 <View style={styles.slide}>
@@ -88,7 +89,7 @@
 
                             <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, marginBottom: 5 }}>كاميرا اتستاكس مبني 9</Text>
                             <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15, lineHeight: 20 }}>14 ميجا بكسل تصوير فيديو وصور معاها كابل للشحن و الكمبيوتر ومعاها كارت 4 جيجا و جراب و البيع لعدم الحاجه اليها</Text>
-                            <Text style={{ color: '#26b5c4', fontFamily: 'cairo', fontSize: 15, marginBottom: 5 }}>سعر المنتج 500 ريال</Text>
+                            <Text style={{ color: '#26b5c4', fontFamily: 'cairo', fontSize: 15, marginBottom: 5 }}>سعر المنتج 500 {i18n.t('sr')}</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
                                 <StarRating
                                     disabled={false}
@@ -113,7 +114,7 @@
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', marginTop: 7, marginBottom: 10 }} >
-                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>التعليقات</Text>
+                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>{i18n.t('comments')}</Text>
                                 <Image source={require('../../assets/images/gray_comments.png')} style={{ width: 20, height: 20, marginHorizontal: 5 }} resizeMode={'contain'} />
                             </View>
                             <View style={{}}>
@@ -136,7 +137,7 @@
                                         </Body>
                                         <Left style={{ flex: 0, alignSelf: 'flex-end', bottom: -10 }}>
                                             <TouchableOpacity onPress={this._toggleModal}>
-                                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>ابلاغ</Text>
+                                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>{i18n.t('report')}</Text>
                                             </TouchableOpacity>
                                         </Left>
                                     </ListItem>
@@ -158,7 +159,7 @@
                                         </Body>
                                         <Left style={{ flex: 0, alignSelf: 'flex-end', bottom: -10 }}>
                                             <TouchableOpacity onPress={this._toggleModal}>
-                                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>ابلاغ</Text>
+                                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>{i18n.t('report')}</Text>
                                             </TouchableOpacity>
                                         </Left>
                                     </ListItem>
@@ -180,13 +181,13 @@
                                         </Body>
                                         <Left style={{ flex: 0, alignSelf: 'flex-end', bottom: -10 }}>
                                             <TouchableOpacity onPress={this._toggleModal}>
-                                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>ابلاغ</Text>
+                                                <Text style={{ color: '#6d6c72', fontSize: 12, fontFamily: 'cairo' }}>{i18n.t('report')}</Text>
                                             </TouchableOpacity>
                                         </Left>
                                     </ListItem>
                                 </List>
                                 <Form>
-                                    <Textarea rowSpan={3} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 11, fontFamily: 'cairo', textAlign: 'right' }} bordered placeholder="اضافة تعليق" placeholderTextColor={{ color: "#acabae" }} />
+                                    <Textarea rowSpan={3} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 11, fontFamily: 'cairo', textAlign: 'right' }} bordered placeholder={i18n.t('addComment')} placeholderTextColor={{ color: "#acabae" }} />
                                     <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 2, backgroundColor: '#26b5c4', width: 30, height: 30, transform: [{ rotate: '45deg' }], position: 'absolute', bottom: -13, right: 7 }}>
                                         <TouchableOpacity>
                                             <Image source={require('../../assets/images/check_mark.png')} style={{ width: 15, height: 15, transform: [{ rotate: '-45deg' }] }} resizeMode={'contain'} />
@@ -197,18 +198,18 @@
                             <View style={{ marginTop: 30 }}>
                                 <Button onPress={() => this.props.navigation.navigate('confirmOrder')} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
                                     <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14 }}></View>
-                                    <Text style={{ color: '#fff', fontSize: 15, fontFamily: 'cairo', }}>اطلب</Text>
+                                    <Text style={{ color: '#fff', fontSize: 15, fontFamily: 'cairo', }}>{i18n.t('order')}</Text>
                                     <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14 }}></View>
                                 </Button>
                             </View>
                             <Modal isVisible={this.state.isModalVisible}>
                                 <View style={{ flex: 1, backgroundColor: '#fff', padding: 10, position: 'absolute', width: '100%' }}>
                                     <Form>
-                                        <Textarea style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: 'right' }} rowSpan={7} bordered placeholder="سبب الابلاغ" placeholderTextColor={{ color: "#acabae" }} />
+                                        <Textarea style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: 'right' }} rowSpan={7} bordered placeholder={i18n.t('reportReason')} placeholderTextColor={{ color: "#acabae" }} />
                                         <View style={{ marginTop: 20, marginBottom: 10 }}>
                                             <Button onPress={this._toggleModal} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
                                                 <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14 }} />
-                                                <Text style={{ color: '#fff', fontSize: 15, fontFamily: 'cairo', }}>ارسال</Text>
+                                                <Text style={{ color: '#fff', fontSize: 15, fontFamily: 'cairo', }}>{i18n.t('sendButton')}</Text>
                                                 <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14 }} />
                                             </Button>
                                         </View>

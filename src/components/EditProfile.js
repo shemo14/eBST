@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Container, Content, Header, Left, Body, Button, Item, Input, Form, Label } from 'native-base'
 import Modal from "react-native-modal";
+import i18n from '../../locale/i18n'
 
 class EditProfile extends Component {
     constructor(props) {
@@ -49,7 +50,7 @@ class EditProfile extends Component {
                     <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>تعديل الحساب</Text>
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Left>

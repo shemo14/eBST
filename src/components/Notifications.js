@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, Dimensions, ImageBackground , TouchableOpacity} from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body , List, ListItem } from 'native-base'
+import i18n from '../../locale/i18n'
 
 class Notifications extends Component {
     constructor(props){
@@ -22,10 +23,10 @@ class Notifications extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>الاشعارات</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{i18n.t('notifications')}</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('home')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>

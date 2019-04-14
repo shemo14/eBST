@@ -13,10 +13,6 @@ class Language extends Component {
         this.onChooseLang = this.onChooseLang.bind(this)
     }
 
-    componentWillMount(){
-        I18nManager.forceRTL(true)
-    }
-
     onChooseLang(lang) {
         this.props.chooseLang(lang);
         this.props.navigation.navigate('login', { lang });

@@ -2,19 +2,21 @@ import React, { Component } from "react";
 import { View, Text, Image, ImageBackground, TouchableOpacity } from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, List, ListItem, Icon } from 'native-base';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import i18n from '../../locale/i18n'
 
 
 const receiveOffers = [
-    { name: 'موبايل سامسونج', nums: 4 },
-    { name: 'لابتوب ابل اير', nums: 6 },
-    { name: 'اي رزع ف البتنجان', nums: 3 },
-    { name: 'اي كلام بردو هنا عادي يعني', nums: 2 },
+    { num: 1, type: 'شراء' , date:'3/10/2019'},
+    { num: 1, type: 'مزايدة' , date:'3/10/2019'},
+    { num: 1, type: 'مبادلة' , date:'3/10/2019'},
+    { num: 1, type: 'مبادلة + عرض سعر' , date:'3/10/2019'},
 ];
 
 const sentOffers = [
-    { name: 'موبايل سامسونج', nums: 4 },
-    { name: 'لابتوب ابل اير', nums: 6 },
-    { name: 'اي رزع ف البتنجان', nums: 3 },
+    { num: 2, type: 'شراء' , date:'3/10/2019'},
+    { num: 2, type: 'مزايدة' , date:'3/10/2019'},
+    { num: 2, type: 'مبادلة' , date:'3/10/2019'},
+    { num: 2, type: 'مبادلة + عرض سعر' , date:'3/10/2019'},
 ];
 
 
@@ -73,10 +75,10 @@ class AcceptedOrders extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18, fontFamily: 'cairo' }}>العروض</Text>
+                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18, fontFamily: 'cairo' }}>{ i18n.t('acceptedOrders') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>
@@ -85,10 +87,10 @@ class AcceptedOrders extends Component {
                 <Content>
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <Button onPress={() => this.onSwipeLeft()} style={{ height: 40, backgroundColor: this.state.receiveShow ? '#E2B705' : 'transparent', borderRadius: 30, margin: 10, padding: 5, borderColor: this.state.receiveShow ? '#E2B705' : '#acabae', borderWidth: 1, width: 120, justifyContent: 'center' }} transparent={!this.state.receiveShow}>
-                            <Text style={{ color: this.state.receiveShow ? '#fff' : '#acabae', textAlign: 'center', fontFamily: 'cairo' }}>العروض الواردة</Text>
+                            <Text style={{ color: this.state.receiveShow ? '#fff' : '#acabae', textAlign: 'center', fontFamily: 'cairo' }}>{ i18n.t('recievedOffers') }</Text>
                         </Button>
                         <Button onPress={() => this.onSwipeRight()} style={{ height: 40, borderRadius: 30, borderColor: this.state.receiveShow ? '#acabae' : '#E2B705', borderWidth: 1, margin: 10, padding: 5, backgroundColor: this.state.receiveShow ? 'transparent' : '#E2B705', width: 120, justifyContent: 'center' }} transparent={this.state.receiveShow}>
-                            <Text style={{ color: this.state.receiveShow ? '#acabae' : '#fff', textAlign: 'center', fontFamily: 'cairo' }}>العروض المرسلة</Text>
+                            <Text style={{ color: this.state.receiveShow ? '#acabae' : '#fff', textAlign: 'center', fontFamily: 'cairo' }}>{ i18n.t('sentOffers') }</Text>
                         </Button>
                     </View>
 
@@ -107,21 +109,20 @@ class AcceptedOrders extends Component {
                                 {
                                     this.state.showData.map((offer, i) => (
                                         <ListItem key={i} onPress={() => console.log('ops')} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
-                                            <Right style={{ flex: 0 }}>
-                                                <View style={{ top: 30 }}>
-                                                    <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} ></View>
-                                                    <View style={[styles.block, { transform: [{ rotate: '20deg' }] }]}>
-                                                        <Image
-                                                            source={require('../../assets/images/photo.png')}
-                                                            style={[styles.image, { borderRadius: 10 }]}
-                                                            resizeMode={'stretch'}
-                                                        />
-                                                    </View>
-                                                </View>
-                                            </Right>
+                                        
                                             <Body style={{ marginHorizontal: 20 }}>
-                                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 15 }}>{offer.name}</Text>
-                                            <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.nums} عروض</Text>
+                                                <View style={{flexDirection:'row'}}>
+                                                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderNumber') } : </Text>
+                                                    <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.num}</Text>
+                                                </View>
+                                                <View style={{flexDirection:'row'}}>
+                                                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderType') } : </Text>
+                                                    <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.type}</Text>
+                                                </View>
+                                                <View style={{flexDirection:'row'}}>
+                                                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderDate') } : </Text>
+                                                    <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.date}</Text>
+                                                </View>
                                             </Body>
                                             <Left style={{ position: 'absolute', right: -10, top: -10 }}>
                                                 <TouchableOpacity onPress={() => alert('testy')} style={{ borderWidth: 1, borderRadius: 5, width: 20, height: 20, transform: [{ rotate: '45deg' }], borderColor: '#acabae', backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>

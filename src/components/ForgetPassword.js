@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity, ImageBackground, Dimensions } from "react-native";
 import {Container, Content, Form, Item, Input, Label, Button} from 'native-base'
+import i18n from '../../locale/i18n'
 
 const height = Dimensions.get('window').height;
 class ForgetPassword extends Component {
@@ -49,7 +50,7 @@ class ForgetPassword extends Component {
                             <Form style={{ width: '100%' }}>
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row'  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>رقم الجوال</Label>
+                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('phoneNumber') }</Label>
                                         <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
                                     </Item>
 
@@ -62,7 +63,7 @@ class ForgetPassword extends Component {
                             <View style={{ marginTop: 20 }}>
                                 <Button onPress={() => this.props.navigation.navigate('verify')} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>ارسال</Text>
+                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                 </Button>
                             </View>

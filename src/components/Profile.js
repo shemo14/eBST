@@ -74,7 +74,7 @@ class Profile extends Component {
                     <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>حسابي</Text>
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Left>
