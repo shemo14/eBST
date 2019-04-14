@@ -34,6 +34,9 @@ import AddProduct from "../components/AddProduct";
 import AcceptedOrders from "../components/AcceptedOrders";
 import BiddingOrderDetails from "../components/BiddingOrderDetails";
 import BuyOrderDetails from "../components/BuyOrderDetails";
+import ExchangeAndPriceOrderDetails from "../components/ExchangeAndPriceOrderDetails";
+import ExchangeOrderDetails from "../components/ExchangeOrderDetails";
+import IncomingOffers from "../components/IncomingOffers";
 
 
 const width = Dimensions.get('window').width;
@@ -44,10 +47,14 @@ const DrawerNavigator = createDrawerNavigator({
     offers: Offers,
     notifications: Notifications,
     myProducts: MyProducts,
+    acceptedOrders: AcceptedOrders,
+    categoryProducts: CategoryProducts,
+    fav: Fav,
     aboutApp: AboutApp,
     policy: Policy,
     contactUs: ContactUs,
     settings: Settings,
+    incomingOffers: IncomingOffers,
 
 }, {
     nitialRouteName: 'home',
@@ -141,12 +148,6 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
-    fav:{
-        screen: Fav,
-        navigationOptions: {
-            header: null
-        }
-    },
     categoryProducts:{
         screen: CategoryProducts,
         navigationOptions: {
@@ -155,6 +156,12 @@ const AppNavigator = createStackNavigator({
     },
     myProducts :{
         screen: MyProducts,
+        navigationOptions: {
+            header: null
+        }
+    },
+    incomingOffers :{
+        screen: IncomingOffers,
         navigationOptions: {
             header: null
         }
@@ -201,6 +208,12 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+    fav: {
+        screen: Fav,
+        navigationOptions: {
+            header: null
+        }
+    },
     buyOrderDetails: {
         screen: BuyOrderDetails,
         navigationOptions: {
@@ -209,6 +222,18 @@ const AppNavigator = createStackNavigator({
     },
     biddingOrderDetails: {
         screen: BiddingOrderDetails,
+        navigationOptions: {
+            header: null
+        }
+    },
+    exchangeAndPriceOrderDetails: {
+        screen: ExchangeAndPriceOrderDetails,
+        navigationOptions: {
+            header: null
+        }
+    },
+    exchangeOrderDetails: {
+        screen: ExchangeOrderDetails,
         navigationOptions: {
             header: null
         }

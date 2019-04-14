@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, ImageBackground, TouchableOpacity } from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, List, ListItem, Icon } from 'native-base';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import i18n from '../../locale/i18n'
 
 
 const receiveOffers = [
@@ -73,7 +74,7 @@ class Offers extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18, fontFamily: 'cairo' }}>العروض</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18, fontFamily: 'cairo' }}>{i18n.t('offers')}</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
@@ -120,8 +121,10 @@ class Offers extends Component {
                                                 </View>
                                             </Right>
                                             <Body style={{ marginHorizontal: 20 }}>
+                                                <TouchableOpacity onPress={() => this.props.navigation.navigate('incomingOffers')}>
                                                 <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 15 }}>{offer.name}</Text>
                                                 <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.nums} عروض</Text>
+                                                </TouchableOpacity>
                                             </Body>
                                             <Left style={{ position: 'absolute', right: -10, top: -10 }}>
                                                 <TouchableOpacity onPress={() => alert('testy')} style={{ borderWidth: 1, borderRadius: 5, width: 20, height: 20, transform: [{ rotate: '45deg' }], borderColor: '#acabae', backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>

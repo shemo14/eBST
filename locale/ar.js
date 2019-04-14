@@ -21,7 +21,7 @@ const ar = {
     'tours': 'جولات',
     'products': 'المنتجات',
     'MyProducts': 'منتجاتي',
-    'sr': 'ريال',
+    'sr': 'ر.س',
     'productDet': 'تفاصيل المنتج',
     'comments': 'التعليقات',
     'report': 'ابلاغ',
@@ -54,6 +54,12 @@ const ar = {
     'message': 'الرسالة',
     'name': 'الاسم',
     'email': 'الايميل',
+    'editAcc': 'تعديل الحساب',
+    'save': 'حفظ',
+    'productDetailsExchanger': 'تفاصيل المنتج المبادل',
+    'fav': 'المفضلة',
+    'offers': 'العروض',
+    'incomingOffers': 'العروض الوارده',
 }
 
 export default ar;

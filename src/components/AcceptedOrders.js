@@ -32,9 +32,10 @@ class AcceptedOrders extends Component {
     }
 
     static navigationOptions = () => ({
-        header: null,
-        drawerLabel: () => null
+        drawerLabel: i18n.t('acceptedOrders') ,
+        drawerIcon: ( <Image source={require('../../assets/images/accepted_orders.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
+
 
     onSwipeLeft(gestureState) {
         this.setState({ showData: receiveOffers, receiveShow: true });
@@ -111,18 +112,20 @@ class AcceptedOrders extends Component {
                                         <ListItem key={i} onPress={() => console.log('ops')} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
                                         
                                             <Body style={{ marginHorizontal: 20 }}>
-                                                <View style={{flexDirection:'row'}}>
-                                                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderNumber') } : </Text>
-                                                    <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.num}</Text>
-                                                </View>
-                                                <View style={{flexDirection:'row'}}>
-                                                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderType') } : </Text>
-                                                    <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.type}</Text>
-                                                </View>
-                                                <View style={{flexDirection:'row'}}>
-                                                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderDate') } : </Text>
-                                                    <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.date}</Text>
-                                                </View>
+                                                <TouchableOpacity onPress={() => this.props.navigation.navigate("exchangeAndPriceOrderDetails")} >
+                                                    <View style={{flexDirection:'row'}}>
+                                                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderNumber') } : </Text>
+                                                        <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.num}</Text>
+                                                    </View>
+                                                    <View style={{flexDirection:'row'}}>
+                                                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderType') } : </Text>
+                                                        <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.type}</Text>
+                                                    </View>
+                                                    <View style={{flexDirection:'row'}}>
+                                                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderDate') } : </Text>
+                                                        <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.date}</Text>
+                                                    </View>
+                                                </TouchableOpacity>
                                             </Body>
                                             <Left style={{ position: 'absolute', right: -10, top: -10 }}>
                                                 <TouchableOpacity onPress={() => alert('testy')} style={{ borderWidth: 1, borderRadius: 5, width: 20, height: 20, transform: [{ rotate: '45deg' }], borderColor: '#acabae', backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>

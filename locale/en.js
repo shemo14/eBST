@@ -54,6 +54,12 @@ const en = {
     'message': 'message',
     'name': 'name',
     'email': 'email',
+    'editAcc': 'edit profile',
+    'save': 'save',
+    'productDetailsExchanger': 'product details exchanger',
+    'fav': 'favourite',
+    'offers': 'offers',
+    'incomingOffers': 'incoming offers',
 }
 
 export default en;

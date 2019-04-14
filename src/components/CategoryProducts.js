@@ -26,6 +26,7 @@ class CategoryProducts extends Component {
             value: 50,
             selected1: undefined,
             starCount: 3,
+            isGrid:true
         }
     }
 
@@ -80,6 +81,15 @@ class CategoryProducts extends Component {
 
     render() {
         const { value } = this.state;
+
+        let grid=require('../../assets/images/multi_product.png');
+        let row=require('../../assets/images/gray_one_product.png');
+
+        if(this.state.isGrid)
+            grid=require('../../assets/images/yellow_multi_product.png');
+        else
+            row=require('../../assets/images/one_product.png');
+
         return (
             <Container>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
@@ -108,15 +118,15 @@ class CategoryProducts extends Component {
                     </ImageBackground>
                 </Header>
                 <View style={{ flexDirection: 'row', height: 50, marginTop: -50, marginBottom: 10, paddingHorizontal: 10 }}>
-                    <TouchableOpacity style={{ margin: 5 }} onPress={() => alert('ops')}>
-                        <Image source={require('../../assets/images/one_product.png')} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
+                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setState({isGrid : true})}>
+                        <Image source={grid} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ margin: 5 }}>
-                        <Image source={require('../../assets/images/yellow_multi_product.png')} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
+                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setState({isGrid : false})}>
+                        <Image source={row} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
                 </View>
                 <Content style={{ padding: 10 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center'}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' , height: this.state.isGrid ? 'auto' : 0}}>
                         <FlatList
                             data={categories}
                             renderItem={({ item }) => this.renderItems(item)}
@@ -125,7 +135,7 @@ class CategoryProducts extends Component {
                             extraData={this.state.refreshed}
                         />
                     </View>
-                    <View style={{ marginTop: 10, alignItems: 'center' }}>
+                    <View style={{ marginTop: 10, alignItems: 'center' , height: this.state.isGrid ? 0 : 'auto'}}>
                         <View style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '96%', marginBottom: 20 }}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('product')}>
                                 <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />

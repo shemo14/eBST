@@ -4,6 +4,7 @@ import {Container, Content, List, ListItem, Header, Left, Right, Body , Button} 
 import Swiper from 'react-native-swiper';
 import StarRating from 'react-native-star-rating';
 import Modal from "react-native-modal";
+import i18n from '../../locale/i18n'
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -31,24 +32,24 @@ class IncomingOffers extends Component {
     }
 
     static navigationOptions = () => ({
-        header: null
+        drawerLabel: () => null
     });
 
     render() {
         return (
             <Container>
-                <Header style={{zIndex: 999, top: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
+                <Header style={{zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
-                        <TouchableOpacity >
+                        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} >
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 , fontFamily:'cairo'}}>تفاصيل المنتج</Text>
+                        <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 , fontFamily:'cairo'}}>{i18n.t('incomingOffers')}</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>
                 </Header>
-                <Content style={{ zIndex: -99, top: -25 }}>
+                <Content style={{ zIndex: -99, marginTop: -50 }}>
                     <View>
                         <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
                             <View style={styles.slide}>
@@ -81,7 +82,7 @@ class IncomingOffers extends Component {
                                         <TouchableOpacity onPress={this.offerOneModal}>
                                             <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile_photo.png')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
                                         </TouchableOpacity>
                                     </Right>
@@ -106,7 +107,7 @@ class IncomingOffers extends Component {
                                         <TouchableOpacity onPress={this.offerOneModal}>
                                             <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile_photo.png')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
                                         </TouchableOpacity>
                                     </Right>
@@ -131,7 +132,7 @@ class IncomingOffers extends Component {
                                         <TouchableOpacity onPress={this.offerTwoModal}>
                                             <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile_photo.png')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
                                         </TouchableOpacity>
                                     </Right>
@@ -156,7 +157,7 @@ class IncomingOffers extends Component {
                                         <TouchableOpacity onPress={this.offerTwoModal}>
                                             <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile_photo.png')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
                                         </TouchableOpacity>
                                     </Right>
@@ -186,7 +187,7 @@ class IncomingOffers extends Component {
                                         <Right style={{ flex: 0 , right:5 , alignSelf:'flex-start' , top:-15}}>
                                             <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile_photo.png')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
                                         </Right>
                                         <Body style={{ marginHorizontal:10, alignSelf:'flex-start' , top:-10}}>
@@ -234,7 +235,7 @@ class IncomingOffers extends Component {
                                         <Right style={{ flex: 0 , right:5 , alignSelf:'flex-start' , top:-15}}>
                                             <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile_photo.png')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
                                         </Right>
                                         <Body style={{ marginHorizontal:10, alignSelf:'flex-start' , top:-10}}>
