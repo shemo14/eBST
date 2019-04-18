@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, Dimensions, I18nManager, ImageBackground , TouchableOpacity} from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body , List, ListItem , Icon } from 'native-base'
+import i18n from '../../locale/i18n'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -10,7 +11,7 @@ class AboutApp extends Component {
     }
 
     static navigationOptions = () => ({
-        drawerLabel: 'عن التطبيق',
+        drawerLabel: i18n.t('aboutApp'),
         drawerIcon: ( <Image source={require('../../assets/images/white_about_app.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
@@ -30,10 +31,10 @@ class AboutApp extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>عن التطبيق</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ i18n.t('aboutApp') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('home')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>

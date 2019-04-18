@@ -3,10 +3,15 @@ import { View, Text, Image, Dimensions, ImageBackground, FlatList, ImageStore, T
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
-
+import i18n from '../../locale/i18n'
+import axios from 'axios'
+import CONST from '../consts'
+import { DoubleBounce } from 'react-native-loader';
+import {connect} from "react-redux";
 
 
 const height = Dimensions.get('window').height;
+let base64   = [];
 class AddAds extends Component {
     constructor(props){
         super(props);
@@ -15,7 +20,9 @@ class AddAds extends Component {
             cameraBrowserOpen: false,
             photos: [{ file: null }],
             imageId: null,
-            refreshed: false
+            refreshed: false,
+            base64: [],
+            isSubmitted: false
         }
     }
 
@@ -44,11 +51,8 @@ class AddAds extends Component {
         this.setState({ photos, refreshed: !this.state.refreshed, imageId: null })
     }
 
-    renderItems = (item, imageId) => {
-        // ImageStore.getBase64ForTag(item.file, (base64Data) => {
-        //     console.log(base64Data)
-        // }, (reason) => console.error(reason));
 
+    renderItems = (item, imageId) => {
 
         if (item.file === null){
             return(
@@ -84,8 +88,48 @@ class AddAds extends Component {
             });
 
             console.log(this.state.photos)
+            const imgs = this.state.photos;
+          //  let base64 = [];
+
+          //  console.log(imgs[1].file)
+
+            for (var i =1; i < imgs.length; i++){
+                ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
+                    base64.push(base64Data);
+                }, (reason) => console.error(reason));
+            }
+
+            console.log('array of base ...', base64)
+
+
         }).catch((e) => console.log(e))
     };
+
+    addAds(){
+        this.setState({ isSubmitted: true })
+        console.log(base64.length, base64)
+        axios({ method: 'POST', url: CONST.url + 'add_ads', headers: {Authorization: this.props.user.token }, data: {lang: this.props.lang, images: JSON.stringify(base64)}}).then(response => {
+            if (response.data.status === 200){
+                this.props.navigation.navigate('finished');
+            }
+        })
+    }
+
+    renderSubmit(){
+        if (this.state.isSubmitted){
+            return(
+                <DoubleBounce size={20} color="#26b5c4" />
+            )
+        }
+
+        return (
+            <Button onPress={()=> this.addAds()} style={{ borderRadius: 25, width: 130, height: 40,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#15b5c5' , position:'absolute' , bottom:-25}}>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-12}}></View>
+                <Text style={{color:'#fff' , fontSize:17}}>{ i18n.t('add') }</Text>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-12}}></View>
+            </Button>
+        );
+    }
 
     render() {
         if (this.state.imageBrowserOpen) {
@@ -105,10 +149,10 @@ class AddAds extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18 }}>اضافة اعلان</Text>
+                        <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18 , fontFamily:'cairoBold' }}>{ i18n.t('addAds') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name={'ios-arrow-back'} type='Ionicons' style={{ color: '#fff' }} />
                             </Button>
                         </Left>
@@ -124,12 +168,8 @@ class AddAds extends Component {
                         extraData={this.state.refreshed}
                     />
                 </Content>
-                <View>
-                    <Button style={{ borderRadius: 25, width: 130, height: 40,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#15b5c5' , position:'absolute' , bottom:-25}}>
-                        <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-12}}></View>
-                        <Text style={{color:'#fff' , fontSize:17}}>اضافة</Text>
-                        <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-12}}></View>
-                    </Button>
+                <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                    { this.renderSubmit() }
                 </View>
             </Container>
         );
@@ -146,4 +186,11 @@ const styles = ({
     },
 });
 
-export default AddAds;
+
+const mapStateToProps = ({ profile, lang }) => {
+    return {
+        user: profile.user,
+        lang: lang.lang
+    };
+};
+export default connect(mapStateToProps, {})(AddAds);

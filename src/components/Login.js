@@ -1,8 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, I18nManager } from "react-native";
-import {Container, Content, Form, Item, Input, Label, Button} from 'native-base'
+import { View, Text, Image, TouchableOpacity, ImageBackground, BackHandler, Linking } from "react-native";
+import {Container, Content, Form, Item, Input, Label, Button, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from '../../locale/i18n'
+import { connect } from 'react-redux';
+import { userLogin, profile } from '../actions'
+import { Permissions, Notifications } from 'expo'
 
 class Login extends Component {
     constructor(props){
@@ -10,18 +13,45 @@ class Login extends Component {
         this.state = {
             phoneStatus: 0,
             passwordStatus: 0,
-            lang:this.props.navigation.state.params.lang
+            phone: '',
+            password: '',
+            msgError: '',
+            token: '',
+            userId: null
         }
     }
 
-    componentWillMount() {
-        if (this.state.lang === 'ar'){
-            I18nManager.forceRTL(true)
+
+    validate = () => {
+        let isError = false;
+        const errors = {
+            msgError: "",
+        };
+
+        if (this.state.password.length <= 0) {
+            isError = true;
+            errors.msgError = i18n.t('passwordRequired');
+        }else if (this.state.phone.length <= 0 || this.state.phone.length !== 10) {
+            isError = true;
+            errors.msgError = i18n.t('phoneValidation');
         }
-        else {
-            I18nManager.forceRTL(false)
+
+        this.setState({
+            ...this.state,
+            ...errors
+        });
+
+        if (isError){
+            Toast.show({
+                text: this.state.msgError,
+                type: "danger",
+                duration: 3000
+            });
         }
-    }
+
+        return isError;
+    };
+
 
     activeInput(type){
         if (type === 'phone'){
@@ -35,6 +65,17 @@ class Login extends Component {
             this.setState({ phoneStatus: 0 })
         }else
             this.setState({ passwordStatus: 0 })
+    }
+
+    onLoginPressed() {
+
+        const err = this.validate();
+        if (!err){
+            this.setState({ loader: true });
+            const {phone, password, token} = this.state;
+            this.props.userLogin({ phone, password, token }, this.props.lang);
+        }
+
     }
 
     renderInputImage(type){
@@ -56,11 +97,57 @@ class Login extends Component {
         return source;
     }
 
+    async componentWillMount() {
+
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+        let finalStatus = existingStatus;
+
+        if (existingStatus !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted') {
+            return;
+        }
+
+        let token = await Notifications.getExpoPushTokenAsync();
+        this.setState({ token, userId: null })
+       // alert(token);
+
+        console.log('app lang', this.props.lang);
+
+    }
+
+    componentWillReceiveProps(newProps){
+        if (newProps.auth !== null && newProps.auth.status === 200){
+
+
+            if (this.state.userId === null){
+                this.setState({ userId: newProps.auth.data.id });
+                this.props.profile(newProps.auth.data.token);
+            }
+
+            this.props.navigation.navigate('DrawerNavigator');
+        }
+
+        if (this.props.profile !== null) {
+            Toast.show({
+                text: newProps.auth.msg,
+                type: newProps.auth.status === 200 ? "success" : "danger",
+                duration: 3000
+            });
+        }
+
+        this.setState({ loader: false });
+    }
+
+
 
 
     render() {
-        console.log(this.state.lang);
-
         return (
             <Container>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
@@ -72,7 +159,7 @@ class Login extends Component {
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row'  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                         <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('phoneNumber') }</Label>
-                                        <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
+                                        <Input onChangeText={(phone) => this.setState({phone})} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
                                     </Item>
 
                                     <Image source={this.renderInputImage('phone')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
@@ -81,8 +168,8 @@ class Login extends Component {
 
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.passwordStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>كلمة المرور</Label>
-                                        <Input secureTextEntry onBlur={() => this.unActiveInput('password')} onFocus={() => this.activeInput('password')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('password') }</Label>
+                                        <Input autoCapitalize='none' onChangeText={(password) => this.setState({password})} secureTextEntry onBlur={() => this.unActiveInput('password')} onFocus={() => this.activeInput('password')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                                     </Item>
 
                                     <Image source={this.renderInputImage('password')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
@@ -91,24 +178,24 @@ class Login extends Component {
 
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 17, width: '100%', paddingHorizontal: 15 }}>
                                 <TouchableOpacity onPress={()=> this.props.navigation.navigate('forgetPassword')}>
-                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>نسيت كلمة المرور ؟</Text>
+                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>{ i18n.t('forgetPass') }</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>الدخول كزائر</Text>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
+                                    <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>{ i18n.t('visitor') }</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <View style={{ marginTop: 50 }}>
-                                <Button onPress={() => this.props.navigation.navigate('home')} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
+                                <Button onPress={() => this.onLoginPressed()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>دخول</Text>
+                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('loginButton') }</Text>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                 </Button>
                             </View>
 
                             <View style={{ marginTop: 50 }}>
                                 <Button onPress={() => this.props.navigation.navigate('register')} bordered style={{ borderRadius: 25, width: 110, height: 40,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center', borderColor: '#e2b705', borderWidth: 1}}>
-                                    <Text style={{color:'#e2b705' , fontSize:15, fontFamily: 'cairoBold' }}>تسجيل</Text>
+                                    <Text style={{color:'#e2b705' , fontSize:15, fontFamily: 'cairoBold' }}>{ i18n.t('registerButton') }</Text>
                                 </Button>
                             </View>
                         </View>
@@ -121,4 +208,12 @@ class Login extends Component {
 }
 
 
-export default Login;
+const mapStateToProps = ({ auth, profile, lang }) => {
+    return {
+        loading: auth.loading,
+        auth: auth.user,
+        user: profile.user,
+        lang: lang.lang
+    };
+};
+export default connect(mapStateToProps, { userLogin, profile })(Login);

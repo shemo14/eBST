@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableHighlight, Li
 import { Container, Content, Header, Left, Right, Body, Button, Icon, Input } from 'native-base'
 import StarRating from 'react-native-star-rating';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
+import i18n from '../../locale/i18n'
 
 const datas = [
     'Simon Mignolet',
@@ -32,7 +33,7 @@ class MyProducts extends Component {
     }
 
     static navigationOptions = () => ({
-        drawerLabel: 'منتجاتي',
+        drawerLabel: i18n.t('MyProducts') ,
         drawerIcon: ( <Image source={require('../../assets/images/white_my_product.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
@@ -88,7 +89,7 @@ class MyProducts extends Component {
                         <Text style={{ color: '#fff', textAlign: 'center', marginRight: 20, fontSize: 18 }}>الاعلانات</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Icon name={'ios-arrow-back'} type='Ionicons' style={{ color: '#fff' }} />
                             </Button>
                         </Left>
@@ -118,7 +119,7 @@ class MyProducts extends Component {
                     <TouchableOpacity style={{ marginHorizontal: 5, marginRight: 10 }} onPress={() => this.setAnimate()}>
                         <Image source={require('../../assets/images/white_search.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
                         <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25}}
                                resizeMode={'contain'}/>
                     </TouchableOpacity>
@@ -219,7 +220,7 @@ class MyProducts extends Component {
                                                             starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                                                         />
                                                     </View>
-                                                    <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 ريال</Text>
+                                                    <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 {i18n.t('sr')}</Text>
                                                 </TouchableOpacity>
                                                 <TouchableOpacity style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                                                     <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />

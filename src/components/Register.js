@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity, ImageBackground, Dimensions , KeyboardAvoidingView } from "react-native";
 import {Container, Content, Form, Item, Input, Label, Button, CheckBox} from 'native-base'
 import styles from '../../assets/styles'
+import i18n from '../../locale/i18n'
 
 const height = Dimensions.get('window').height;
 class Register extends Component {
@@ -94,7 +95,7 @@ class Register extends Component {
                                 <Form style={{width: '100%'}}>
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row' }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                            <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>اسم المستخدم</Label>
+                                            <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('username') }</Label>
                                             <Input auto-capitalization={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}/>
                                         </Item>
                                         <Image source={this.renderInputImage('name')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
@@ -102,7 +103,7 @@ class Register extends Component {
 
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                            <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>رقم الجوال</Label>
+                                            <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('phoneNumber') }</Label>
                                             <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}/>
                                         </Item>
 
@@ -111,7 +112,7 @@ class Register extends Component {
 
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.mailStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
                                         <Item floatingLabel style={{  borderBottomWidth: 0, top: -18,  marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                            <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13  }}>البريد الالكتروني</Label>
+                                            <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13  }}>{ i18n.t('email') }</Label>
                                             <Input keyboardType={'email-address'} onBlur={() => this.unActiveInput('mail')} onFocus={() => this.activeInput('mail')} style={{  width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}/>
                                         </Item>
 
@@ -120,7 +121,7 @@ class Register extends Component {
 
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.passwordStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18,  marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                            <Label style={{ top: 15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>كلمة المرور الجديدة</Label>
+                                            <Label style={{ top: 15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('password') }</Label>
                                             <Input secureTextEntry onBlur={() => this.unActiveInput('password')} onFocus={() => this.activeInput('password')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}/>
                                         </Item>
 
@@ -129,7 +130,7 @@ class Register extends Component {
 
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.verifyPasswordStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                            <Label style={{ top: 15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>تأكيد كلمة المرور الجديدة</Label>
+                                            <Label style={{ top: 15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('verifyNewPass') }</Label>
                                             <Input secureTextEntry onBlur={() => this.unActiveInput('verifyPassword')} onFocus={() => this.activeInput('verifyPassword')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}/>
                                         </Item>
 
@@ -139,14 +140,14 @@ class Register extends Component {
                                     <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center'  }}>
                                         <CheckBox checked={false} style={{marginHorizontal: 20, borderRadius: 2}}
                                                   color='#26b5c4'/>
-                                        <Text style={{fontFamily: 'cairo', color: '#6d6c72'}}>تسجيل كتاجر</Text>
+                                        <Text style={{fontFamily: 'cairo', color: '#6d6c72'}}>{ i18n.t('visitorRegister') }</Text>
                                     </View>
                                 </Form>
 
                                 <View style={{marginTop: 30}}>
                                     <Button onPress={() => this.props.navigation.navigate('confirm')} style={{ borderRadius: 25, width: 130, height: 50, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
                                         <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14 }} />
-                                        <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>تسجيل</Text>
+                                        <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>{ i18n.t('registerButton') }</Text>
                                         <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14 }} />
                                     </Button>
                                 </View>

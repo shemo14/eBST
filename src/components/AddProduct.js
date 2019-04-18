@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { View, Text, Image, Dimensions, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView} from "react-native";
-import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label , Textarea , CheckBox } from 'native-base'
+import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label , Textarea , CheckBox , Picker } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
+import i18n from '../../locale/i18n'
 
 const height = Dimensions.get('window').height;
 class AddProduct extends Component {
@@ -119,10 +120,10 @@ class AddProduct extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>اضافة منتج</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ i18n.t('addProduct') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('home')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>
@@ -148,33 +149,71 @@ class AddProduct extends Component {
                             <Form style={{ width: '100%' }}>
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productName === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row'  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>اسم المنتج</Label>
+                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productName') }</Label>
                                         <Input autoCapitalize={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
                                     </Item>
                                 </View>
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productPrice === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>سعر المنتج</Label>
+                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productPrice') }</Label>
                                         <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                                     </Item>
                                 </View>
+
+                                <View>
+                                    <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
+                                        <Picker
+                                            mode="dropdown"
+                                            iosIcon={<Icon name="arrow-down" />}
+                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                            placeholderStyle={{ color: "#c5c5c5" }}
+                                            placeholderIconColor="#fff"
+                                            selectedValue={this.state.selected1}
+                                            onValueChange={(value) => this.setState({ selected1: value })}
+                                        >
+                                            <Picker.Item label={ i18n.t('category') } value="key0" />
+                                            <Picker.Item label="فرنسا" value="key1" />
+                                            <Picker.Item label="امريكا" value="key2" />
+                                        </Picker>
+                                        <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
+                                    </Item>
+                                </View>
+                                <View>
+                                    <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
+                                        <Picker
+                                            mode="dropdown"
+                                            iosIcon={<Icon name="arrow-down" />}
+                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                            placeholderStyle={{ color: "#c5c5c5" }}
+                                            placeholderIconColor="#fff"
+                                            selectedValue={this.state.selected1}
+                                            onValueChange={(value) => this.setState({ selected1: value })}
+                                        >
+                                            <Picker.Item label={ i18n.t('productType') } value="key0" />
+                                            <Picker.Item label="فرنسا" value="key1" />
+                                            <Picker.Item label="امريكا" value="key2" />
+                                        </Picker>
+                                        <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
+                                    </Item>
+                                </View>
+
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productDisc === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
                                     <Textarea placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: 'right', color: '#26b5c4', fontSize: 12}} placeholder="وصف المنتج" />
                                 </View>
                                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, alignSelf: 'center' }}>
                                     <CheckBox checked={false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#26b5c4' />
-                                    <Text style={{ fontFamily: 'cairo', color: '#6d6c72' }}>اضافة سعر اضافي للمبادلة</Text>
+                                    <Text style={{ fontFamily: 'cairo', color: '#6d6c72' }}>{ i18n.t('addExtraPrice') }</Text>
                                 </View>
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productPrice === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>سعر اضافي</Label>
+                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('extraPrice') }</Label>
                                         <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                                     </Item>
                                 </View>
                                 <View style={{ marginTop: 20 }}>
                                         <Button onPress={() => this.props.navigation.navigate('confirm')} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                             <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                            <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>ارسال</Text>
+                                            <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
                                             <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                         </Button>
                                     </View>

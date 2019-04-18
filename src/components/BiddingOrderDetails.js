@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, Dimensions, I18nManager, ImageBackground, StyleSheet } from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body ,  List, ListItem } from 'native-base'
+import i18n from '../../locale/i18n'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -29,10 +30,10 @@ class BiddingOrderDetails extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>تفاصيل الطلب</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ i18n.t('orderDetails') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('incomingOffers')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>
@@ -45,33 +46,33 @@ class BiddingOrderDetails extends Component {
                                 paddingRight: 7, paddingLeft: 7 , paddingVertical: 0 , marginBottom:10 }}>
                                 <Body style={{  alignSelf:'flex-start'}}>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>رقم الطلب: </Text>
+                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>{ i18n.t('orderNumber') }: </Text>
                                         <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:13}}>1</Text>
                                     </View>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>نوع الطلب: </Text>
+                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>{ i18n.t('orderType') }: </Text>
                                         <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:13}}>مزايدة</Text>
                                     </View>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>تاريخ الطلب: </Text>
+                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>{ i18n.t('orderDate') }: </Text>
                                         <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:13}}>3/10/2019</Text>
                                     </View>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>عرض السعر: </Text>
-                                        <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:13}}>550 رس</Text>
+                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>{ i18n.t('showPrice') }: </Text>
+                                        <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:13}}>550 { i18n.t('sr') }</Text>
                                     </View>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>اسم صاحب المنتج: </Text>
+                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>{ i18n.t('ownerName') }: </Text>
                                         <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:13}}>اوامر الشبكة</Text>
                                     </View>
                                     <View style={{flexDirection:'row'}}>
-                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>رقم الجوال: </Text>
+                                        <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>{ i18n.t('phoneNumber') }: </Text>
                                         <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:13}}>0000000</Text>
                                     </View>
                                 </Body>
                             </ListItem>
                             <ListItem style={{  width: '100%', marginLeft: 0 ,paddingRight: 7, paddingLeft: 7  , paddingTop: 0 , paddingBottom:0 , overflow:'hidden' ,  marginBottom:10 , borderBottomWidth:0 }}>
-                                <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>تفاصيل المنتج</Text>
+                                <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:13}}>{ i18n.t('productDet') }</Text>
                             </ListItem >
                             <ListItem style={{ borderTopRightRadius: 5,borderTopLeftRadius: 5 , borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0 ,
                                 paddingRight: 0, paddingLeft: 0 , paddingTop: 0 , paddingBottom:0 , overflow:'hidden' , borderBottomWidth:0 }}>

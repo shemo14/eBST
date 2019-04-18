@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, Dimen
 import { Container, Content, Button, Footer, Icon, Header } from 'native-base'
 import Swiper from 'react-native-swiper';
 import FooterSection from './Footer';
+import i18n from '../../locale/i18n'
 
 
 const width = Dimensions.get('window').width;
@@ -13,7 +14,7 @@ class Home extends Component {
 
     static navigationOptions = () => ({
         header: null,
-        drawerLabel: 'الرئيسية',
+        drawerLabel: i18n.t('home') ,
         drawerIcon: ( <Image source={require('../../assets/images/white_home.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
@@ -29,7 +30,7 @@ class Home extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.openDrawer()}>
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('notifications')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                             <Image source={require('../../assets/images/notification.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>
@@ -58,19 +59,19 @@ class Home extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('categories')} style={{ right: 50 }}>
                             <Image source={require('../../assets/images/border_blue.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#4fb7c3', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18, fontFamily: 'cairo', color: '#acabae' }}>متاجر</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18, fontFamily: 'cairo', color: '#acabae' }}>{ i18n.t('stores') }</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('categories')} style={{ left: 50, top: -50 }}>
                             <Image source={require('../../assets/images/shape_yellow.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#e1b82b', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 , fontFamily: 'cairo', color: '#acabae' }}>اسر منتجة</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 , fontFamily: 'cairo', color: '#acabae' }}>{ i18n.t('family') }</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('categories')} style={{ right: 50, top: -100 }}  >
                             <Image source={require('../../assets/images/border_blue.png')} style={{ width: 150, height: 150 }} resizeMode={'contain'}/>
                             <View transparent style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: '#4fb7c3', width: 100, height: 100, transform: [{ rotate: '45deg'}], position: 'absolute', top: 24.7, left: 24.7 }}>
-                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 , fontFamily: 'cairo', color: '#acabae' }}>مبادلات</Text>
+                                <Text style={{ transform: [{ rotate: '-45deg'}], textAlign: 'center', fontSize: 18 , fontFamily: 'cairo', color: '#acabae' }}>{ i18n.t('exchanges') }</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

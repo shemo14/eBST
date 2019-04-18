@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, Dimensions, I18nManager, ImageBackground , TouchableOpacity} from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body , List, ListItem , Icon ,  Form, Item, Input , Textarea} from 'native-base'
+import i18n from '../../locale/i18n'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -10,7 +11,7 @@ class ContactUs extends Component {
     }
 
     static navigationOptions = () => ({
-        drawerLabel: 'تواصل معنا',
+        drawerLabel: i18n.t('contactUs'),
         drawerIcon: ( <Image source={require('../../assets/images/white_contact_us.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
@@ -27,10 +28,10 @@ class ContactUs extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>اتصل بنا</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ i18n.t('contactUs') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
-                            <Button transparent onPress={() => this.props.navigation.navigate('home')}>
+                            <Button transparent onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>
@@ -66,26 +67,26 @@ class ContactUs extends Component {
                         <View style={{marginBottom:10 }}>
                             <View style={{justifyContent:'space-between', flexDirection:'row' , flex:1}}>
                                 <Item regular style={{ borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , height:45 , padding:5 , width:'48%'}}>
-                                    <Input placeholder="الاسم" 
+                                    <Input placeholder={ i18n.t('name') }
                                     style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign:'right' }} 
-                                    autoCapitalize={none}
+                                    // autoCapitalize={none}
                                     />
                                 </Item>
                                 <Item regular style={{ borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35, height:45 , padding:5 , width:'48%'}}>
-                                    <Input placeholder="الايميل"
+                                    <Input placeholder={ i18n.t('email') }
                                      style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign:'right'}} 
-                                     keyboardType={email-address}
+                                    //  keyboardType={email-address}
                                 
                                      />
                                 </Item>
                             </View>
                             <View style={{ flex:1 , marginTop:10}}>
-                                <Textarea rowSpan={5} style={{paddingTop:10, paddingBottom:10 , paddingLeft:18 , paddingRight:18 , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:30 , fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign:'right'}} placeholder="الرسالة" />
+                                <Textarea rowSpan={5} style={{paddingTop:10, paddingBottom:10 , paddingLeft:18 , paddingRight:18 , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:30 , fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign:'right'}} placeholder={ i18n.t('message') } />
                             </View>
                             <View style={{ marginTop: 10 , marginBottom:10 }}>
                                 <Button onPress={this._toggleModal} style={{ borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>ارسال</Text>
+                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
                                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                 </Button>
                             </View>

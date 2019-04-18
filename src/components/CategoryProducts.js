@@ -3,6 +3,7 @@ import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Dimensi
 import { Container, Content, Button, Header, Right, Body, Left, Icon, Input, Picker, Item, CheckBox } from 'native-base';
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
+import i18n from '../../locale/i18n'
 
 
 const categories = [
@@ -25,6 +26,7 @@ class CategoryProducts extends Component {
             value: 50,
             selected1: undefined,
             starCount: 3,
+            isGrid:true
         }
     }
 
@@ -69,7 +71,7 @@ class CategoryProducts extends Component {
                         />
                     </View>
                     <View style={{ flexDirection: 'row', flex: 1, width: '100%' }}>
-                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', flex: 2, alignSelf: 'flex-start' }}>500 ريال</Text>
+                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', flex: 2, alignSelf: 'flex-start' }}>500 {i18n.t('sr')}</Text>
                         <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
                     </View>
                 </View>
@@ -79,6 +81,15 @@ class CategoryProducts extends Component {
 
     render() {
         const { value } = this.state;
+
+        let grid=require('../../assets/images/multi_product.png');
+        let row=require('../../assets/images/gray_one_product.png');
+
+        if(this.state.isGrid)
+            grid=require('../../assets/images/yellow_multi_product.png');
+        else
+            row=require('../../assets/images/one_product.png');
+
         return (
             <Container>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
@@ -89,7 +100,7 @@ class CategoryProducts extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>الاقسام</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>{i18n.t('products')}</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <View style={{ flexDirection: 'row' }}>
@@ -99,7 +110,7 @@ class CategoryProducts extends Component {
                                 <Button transparent onPress={() => this.setState({ visibleModal: 1 })}>
                                     <Image source={require('../../assets/images/white_filter.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </Button>
-                                <Button transparent onPress={() => this.props.navigation.navigate('models')}>
+                                <Button transparent onPress={() => this.props.navigation.goBack()}>
                                     <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </Button>
                             </View>
@@ -107,15 +118,15 @@ class CategoryProducts extends Component {
                     </ImageBackground>
                 </Header>
                 <View style={{ flexDirection: 'row', height: 50, marginTop: -50, marginBottom: 10, paddingHorizontal: 10 }}>
-                    <TouchableOpacity style={{ margin: 5 }} onPress={() => alert('ops')}>
-                        <Image source={require('../../assets/images/one_product.png')} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
+                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setState({isGrid : true})}>
+                        <Image source={grid} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ margin: 5 }}>
-                        <Image source={require('../../assets/images/yellow_multi_product.png')} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
+                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setState({isGrid : false})}>
+                        <Image source={row} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
                 </View>
                 <Content style={{ padding: 10 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', height: 0 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' , height: this.state.isGrid ? 'auto' : 0}}>
                         <FlatList
                             data={categories}
                             renderItem={({ item }) => this.renderItems(item)}
@@ -124,7 +135,7 @@ class CategoryProducts extends Component {
                             extraData={this.state.refreshed}
                         />
                     </View>
-                    <View style={{ marginTop: 10, alignItems: 'center' }}>
+                    <View style={{ marginTop: 10, alignItems: 'center' , height: this.state.isGrid ? 0 : 'auto'}}>
                         <View style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '96%', marginBottom: 20 }}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('product')}>
                                 <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
@@ -145,7 +156,7 @@ class CategoryProducts extends Component {
                                         starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                                     />
                                 </View>
-                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 ريال</Text>
+                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 {i18n.t('sr')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                                 <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
@@ -172,7 +183,7 @@ class CategoryProducts extends Component {
                                         starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                                     />
                                 </View>
-                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 ريال</Text>
+                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 {i18n.t('sr')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                                 <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
@@ -199,7 +210,7 @@ class CategoryProducts extends Component {
                                         starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                                     />
                                 </View>
-                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 ريال</Text>
+                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 {i18n.t('sr')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                                 <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
@@ -226,7 +237,7 @@ class CategoryProducts extends Component {
                                         starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                                     />
                                 </View>
-                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 ريال</Text>
+                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 {i18n.t('sr')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                                 <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
@@ -253,7 +264,7 @@ class CategoryProducts extends Component {
                                         starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                                     />
                                 </View>
-                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 ريال</Text>
+                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>500 {i18n.t('sr')}</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                                 <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
