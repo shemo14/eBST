@@ -9,7 +9,6 @@ import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {connect} from "react-redux";
 
-
 const height = Dimensions.get('window').height;
 let base64   = [];
 class AddAds extends Component {

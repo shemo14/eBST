@@ -45,6 +45,7 @@ const width = Dimensions.get('window').width;
 const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
 const DrawerNavigator = createDrawerNavigator({
     home: Home,
+    ads: Ads,
     categories: Categories,
     offers: Offers,
     notifications: Notifications,

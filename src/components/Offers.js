@@ -31,7 +31,6 @@ class Offers extends Component {
     }
 
     static navigationOptions = () => ({
-        header: null,
         drawerLabel: () => null
     });
 

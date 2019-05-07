@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
-import {Image, View, Text, TouchableOpacity, ImageBackground, AsyncStorage, Linking } from 'react-native';
-import {Container, Footer, Content, Body } from 'native-base';
+import {Image, View, Text, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
+import {Container, Content} from 'native-base';
 import { DrawerItems } from 'react-navigation';
-
-
 
 class CustomDrawer extends Component {
     constructor(props){
@@ -15,8 +13,9 @@ class CustomDrawer extends Component {
         }
     }
 
-    logout(){
-        console.log('logout')
+    async logout(){
+        this.props.navigation.navigate('login');
+        await AsyncStorage.clear()
     }
 
     render(){
@@ -42,7 +41,7 @@ class CustomDrawer extends Component {
                             />
                         </View>
                         <View style={{ flex: 1 }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.logout()}>
                                 <Image source={require('../../assets/images/white_logout.png')} style={{ height: 40, width: 40, alignSelf: 'flex-end', marginHorizontal: 20 }} resizeMode={'contain'}  />
                             </TouchableOpacity>
                         </View>

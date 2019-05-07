@@ -58,6 +58,7 @@ const ar = {
     'productDetailsExchanger': 'تفاصيل المنتج المبادل',
     'fav': 'المفضلة',
     'offers': 'العروض',
+    'productPrice': 'سعر المنتج',
     'incomingOffers': 'العروض الوارده',
     'passwordRequired': 'كلمة السر مطلوبه',
     'phoneRequired': 'رقم الهاتف مطلوب',

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, ImageBackground, BackHandler, Linking } from "react-native";
+import { View, Text, Image, TouchableOpacity, ImageBackground, BackHandler, Linking, AsyncStorage } from "react-native";
 import {Container, Content, Form, Item, Input, Label, Button, Toast} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from '../../locale/i18n'
 import { connect } from 'react-redux';
 import { userLogin, profile } from '../actions'
 import { Permissions, Notifications } from 'expo'
+import {DoubleBounce} from "react-native-loader";
 
 class Login extends Component {
     constructor(props){
@@ -15,43 +16,48 @@ class Login extends Component {
             passwordStatus: 0,
             phone: '',
             password: '',
-            msgError: '',
             token: '',
-            userId: null
+            userId: null,
+            isLoaded: false
         }
     }
 
-
     validate = () => {
         let isError = false;
-        const errors = {
-            msgError: "",
-        };
+        let msg = '';
 
-        if (this.state.password.length <= 0) {
+        if (this.state.phone.length <= 0 || this.state.phone.length !== 10) {
             isError = true;
-            errors.msgError = i18n.t('passwordRequired');
-        }else if (this.state.phone.length <= 0 || this.state.phone.length !== 10) {
+            msg = i18n.t('phoneValidation');
+        }else if (this.state.password.length <= 0) {
             isError = true;
-            errors.msgError = i18n.t('phoneValidation');
+            msg = i18n.t('passwordRequired');
         }
-
-        this.setState({
-            ...this.state,
-            ...errors
-        });
-
-        if (isError){
+        if (msg != ''){
             Toast.show({
-                text: this.state.msgError,
+                text: msg,
                 type: "danger",
                 duration: 3000
             });
         }
-
         return isError;
     };
 
+    renderSubmit(){
+        if (this.state.isLoaded){
+            return(
+                <DoubleBounce size={20} color="#26b5c4" />
+            )
+        }
+
+        return (
+            <Button onPress={() => this.onLoginPressed()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
+                <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('loginButton') }</Text>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
+            </Button>
+        );
+    }
 
     activeInput(type){
         if (type === 'phone'){
@@ -68,14 +74,12 @@ class Login extends Component {
     }
 
     onLoginPressed() {
-
         const err = this.validate();
         if (!err){
-            this.setState({ loader: true });
+            this.setState({ isLoaded: true });
             const {phone, password, token} = this.state;
             this.props.userLogin({ phone, password, token }, this.props.lang);
         }
-
     }
 
     renderInputImage(type){
@@ -115,15 +119,14 @@ class Login extends Component {
 
         let token = await Notifications.getExpoPushTokenAsync();
         this.setState({ token, userId: null })
+        AsyncStorage.setItem('deviceID', token);
        // alert(token);
-
         console.log('app lang', this.props.lang);
 
     }
 
     componentWillReceiveProps(newProps){
         if (newProps.auth !== null && newProps.auth.status === 200){
-
 
             if (this.state.userId === null){
                 this.setState({ userId: newProps.auth.data.id });
@@ -141,11 +144,8 @@ class Login extends Component {
             });
         }
 
-        this.setState({ loader: false });
+        this.setState({ isLoaded: false });
     }
-
-
-
 
     render() {
         return (
@@ -180,17 +180,13 @@ class Login extends Component {
                                 <TouchableOpacity onPress={()=> this.props.navigation.navigate('forgetPassword')}>
                                     <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>{ i18n.t('forgetPass') }</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('DrawerNavigator')}>
                                     <Text style={{ color: '#6d6c72', fontSize: 13, fontFamily: 'cairo', }}>{ i18n.t('visitor') }</Text>
                                 </TouchableOpacity>
                             </View>
 
                             <View style={{ marginTop: 50 }}>
-                                <Button onPress={() => this.onLoginPressed()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
-                                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('loginButton') }</Text>
-                                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
-                                </Button>
+                                { this.renderSubmit() }
                             </View>
 
                             <View style={{ marginTop: 50 }}>

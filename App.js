@@ -22,14 +22,14 @@ export default class App extends React.Component {
 
   async loadFontAsync() {
     try {
-      await Font.loadAsync({ cairo: require('./assets/fonts/Cairo-Regular.ttf') });
-      await Font.loadAsync({ cairoBold: require('./assets/fonts/Cairo-Bold.ttf') });
-      this.setState({ fontLoaded: true });
+      await Font.loadAsync({cairo: require('./assets/fonts/Cairo-Regular.ttf')});
+      await Font.loadAsync({cairoBold: require('./assets/fonts/Cairo-Bold.ttf')});
+      this.setState({fontLoaded: true});
     } catch (e) {
       console.log(e);
     }
 
-    // await AsyncStorage.clear()
+    //  await AsyncStorage.clear()
   }
 
   render() {
