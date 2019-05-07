@@ -115,7 +115,11 @@ class Login extends Component {
 
         let token = await Notifications.getExpoPushTokenAsync();
         this.setState({ token, userId: null })
+<<<<<<< HEAD
+       alert(token);
+=======
        // alert(token);
+>>>>>>> 210a0936eeb04612b81ae32c7abab3933e8e836e
 
         console.log('app lang', this.props.lang);
 
