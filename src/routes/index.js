@@ -45,6 +45,7 @@ const width = Dimensions.get('window').width;
 const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
 const DrawerNavigator = createDrawerNavigator({
     home: Home,
+    ads: Ads,
     categories: Categories,
     offers: Offers,
     notifications: Notifications,
@@ -57,6 +58,7 @@ const DrawerNavigator = createDrawerNavigator({
     contactUs: ContactUs,
     settings: Settings,
     incomingOffers: IncomingOffers,
+    product: ProductDetails,
 
 }, {
     nitialRouteName: 'home',
@@ -254,4 +256,3 @@ const AppNavigator = createStackNavigator({
 });
 
 export default createAppContainer(AppNavigator);
-

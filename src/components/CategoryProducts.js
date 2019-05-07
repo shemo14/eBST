@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, Slider } from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, Slider, AsyncStorage } from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, Icon, Input, Picker, Item, CheckBox } from 'native-base';
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
@@ -8,8 +8,6 @@ import axios from 'axios'
 import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
-
-
 
 const width = Dimensions.get('window').width;
 class CategoryProducts extends Component {
@@ -21,8 +19,8 @@ class CategoryProducts extends Component {
             showData: [],
             receiveShow: true,
             value: 50,
-            selected1: undefined,
-            starCount: 3,
+            selectedCountry: undefined,
+            starCount: null,
             isGrid:true,
             itemId:this.props.navigation.state.params.id,
             products:[],
@@ -31,20 +29,28 @@ class CategoryProducts extends Component {
             refreshed: false,
             fadeAnim: new Animated.Value(0),
             availabel: 0,
+            countries: [],
+            type: null
         }
     }
-    componentWillMount(){
 
-        axios({ 
-            url:CONST.url+'category_products' ,
-            method:'POST' , 
-            headers: {Authorization: this.props.user.token },
-            data:{category_id:this.state.itemId}
-         }).then(response=>{
-            this.setState({products:response.data.data , status:response.data.status})
-        })
+    componentWillMount() {
+        AsyncStorage.getItem('deviceID').then(deviceID => {
+            axios({
+                url: CONST.url + 'category_products',
+                method: 'POST',
+                headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
+                data: {category_id: this.state.itemId, device_id: deviceID}
+            }).then(response => {
+                this.setState({products: response.data.data, status: response.data.status})
+            })
+        });
 
+        axios.post(CONST.url + 'countries', { lang: this.props.lang }).then(response => {
+            this.setState({ countries: response.data.data })
+        });
     }
+
     change(value) {
         this.setState(() => {
             return {
@@ -87,17 +93,16 @@ class CategoryProducts extends Component {
         }
     }
 
-
     renderItems = (item) => {
-
-        // console.log(item)
         return (
             <View style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, margin: 5, overflow: 'hidden' }}>
-                <View style={{ width: '100%' }}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: item.id })} style={{ width: '100%' }}>
                     <Image source={{uri:item.image}} resizeMode={'stretch'} style={{ width: '100%', height: 100, flex: 1 }} />
-                </View>
+                </TouchableOpacity>
                 <View style={{ width: '100%', padding: 5 }}>
-                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17 }}>{item.name}</Text>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: item.id })}>
+                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17, alignSelf: 'flex-start' }}>{item.name}</Text>
+                    </TouchableOpacity>
                     <View style={{ alignSelf: 'flex-start' }}>
                         <StarRating
                             disabled={true}
@@ -118,7 +123,6 @@ class CategoryProducts extends Component {
         );
     }
 
-    
     renderLoader(){
         if (this.state.status === null){
             return(
@@ -134,33 +138,54 @@ class CategoryProducts extends Component {
             return(
                 <View style={{ width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                     <Image source={require('../../assets/images/no_data.png')} resizeMode={'contain'} style={{ width: 200, height: 200 }}/>
-                    <Text style={{ fontFamily: 'cairo', fontSize: 16, textAlign: "center", marginTop: 10, color: '#6d6c72' }}>{ i18n.t('noData') }</Text>
+                    <Text style={{ fontFamily: 'cairo', fontSize: 16, textAlign: "center", marginTop: 10, color: '#6d6c72' }}>{ i18n.t('noSearchResult') }</Text>
                 </View>
             );
         }
     }
 
-    search(){
-        this.setState({ status: null, refreshed: true })
-         
+    search() {
+        this.setState({status: null, refreshed: true})
 
-        axios({ 
-            url:CONST.url+'products_search' ,
-            method:'POST' , 
-            headers: {Authorization: this.props.user.token },
-            data:{search: this.state.search, lang: this.props.lang , category_id:this.state.itemId}
-         }).then(response=>{
-
-             console.log(response.data.data);
-             
-            this.setState({ products: response.data.data, status: response.data.status, refreshed: false })
-        })
-
+        AsyncStorage.getItem('deviceID').then(deviceID => {
+            axios({
+                url: CONST.url + 'products_search',
+                method: 'POST',
+                headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
+                data: {search: this.state.search, lang: this.props.lang, category_id: this.state.itemId, device_id: deviceID}
+            }).then(response => {
+                this.setState({products: response.data.data, status: response.data.status, refreshed: false})
+            })
+        });
     }
+
+    setFilterType = ( type ) => {
+        if (type === this.state.type)
+            this.setState({ type: null })
+        else
+            this.setState({ type })
+    }
+
+    productFilter(){
+        this.setState({status: null, refreshed: true, visibleModal: null})
+
+        AsyncStorage.getItem('deviceID').then(deviceID => {
+            axios({
+                url: CONST.url + 'products_filter',
+                method: 'POST',
+                headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
+                data: {country_id: this.state.selectedCountry, type: this.state.type, rate: this.state.starCount, category_id: this.state.itemId, device_id: deviceID}
+            }).then(response => {
+                this.setState({products: response.data.data, status: response.data.status, refreshed: false})
+            })
+        });
+    }
+
 
     render() {
         const { value } = this.state;
-        // console.log(this.state.products)
+        console.log(this.state.countries)
+        console.log('this is fucken products ...', this.state.products)
 
         let grid=require('../../assets/images/multi_product.png');
         let row=require('../../assets/images/gray_one_product.png');
@@ -180,7 +205,7 @@ class CategoryProducts extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>{i18n.t('products')}</Text>
+                        <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>{i18n.t('products')}</Text>
                         </Body>
                         <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: 32, position: 'absolute', borderColor: '#e2b705', marginLeft: 10 }}>
                             <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
@@ -215,7 +240,7 @@ class CategoryProducts extends Component {
 
                     { this.renderLoader() }
                     { this.renderNoData() }
-                    
+
                     <View style={{ flexDirection: 'row', justifyContent: 'center' , height: this.state.isGrid ? 'auto' : 0}}>
                         <FlatList
                             data={this.state.products}
@@ -226,13 +251,10 @@ class CategoryProducts extends Component {
                         />
                     </View>
 
-
                     <View style={{ marginTop: 10, alignItems: 'center' , height: this.state.isGrid ? 0 : 'auto'}}>
                         {
                             this.state.products.map(
-                                            
                                 (product , i) => {
-                                        
                                     return(
                                         <View key={i} style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '96%', marginBottom: 20 }}>
                                             <TouchableOpacity onPress={() => this.props.navigation.navigate('product')}>
@@ -262,20 +284,19 @@ class CategoryProducts extends Component {
                                         </View>
                                     )
                                 }
-                            ) 
+                            )
                         }
                     </View>
-
                 </Content>
 
                 <Modal isVisible={this.state.visibleModal === 1} onBackdropPress={() => this.setState({ visibleModal: null })}>
                     <View style={{ width: '115%', position: 'absolute', top: -20, backgroundColor: '#26b5c4', justifyContent: 'center', alignItems: 'center', height: 300, alignSelf: 'center' }}>
                         <View style={{ width: '100%', height: 40, top: -8, position: 'absolute', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginTop: 15 }} noShadow>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.productFilter()}>
                                 <Image source={require('../../assets/images/check_mark.png')} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
                             </TouchableOpacity>
-                            <Text style={{ color: '#fff', fontSize: 17, textAlign: 'center', fontFamily: 'cairo' }}>بحث متقدم</Text>
-                            <TouchableOpacity>
+                            <Text style={{ color: '#fff', fontSize: 17, textAlign: 'center', fontFamily: 'cairo' }}>{ i18n.t('advancedSearch') }</Text>
+                            <TouchableOpacity onPress={() => this.setState({ visibleModal: null })}>
                                 <Image source={require('../../assets/images/cancel.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </TouchableOpacity>
                         </View>
@@ -285,39 +306,43 @@ class CategoryProducts extends Component {
                                     <Picker
                                         mode="dropdown"
                                         iosIcon={<Icon name="arrow-down" />}
-                                        style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#fff" }}
+                                        style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", fontWeight: 'normal', color: "#fff" }}
                                         placeholder="المدن"
                                         placeholderStyle={{ color: "#fff" }}
                                         placeholderIconColor="#fff"
-                                        selectedValue={this.state.selected1}
-                                        onValueChange={(value) => this.setState({ selected1: value })}
+                                        selectedValue={this.state.selectedCountry}
+                                        onValueChange={(value) => this.setState({ selectedCountry: value })}
                                     >
-                                        <Picker.Item label="مصر" value="key0" />
-                                        <Picker.Item label="فرنسا" value="key1" />
-                                        <Picker.Item label="امريكا" value="key2" />
+                                        {
+                                            this.state.countries.map((country, i) => (
+                                                <Picker.Item key={i} label={country.name} value={country.id} />
+                                            ))
+                                        }
                                     </Picker>
                                     <Image source={require('../../assets/images/white_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
                                 </Item>
                             </View>
-                            <View style={{ width: '100%', marginTop: 20 }}>
-                                <Slider
-                                    step={10}
-                                    maximumValue={50}
-                                    onValueChange={this.change.bind(this)}
-                                    value={value}
-                                    thumbTintColor={'#fff'}
-                                    style={{ width: (width * 85) / 100 }}
-                                    maximumTrackTintColor={"#e2b705"}
-                                    minimumTrackTintColor={'#fff'}
-                                />
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: (width * 85) / 100, alignItems: 'center' }}>
-                                    <Text style={{ color: '#fff' }}>10</Text>
-                                    <Text style={{ color: '#fff' }}>20</Text>
-                                    <Text style={{ color: '#fff' }}>30</Text>
-                                    <Text style={{ color: '#fff' }}>40</Text>
-                                    <Text style={{ color: '#fff' }}>50</Text>
-                                </View>
-                            </View>
+
+                            {/*<View style={{ width: '100%', marginTop: 20 }}>*/}
+                            {/*    <Slider*/}
+                            {/*        step={10}*/}
+                            {/*        maximumValue={50}*/}
+                            {/*        onValueChange={this.change.bind(this)}*/}
+                            {/*        value={value}*/}
+                            {/*        thumbTintColor={'#fff'}*/}
+                            {/*        style={{ width: (width * 85) / 100 }}*/}
+                            {/*        maximumTrackTintColor={"#e2b705"}*/}
+                            {/*        minimumTrackTintColor={'#fff'}*/}
+                            {/*    />*/}
+                            {/*    <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 5, width: (width * 85) / 100, alignItems: 'center' }}>*/}
+                            {/*        <Text style={{ color: '#fff' }}>10</Text>*/}
+                            {/*        <Text style={{ color: '#fff' }}>20</Text>*/}
+                            {/*        <Text style={{ color: '#fff' }}>30</Text>*/}
+                            {/*        <Text style={{ color: '#fff' }}>40</Text>*/}
+                            {/*        <Text style={{ color: '#fff' }}>50</Text>*/}
+                            {/*    </View>*/}
+                            {/*</View>*/}
+
                         </View>
                         <View style={{ justifyContent: 'center', alignItems: 'center', width: '80%', borderRadius: 30, borderColor: '#fff', borderWidth: 1, height: 50, marginTop: 20 }}>
                             <StarRating
@@ -330,13 +355,13 @@ class CategoryProducts extends Component {
                                 starStyle={{ color: '#fff', marginHorizontal: 2 }}
                             />
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginTop: 20, alignItems: 'center', width: '80%' }}>
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center', marginHorizontal: 30 }}>
-                                <CheckBox checked={true} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20, alignItems: 'center', width: '80%' }}>
+                            <TouchableOpacity onPress={() => this.setFilterType(1)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
+                                <CheckBox onPress={() => this.setFilterType(1)} checked={this.state.type === 1 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
                                 <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مزايدات</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center', marginHorizontal: 30 }}>
-                                <CheckBox checked={false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
+                            <TouchableOpacity onPress={() => this.setFilterType(2)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
+                                <CheckBox onPress={() => this.setFilterType(2)} checked={this.state.type === 2 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
                                 <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مبادلات</Text>
                             </TouchableOpacity>
                         </View>

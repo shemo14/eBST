@@ -65,6 +65,8 @@ const en = {
     'phoneValidation': 'Phone number is incorrect',
     'noData': 'there is no data',
     'finishAds': 'your ad added successfully',
+    'advancedSearch': 'advanced Search',
+    'noSearchResult': 'no search Result',
 }
 
 export default en;

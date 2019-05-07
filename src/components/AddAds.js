@@ -1,3 +1,4 @@
+
 import React, { Component } from "react";
 import { View, Text, Image, Dimensions, ImageBackground, FlatList, ImageStore, TouchableOpacity } from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
@@ -8,7 +9,6 @@ import axios from 'axios'
 import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {connect} from "react-redux";
-
 
 const height = Dimensions.get('window').height;
 let base64   = [];
@@ -124,9 +124,9 @@ class AddAds extends Component {
 
         return (
             <Button onPress={()=> this.addAds()} style={{ borderRadius: 25, width: 130, height: 40,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#15b5c5' , position:'absolute' , bottom:-25}}>
-                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-12}}></View>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-12}} />
                 <Text style={{color:'#fff' , fontSize:17}}>{ i18n.t('add') }</Text>
-                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-12}}></View>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-12}} />
             </Button>
         );
     }
@@ -193,4 +193,5 @@ const mapStateToProps = ({ profile, lang }) => {
         lang: lang.lang
     };
 };
+
 export default connect(mapStateToProps, {})(AddAds);

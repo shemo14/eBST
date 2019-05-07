@@ -27,7 +27,7 @@ export const userLogout = ({ user_id }) => {
 
 
 const handelLogin = (dispatch, data) => {
-    if (data.key === "0"){
+    if (data.status != 200){
         loginFailed(dispatch, data)
     }else{
         loginSuccess(dispatch, data)

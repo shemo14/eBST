@@ -65,6 +65,8 @@ const ar = {
     'phoneValidation': 'رقم الهاتف غير صحيح',
     'noData': 'لا يوجد بيانات حاليا',
     'finishAds': 'تم اضافة الاعلان بنجاح  وفي انتظار الموافقة من الادارة',
+    'advancedSearch': 'بحث متقدم',
+    'noSearchResult': 'لا يوجد نتائج بحث',
 }
 
 export default ar;

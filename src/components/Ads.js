@@ -6,11 +6,8 @@ import i18n from '../../locale/i18n'
 import axios from 'axios'
 import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
-<<<<<<< HEAD
 import Modal from "react-native-modal";
 import Swiper from 'react-native-swiper';
-=======
->>>>>>> 210a0936eeb04612b81ae32c7abab3933e8e836e
 
 const height = Dimensions.get('window').height;
 class Ads extends Component {
@@ -18,20 +15,15 @@ class Ads extends Component {
         super(props);
         this.state={
             ads:[],
-<<<<<<< HEAD
             adsImgs:[],
             status: null,
             offerTwoModal: false
-=======
-            status: null,
->>>>>>> 210a0936eeb04612b81ae32c7abab3933e8e836e
         }
     }
     offerTwoModal = () => this.setState({ offerTwoModal: !this.state.offerTwoModal });
 
-
     static navigationOptions = () => ({
-        header: null
+        drawerLabel: () => null
     });
 
     componentWillMount(){
@@ -43,10 +35,6 @@ class Ads extends Component {
                 images[i] = {
                     uri: ads[i].image,
                     dimensions: { width: 1080, height: 1000 },
-<<<<<<< HEAD
-                    id: ads[i].id
-=======
->>>>>>> 210a0936eeb04612b81ae32c7abab3933e8e836e
                 }
             }
 
@@ -55,7 +43,7 @@ class Ads extends Component {
 
     }
 
-<<<<<<< HEAD
+
     renderAddsImgs(item , i){
         this.setState({adsImgs:[]})
         console.log('item: ' + item.id + 'i ' + i);
@@ -66,8 +54,6 @@ class Ads extends Component {
     }
 
 
-=======
->>>>>>> 210a0936eeb04612b81ae32c7abab3933e8e836e
     renderLoader(){
         if (this.state.status === null){
             return(
@@ -76,7 +62,6 @@ class Ads extends Component {
                 </View>
             );
         }
-<<<<<<< HEAD
     }
 
     renderNoData(){
@@ -90,8 +75,6 @@ class Ads extends Component {
         }
     }
 
-=======
-    }
 
     renderNoData(){
         if (this.state.ads.length === 0 && this.state.status != null){
@@ -103,9 +86,6 @@ class Ads extends Component {
             );
         }
     }
-
->>>>>>> 210a0936eeb04612b81ae32c7abab3933e8e836e
-
 
     renderHeader(data){
         if (data.index === 1){
@@ -133,7 +113,7 @@ class Ads extends Component {
                     <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
-                                <Icon name='menu' style={{ color: '#fff', fontSize: 30, marginTop: 8, left: -10 }} />
+                                <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
@@ -141,7 +121,7 @@ class Ads extends Component {
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                <Icon name={'ios-arrow-back'} type='Ionicons' style={{ color: '#fff' }} />
+                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                             </Button>
                         </Left>
                     </ImageBackground>
@@ -165,27 +145,27 @@ class Ads extends Component {
                     </Button>
                 </View>
                 <Modal isVisible={this.state.offerTwoModal} onBackdropPress={()=> this.setState({ offerTwoModal : false })}>
-                        <View style={{ flex: 1 , padding:10 , position:'absolute' , width:'100%' ,overflow:'hidden'}}>
-                            <View style={{width:'100%' ,  overflow:'hidden'}}>
-                                <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50 , bottom:-15}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12 , bottom:-15}} style={{ width: '100%', height: 180, overflow: 'hidden' }} showsButtons={false} autoplay={true}>
-                                    {
-                                        this.state.adsImgs.map(
-                                            
-                                            (img , i) => {
-                                                    
-                                                return(
-                                                    <View key={i} style={styles.slide}>
-                                                        <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
-                                                        <Image source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
-                                                    </View>
-                                                )
-                                            }
-                                        ) 
-                                    }
-                                </Swiper>
-                            </View>
-                            </View>
-                        </Modal>
+                    <View style={{ flex: 1 , padding:10 , position:'absolute' , width:'100%' ,overflow:'hidden'}}>
+                        <View style={{width:'100%' ,  overflow:'hidden'}}>
+                            <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50 , bottom:-15}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12 , bottom:-15}} style={{ width: '100%', height: 180, overflow: 'hidden' }} showsButtons={false} autoplay={true}>
+                                {
+                                    this.state.adsImgs.map(
+
+                                        (img , i) => {
+
+                                            return(
+                                                <View key={i} style={styles.slide}>
+                                                    <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
+                                                    <Image source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
+                                                </View>
+                                            )
+                                        }
+                                    )
+                                }
+                            </Swiper>
+                        </View>
+                    </View>
+                </Modal>
 
             </Container>
         );
