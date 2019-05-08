@@ -59,7 +59,7 @@ const DrawerNavigator = createDrawerNavigator({
     settings: Settings,
     incomingOffers: IncomingOffers,
     product: ProductDetails,
-
+    addProduct: AddProduct
 }, {
     nitialRouteName: 'home',
     drawerPosition: 'right',

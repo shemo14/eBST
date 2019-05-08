@@ -18,7 +18,7 @@ class ProductDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            starCount: 3,
+            starCount: 0,
             redHeart: false,
             isModalVisible: false,
             id: this.props.navigation.state.params.id,
@@ -35,13 +35,28 @@ class ProductDetails extends Component {
     }
 
     onStarRatingPress(rating) {
-        this.setState({
-            starCount: rating
-        });
+        this.setState({ starCount: rating });
+        axios({
+            url: CONST.url + 'rate',
+            method: 'POST',
+            headers: {Authorization: this.props.user.token},
+            data: {product_id: this.state.id, rate: rating, lang: this.props.lang}
+        }).then(response => {
+            this.setState({ starCount: response.data.data.rate })
+        })
     }
 
     redHeart() {
         this.setState({redHeart: !this.state.redHeart})
+
+        AsyncStorage.getItem('deviceID').then(deviceID => {
+            axios({
+                url: CONST.url + 'set_fav',
+                method: 'POST',
+                headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
+                data: {product_id: this.state.id, device_id: deviceID, lang: this.props.lang}
+            })
+        })
     }
 
     renderImage() {
@@ -77,7 +92,9 @@ class ProductDetails extends Component {
                     product: response.data.data.details,
                     images: response.data.data.images,
                     comments: response.data.data.comments,
-                    status: response.data.status
+                    status: response.data.status,
+                    redHeart: response.data.data.details.isLiked,
+                    starCount: response.data.data.details.rate
                 })
             })
         })
@@ -205,7 +222,7 @@ class ProductDetails extends Component {
                             <StarRating
                                 disabled={false}
                                 maxStars={5}
-                                rating={this.state.product.rate}
+                                rating={this.state.starCount}
                                 fullStarColor={'#26b5c4'}
                                 selectedStar={(rating) => this.onStarRatingPress(rating)}
                                 starSize={17}
@@ -218,7 +235,7 @@ class ProductDetails extends Component {
                                         fontSize: 12,
                                         marginHorizontal: 2,
                                         fontFamily: 'cairo'
-                                    }}>45</Text>
+                                    }}>{ this.state.product.views }</Text>
                                     <Image source={require('../../assets/images/gray_seen.png')}
                                            style={{width: 20, height: 20}} resizeMode={'contain'}/>
                                 </View>

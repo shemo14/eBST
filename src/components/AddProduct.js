@@ -4,6 +4,10 @@ import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
 import i18n from '../../locale/i18n'
+import axios from 'axios'
+import CONST from '../consts'
+import { DoubleBounce } from 'react-native-loader';
+import {connect} from 'react-redux';
 
 const height = Dimensions.get('window').height;
 class AddProduct extends Component {
@@ -17,10 +21,32 @@ class AddProduct extends Component {
             refreshed: false,
             productName: 0,
             productPrice: 0,
-            productDisc: 0
+            productDisc: 0,
+            categories: [],
+            status: null,
+            selectedCategory: null,
         }
     }
 
+    static navigationOptions = () => ({
+        drawerLabel: () => null
+    });
+
+    componentWillMount() {
+        axios.post(CONST.url + 'categories', { lang: this.props.lang }).then(response => {
+            this.setState({ categories: response.data.data, status: response.data.status })
+        })
+    }
+
+    renderLoader(){
+        if (this.state.status === null){
+            return(
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: 400, }}>
+                    <DoubleBounce size={20} color="#26b5c4" />
+                </View>
+            );
+        }
+    }
 
     async componentDidMount(){
         await Permissions.askAsync(Permissions.CAMERA);
@@ -131,6 +157,8 @@ class AddProduct extends Component {
                 </Header>
 
                 <Content style={{ padding: 20 , marginBottom:20}}>
+                    { this.renderLoader() }
+
                     <KeyboardAvoidingView behavior={'position'} style={{width:'100%', height: null, flex: 1,}}>
                         <View style={{ width: undefined, height: 100, flex: 1, justifyContent: 'center', alignItems: 'center', margin: 2  }}>
                             <Button onPress={() => this.state.photos.length === 5 ?  alert("ops") : this.setState({imageBrowserOpen: true})} transparent style={{ borderRadius: 5, borderColor: '#c6c5c5', borderWidth: 1, width: 70, height: 70, transform: [{ rotate: '-45deg'}], alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}>
@@ -168,12 +196,14 @@ class AddProduct extends Component {
                                             style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
                                             placeholderStyle={{ color: "#c5c5c5" }}
                                             placeholderIconColor="#fff"
-                                            selectedValue={this.state.selected1}
-                                            onValueChange={(value) => this.setState({ selected1: value })}
+                                            selectedValue={this.state.selectedCategory}
+                                            onValueChange={(value) => this.setState({ selectedCategory: value })}
                                         >
-                                            <Picker.Item label={ i18n.t('category') } value="key0" />
-                                            <Picker.Item label="فرنسا" value="key1" />
-                                            <Picker.Item label="امريكا" value="key2" />
+                                            {
+                                                this.state.categories.map((category, i) => (
+                                                    <Picker.Item key={i} label={category.name} value={category.id} />
+                                                ))
+                                            }
                                         </Picker>
                                         <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
                                     </Item>

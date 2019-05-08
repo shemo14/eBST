@@ -34,6 +34,7 @@ class Ads extends Component {
             for (var i = 0; i < ads.length; i++){
                 images[i] = {
                     uri: ads[i].image,
+                    id: ads[i].id,
                     dimensions: { width: 1080, height: 1000 },
                 }
             }

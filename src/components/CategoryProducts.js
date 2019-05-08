@@ -23,6 +23,7 @@ class CategoryProducts extends Component {
             starCount: null,
             isGrid:true,
             itemId:this.props.navigation.state.params.id,
+            productsType:this.props.navigation.state.params.type,
             products:[],
             status: null,
             search: '',
@@ -30,7 +31,7 @@ class CategoryProducts extends Component {
             fadeAnim: new Animated.Value(0),
             availabel: 0,
             countries: [],
-            type: null
+            type: null,
         }
     }
 
@@ -40,7 +41,7 @@ class CategoryProducts extends Component {
                 url: CONST.url + 'category_products',
                 method: 'POST',
                 headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
-                data: {category_id: this.state.itemId, device_id: deviceID}
+                data: {category_id: this.state.itemId, device_id: deviceID, type: this.state.productsType}
             }).then(response => {
                 this.setState({products: response.data.data, status: response.data.status})
             })
@@ -49,6 +50,23 @@ class CategoryProducts extends Component {
         axios.post(CONST.url + 'countries', { lang: this.props.lang }).then(response => {
             this.setState({ countries: response.data.data })
         });
+    }
+
+    renderType(){
+        if (this.state.productsType === 2){
+            return(
+                <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20, alignItems: 'center', width: '80%' }}>
+                    <TouchableOpacity onPress={() => this.setFilterType(1)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
+                        <CheckBox onPress={() => this.setFilterType(1)} checked={this.state.type === 1 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
+                        <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مزايدات</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.setFilterType(2)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
+                        <CheckBox onPress={() => this.setFilterType(2)} checked={this.state.type === 2 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
+                        <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مبادلات</Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
     }
 
     change(value) {
@@ -152,7 +170,13 @@ class CategoryProducts extends Component {
                 url: CONST.url + 'products_search',
                 method: 'POST',
                 headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
-                data: {search: this.state.search, lang: this.props.lang, category_id: this.state.itemId, device_id: deviceID}
+                data: {
+                    search: this.state.search,
+                    lang: this.props.lang,
+                    category_id: this.state.itemId,
+                    device_id: deviceID,
+                    type: this.state.productsType
+                }
             }).then(response => {
                 this.setState({products: response.data.data, status: response.data.status, refreshed: false})
             })
@@ -174,7 +198,14 @@ class CategoryProducts extends Component {
                 url: CONST.url + 'products_filter',
                 method: 'POST',
                 headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
-                data: {country_id: this.state.selectedCountry, type: this.state.type, rate: this.state.starCount, category_id: this.state.itemId, device_id: deviceID}
+                data: {
+                    country_id: this.state.selectedCountry,
+                    type: this.state.type,
+                    rate: this.state.starCount,
+                    category_id: this.state.itemId,
+                    device_id: deviceID,
+                    product_type: this.state.productsType
+                }
             }).then(response => {
                 this.setState({products: response.data.data, status: response.data.status, refreshed: false})
             })
@@ -355,16 +386,7 @@ class CategoryProducts extends Component {
                                 starStyle={{ color: '#fff', marginHorizontal: 2 }}
                             />
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20, alignItems: 'center', width: '80%' }}>
-                            <TouchableOpacity onPress={() => this.setFilterType(1)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
-                                <CheckBox onPress={() => this.setFilterType(1)} checked={this.state.type === 1 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
-                                <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مزايدات</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={() => this.setFilterType(2)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
-                                <CheckBox onPress={() => this.setFilterType(2)} checked={this.state.type === 2 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
-                                <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مبادلات</Text>
-                            </TouchableOpacity>
-                        </View>
+                        { this.renderType() }
                     </View>
                 </Modal>
             </Container>
