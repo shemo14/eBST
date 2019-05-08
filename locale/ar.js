@@ -67,6 +67,13 @@ const ar = {
     'finishAds': 'تم اضافة الاعلان بنجاح  وفي انتظار الموافقة من الادارة',
     'advancedSearch': 'بحث متقدم',
     'noSearchResult': 'لا يوجد نتائج بحث',
+    'buy': 'شراء',
+    'auction': 'مزايدة',
+    'exchange': 'مبادلة',
+    'exchangeWithDifferencePrice': 'مبادلة مع فرق السعر',
+    'auctionPrice': 'سعر المزايدة',
+    'exchangeProduct': 'منتج المبادلة',
+    'productDesc': 'وصف المنتج',
 }
 
 export default ar;

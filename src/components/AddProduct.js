@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, Image, Dimensions, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView} from "react-native";
-import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label , Textarea , CheckBox , Picker } from 'native-base'
+import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView} from "react-native";
+import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label , Textarea , Picker } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
 import i18n from '../../locale/i18n'
@@ -9,7 +9,8 @@ import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
 
-const height = Dimensions.get('window').height;
+
+let base64   = [];
 class AddProduct extends Component {
     constructor(props){
         super(props);
@@ -19,12 +20,23 @@ class AddProduct extends Component {
             photos: [],
             imageId: null,
             refreshed: false,
-            productName: 0,
-            productPrice: 0,
-            productDisc: 0,
+            name: null,
+            nameStatus: 0,
+            price: null,
+            priceStatus: 0,
+            desc: null,
+            descStatus: 0,
+            auctionPrice: null,
+            auctionPriceStatus: 0,
+            exchangeProduct: null,
+            exchangeProductStatus: 0,
+            extraPrice: null,
+            extraPriceStatus: 0,
             categories: [],
             status: null,
             selectedCategory: null,
+            selectedType: 1,
+            isSubmitted: false
         }
     }
 
@@ -48,33 +60,74 @@ class AddProduct extends Component {
         }
     }
 
+    setType(value){
+        if (value == 1)
+            this.setState({ auctionPrice: null, exchangeProduct: null, extraPrice: null, selectedType: value });
+        else if(value == 2)
+            this.setState({ price: null, exchangeProduct: null, extraPrice: null, selectedType: value });
+        else if(value == 3)
+          this.setState({ auctionPrice: null, price: null, extraPrice: null, selectedType: value });
+        else if(value == 4)
+         this.setState({ auctionPrice: null, price: null, selectedType: value });
+    }
+
     async componentDidMount(){
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
     }
 
+    renderSubmit(){
+        if (this.state.isSubmitted){
+            return(
+                <DoubleBounce size={20} color="#26b5c4" />
+            )
+        }
+
+        return (
+            <Button onPress={() => this.addProduct()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4', marginBottom: 20 }}>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
+                <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
+                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
+            </Button>
+        );
+    }
+
     activeInput(type){
         if (type === 'name'){
-            this.setState({ productName: 1 })
+            this.setState({ nameStatus: 1 })
         }else if (type === 'price') {
-            this.setState({productPrice: 1})
-        } else
-            this.setState({productDisc: 1})
+            this.setState({ priceStatus: 1 })
+        }else if (type === 'desc') {
+            this.setState({ descStatus: 1 })
+        }else if (type === 'auctionPrice') {
+            this.setState({ auctionPriceStatus: 1 })
+        }else if (type === 'exchangeProduct') {
+            this.setState({ exchangeProductStatus: 1 })
+        } else if (type === 'extraPrice') {
+            this.setState({ extraPriceStatus: 1 })
+        }
     }
 
     unActiveInput(type){
         if (type === 'name'){
-            this.setState({ productName: 0 })
+            this.setState({ nameStatus: 0 })
         }else if (type === 'price') {
-            this.setState({productPrice: 0})
-        } else
-            this.setState({productDisc: 0})
+            this.setState({ priceStatus: 0 })
+        }else if (type === 'desc') {
+            this.setState({ descStatus: 0 })
+        }else if (type === 'auctionPrice') {
+            this.setState({ auctionPriceStatus: 0 })
+        }else if (type === 'exchangeProduct') {
+            this.setState({ exchangeProductStatus: 0 })
+        } else if (type === 'extraPrice') {
+            this.setState({ extraPriceStatus: 0 })
+        }
     }
 
 
 
     static navigationOptions = () => ({
-        header: null
+        drawerLabel: () => null
     });
 
     _keyExtractor = (item, index) => item.id;
@@ -94,13 +147,6 @@ class AddProduct extends Component {
     }
 
     renderItems = (item, imageId) => {
-        // ImageStore.getBase64ForTag(item.file, (base64Data) => {
-        //     console.log(base64Data)
-        // }, (reason) => console.error(reason));
-
-
-        console.log('this is md5 here.....', item.md5, this.state.imageId);
-
         return(
             <View style={{ margin: 2}}>
                 <TouchableOpacity onPress={() => this.deleteImage(item)} style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', position: 'absolute', zIndex: 999, height: imageId === item.md5 ? 60 : 0, width: 60, alignItems: 'center', justifyContent: 'center', borderRadius: 3 }}>
@@ -124,9 +170,93 @@ class AddProduct extends Component {
                 photos: images.concat(photos)
             });
 
-            console.log(this.state.photos)
-        }).catch((e) => console.log(e))
+            const imgs = this.state.photos;
+
+            for (var i =1; i < imgs.length; i++) {
+                ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
+                    base64.push(base64Data);
+                }, (reason) => console.error(reason));
+            }
+
+            }).catch((e) => console.log(e))
     };
+
+    addProduct(){
+        this.setState({ isSubmitted: true });
+
+        axios({
+            method: 'POST',
+            url: CONST.url + 'add_product',
+            headers: {Authorization: this.props.user.token },
+            data: {
+                name: this.state.name,
+                desc: this.state.desc,
+                price: this.state.price,
+                lang: this.props.lang,
+                type: this.state.selectedType,
+                exchange_price: this.state.extraPrice,
+                max_price: this.state.auctionPrice,
+                exchange_product: this.state.exchangeProduct,
+                category_id: this.state.selectedCategory,
+                images: JSON.stringify(base64)
+            }}).then(response => {
+            if (response.data.status === 200){
+                this.props.navigation.navigate('confirm');
+            }
+        })
+    }
+
+    renderProductOptions(){
+        if (this.state.selectedType == 1){
+            return(
+                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.priceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
+                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
+                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productPrice') }</Label>
+                        <Input onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                    </Item>
+                </View>
+
+            );
+        } else if (this.state.selectedType == 2){
+            return(
+                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.auctionPriceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
+                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
+                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('auctionPrice') }</Label>
+                        <Input onChangeText={(auctionPrice) => this.setState({ auctionPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('auctionPrice')} onFocus={() => this.activeInput('auctionPrice')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                    </Item>
+                </View>
+
+            );
+        } else if (this.state.selectedType == 3){
+            return(
+                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.exchangeProductStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
+                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
+                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('exchangeProduct') }</Label>
+                        <Input onChangeText={(exchangeProduct) => this.setState({ exchangeProduct })} onBlur={() => this.unActiveInput('exchangeProduct')} onFocus={() => this.activeInput('exchangeProduct')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                    </Item>
+                </View>
+            )
+        } else if (this.state.selectedType == 4){
+            return(
+                <View>
+                    <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.exchangeProductStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
+                        <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
+                            <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('exchangeProduct') }</Label>
+                            <Input onChangeText={(exchangeProduct) => this.setState({ exchangeProduct })} onBlur={() => this.unActiveInput('exchangeProduct')} onFocus={() => this.activeInput('exchangeProduct')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                        </Item>
+                    </View>
+
+                    <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.extraPriceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
+                        <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
+                            <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('extraPrice') }</Label>
+                            <Input onChangeText={(extraPrice) => this.setState({ extraPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                        </Item>
+                    </View>
+                </View>
+            )
+        }
+    }
+
 
     render() {
         if (this.state.imageBrowserOpen) {
@@ -137,7 +267,7 @@ class AddProduct extends Component {
 
 
         return (
-            <Container style={{ paddingBottom: 20, marginBottom: 10, backgroundColor: 'transparent' }}>
+            <Container style={{ backgroundColor: 'transparent' }}>
                  <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
                     <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
@@ -156,10 +286,10 @@ class AddProduct extends Component {
                     </ImageBackground>
                 </Header>
 
-                <Content style={{ padding: 20 , marginBottom:20}}>
+                <Content style={{ padding: 10 }}>
                     { this.renderLoader() }
 
-                    <KeyboardAvoidingView behavior={'position'} style={{width:'100%', height: null, flex: 1,}}>
+                    <KeyboardAvoidingView behavior={'padding'} style={{width:'100%', height: null, flex: 1,}}>
                         <View style={{ width: undefined, height: 100, flex: 1, justifyContent: 'center', alignItems: 'center', margin: 2  }}>
                             <Button onPress={() => this.state.photos.length === 5 ?  alert("ops") : this.setState({imageBrowserOpen: true})} transparent style={{ borderRadius: 5, borderColor: '#c6c5c5', borderWidth: 1, width: 70, height: 70, transform: [{ rotate: '-45deg'}], alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}>
                                 <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#c6c5c5', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
@@ -173,21 +303,17 @@ class AddProduct extends Component {
                             extraData={this.state.refreshed}
                             style={{marginTop:10}}
                         />
-                        <View style={{width: '100%',  alignItems: 'center', padding: 20 }}>
+                        <View style={{width: '100%',  alignItems: 'center', padding: 21 }}>
                             <Form style={{ width: '100%' }}>
-                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productName === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row'  }}>
+                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row'  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                         <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productName') }</Label>
-                                        <Input autoCapitalize={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
+                                        <Input onChangeText={(name) => this.setState({ name })} autoCapitalize={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
                                     </Item>
                                 </View>
-                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productPrice === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
-                                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productPrice') }</Label>
-                                        <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
-                                    </Item>
+                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.descStatus === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
+                                    <Textarea onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: 'right', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
                                 </View>
-
                                 <View>
                                     <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
                                         <Picker
@@ -199,6 +325,7 @@ class AddProduct extends Component {
                                             selectedValue={this.state.selectedCategory}
                                             onValueChange={(value) => this.setState({ selectedCategory: value })}
                                         >
+                                            <Picker.Item label={i18n.t('categories')} value={null} />
                                             {
                                                 this.state.categories.map((category, i) => (
                                                     <Picker.Item key={i} label={category.name} value={category.id} />
@@ -216,37 +343,21 @@ class AddProduct extends Component {
                                             style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
                                             placeholderStyle={{ color: "#c5c5c5" }}
                                             placeholderIconColor="#fff"
-                                            selectedValue={this.state.selected1}
-                                            onValueChange={(value) => this.setState({ selected1: value })}
+                                            selectedValue={this.state.selectedType}
+                                            onValueChange={(value) => this.setType(value)}
                                         >
-                                            <Picker.Item label={ i18n.t('productType') } value="key0" />
-                                            <Picker.Item label="فرنسا" value="key1" />
-                                            <Picker.Item label="امريكا" value="key2" />
+                                            <Picker.Item label={ i18n.t('buy') } value="1" />
+                                            <Picker.Item label={ i18n.t('auction') } value="2" />
+                                            <Picker.Item label={ i18n.t('exchange') } value="3" />
+                                            <Picker.Item label={ i18n.t('exchangeWithDifferencePrice') } value="4" />
                                         </Picker>
                                         <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
                                     </Item>
                                 </View>
-
-                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productDisc === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
-                                    <Textarea placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: 'right', color: '#26b5c4', fontSize: 12}} placeholder="وصف المنتج" />
+                                { this.renderProductOptions() }
+                                <View style={{ marginTop: 20 , alignItems: 'center', justifyContent: 'center' }}>
+                                    { this.renderSubmit() }
                                 </View>
-                                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20, alignSelf: 'center' }}>
-                                    <CheckBox checked={false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#26b5c4' />
-                                    <Text style={{ fontFamily: 'cairo', color: '#6d6c72' }}>{ i18n.t('addExtraPrice') }</Text>
-                                </View>
-                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.productPrice === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
-                                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('extraPrice') }</Label>
-                                        <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
-                                    </Item>
-                                </View>
-                                <View style={{ marginTop: 20 }}>
-                                        <Button onPress={() => this.props.navigation.navigate('confirm')} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
-                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                            <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
-                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
-                                        </Button>
-                                    </View>
                             </Form>
                         </View>
                     </KeyboardAvoidingView>
@@ -267,4 +378,11 @@ const styles = ({
     },
 });
 
-export default AddProduct;
+const mapStateToProps = ({ profile, lang }) => {
+    return {
+        user: profile.user,
+        lang: lang.lang
+    };
+};
+
+export default connect(mapStateToProps, {})(AddProduct);

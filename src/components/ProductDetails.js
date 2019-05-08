@@ -179,6 +179,8 @@ class ProductDetails extends Component {
     }
 
     render() {
+        console.log(this.state.product);
+
         return (
             <Container>
                 <Header style={{zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent'}} noShadow>

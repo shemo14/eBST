@@ -1,6 +1,5 @@
-
 import React, { Component } from "react";
-import { View, Text, Image, Dimensions, ImageBackground, FlatList, ImageStore, TouchableOpacity } from "react-native";
+import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity } from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
@@ -10,7 +9,6 @@ import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {connect} from "react-redux";
 
-const height = Dimensions.get('window').height;
 let base64   = [];
 class AddAds extends Component {
     constructor(props){
@@ -87,19 +85,13 @@ class AddAds extends Component {
                 photos: images.concat(photos)
             });
 
-            console.log(this.state.photos)
             const imgs = this.state.photos;
-          //  let base64 = [];
-
-          //  console.log(imgs[1].file)
 
             for (var i =1; i < imgs.length; i++){
                 ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
                     base64.push(base64Data);
                 }, (reason) => console.error(reason));
             }
-
-            console.log('array of base ...', base64)
 
 
         }).catch((e) => console.log(e))

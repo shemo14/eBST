@@ -67,6 +67,13 @@ const en = {
     'finishAds': 'your ad added successfully',
     'advancedSearch': 'advanced Search',
     'noSearchResult': 'no search Result',
+    'buy': 'buy',
+    'auction': 'auction',
+    'auctionPrice': 'auction price',
+    'exchange': 'exchange',
+    'exchangeProduct': 'exchange product',
+    'productDesc': 'product description',
+    'exchangeWithDifferencePrice': 'exchange with difference price',
 }
 
 export default en;
