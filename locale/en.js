@@ -10,6 +10,9 @@ const en = {
     'newPass': 'new password',
     'verifyNewPass': 'verify new password',
     'verify': 'verify',
+    'edit': 'edit',
+    'orderSent': 'Your offer sent successfully',
+    'confirmOrder': 'Confirm Order',
     'username': 'username',
     'email': 'email address',
     'visitorRegister': 'register as a visitor',
@@ -68,12 +71,15 @@ const en = {
     'advancedSearch': 'advanced Search',
     'noSearchResult': 'no search Result',
     'buy': 'buy',
+    'search': 'search',
     'auction': 'auction',
     'auctionPrice': 'auction price',
+    'editProduct': 'edit Product',
     'exchange': 'exchange',
     'exchangeProduct': 'exchange product',
     'productDesc': 'product description',
     'exchangeWithDifferencePrice': 'exchange with difference price',
+    'compeleteData': 'Plz enter data correctly'
 }
 
 export default en;

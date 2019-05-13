@@ -39,7 +39,9 @@ import ExchangeOrderDetails from "../components/ExchangeOrderDetails";
 import IncomingOffers from "../components/IncomingOffers";
 import InitScreen from "../components/InitScreen";
 import Finished from "../components/Finished";
-
+import EditProduct from "../components/EditProduct";
+import SetOffer from "../components/SetOffer";
+import ConfirmOrder from "../components/ConfirmOrder";
 
 const width = Dimensions.get('window').width;
 const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
@@ -56,7 +58,9 @@ const DrawerNavigator = createDrawerNavigator({
     aboutApp: AboutApp,
     policy: Policy,
     contactUs: ContactUs,
+    confirmOrder: ConfirmOrder,
     settings: Settings,
+    setOffer: SetOffer,
     incomingOffers: IncomingOffers,
     product: ProductDetails,
     addProduct: AddProduct
@@ -72,7 +76,6 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
-
     initScreen:{
         screen: InitScreen,
         navigationOptions: {
@@ -127,6 +130,12 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+    confirmOrder:{
+        screen: ConfirmOrder,
+        navigationOptions: {
+            header: null
+        }
+    },
     notifications:{
         screen: Notifications,
         navigationOptions: {
@@ -165,6 +174,18 @@ const AppNavigator = createStackNavigator({
     },
     myProducts :{
         screen: MyProducts,
+        navigationOptions: {
+            header: null
+        }
+    },
+    setOffer:{
+        screen: SetOffer,
+        navigationOptions: {
+            header: null
+        }
+    },
+    editProduct:{
+        screen: EditProduct,
         navigationOptions: {
             header: null
         }

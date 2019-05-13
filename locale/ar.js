@@ -64,16 +64,22 @@ const ar = {
     'passwordLength': 'كلمة السر اقل من 6 احرف',
     'phoneValidation': 'رقم الهاتف غير صحيح',
     'noData': 'لا يوجد بيانات حاليا',
+    'orderSent': 'تم ارسال طلبك بنجاح',
+    'confirmOrder': 'تأكيد الطلب',
     'finishAds': 'تم اضافة الاعلان بنجاح  وفي انتظار الموافقة من الادارة',
     'advancedSearch': 'بحث متقدم',
     'noSearchResult': 'لا يوجد نتائج بحث',
     'buy': 'شراء',
+    'search': 'بحث',
+    'editProduct': 'تعديل المنتج',
+    'edit': 'تعديل',
     'auction': 'مزايدة',
     'exchange': 'مبادلة',
     'exchangeWithDifferencePrice': 'مبادلة مع فرق السعر',
     'auctionPrice': 'سعر المزايدة',
     'exchangeProduct': 'منتج المبادلة',
     'productDesc': 'وصف المنتج',
+    'compeleteData': 'الرجاء ادخال كل البيانات بشكل صحيح',
 }
 
 export default ar;

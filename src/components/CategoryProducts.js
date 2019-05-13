@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, Slider, AsyncStorage } from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, AsyncStorage } from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, Icon, Input, Picker, Item, CheckBox } from 'native-base';
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
@@ -8,8 +8,11 @@ import axios from 'axios'
 import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
+import ProductBlock from './ProductBlock';
+import ProductRow from './ProductRow';
 
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 class CategoryProducts extends Component {
     constructor(props) {
         super(props);
@@ -69,14 +72,6 @@ class CategoryProducts extends Component {
         }
     }
 
-    change(value) {
-        this.setState(() => {
-            return {
-                value: parseFloat(value),
-            };
-        });
-    }
-
     onStarRatingPress(rating) {
         this.setState({
             starCount: rating
@@ -113,38 +108,14 @@ class CategoryProducts extends Component {
 
     renderItems = (item) => {
         return (
-            <View style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, margin: 5, overflow: 'hidden' }}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: item.id })} style={{ width: '100%' }}>
-                    <Image source={{uri:item.image}} resizeMode={'stretch'} style={{ width: '100%', height: 100, flex: 1 }} />
-                </TouchableOpacity>
-                <View style={{ width: '100%', padding: 5 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: item.id })}>
-                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17, alignSelf: 'flex-start' }}>{item.name}</Text>
-                    </TouchableOpacity>
-                    <View style={{ alignSelf: 'flex-start' }}>
-                        <StarRating
-                            disabled={true}
-                            maxStars={5}
-                            rating={item.rate}
-                            fullStarColor={'#26b5c4'}
-                            selectedStar={(rating) => this.onStarRatingPress(rating)}
-                            starSize={15}
-                            starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
-                        />
-                    </View>
-                    <View style={{ flexDirection: 'row', flex: 1, width: '100%' }}>
-                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', flex: 2, alignSelf: 'flex-start' }}>{item.price} {i18n.t('sr')}</Text>
-                        <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
-                    </View>
-                </View>
-            </View>
+            <ProductBlock data={item} navigation={this.props.navigation} />
         );
     }
 
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', justifyContent: 'center', height: 400, }}>
+                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*35)/100 }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -212,12 +183,12 @@ class CategoryProducts extends Component {
         });
     }
 
+    setView(isGrid){
+        this.setState({isGrid , status: null });
+        this.componentWillMount();
+    }
 
     render() {
-        const { value } = this.state;
-        console.log(this.state.countries)
-        console.log('this is fucken products ...', this.state.products)
-
         let grid=require('../../assets/images/multi_product.png');
         let row=require('../../assets/images/gray_one_product.png');
 
@@ -242,7 +213,7 @@ class CategoryProducts extends Component {
                             <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
                                 <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0 }} />
                             </TouchableOpacity>
-                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={'بحث ...'} placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', }} />
+                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={i18n.t('search') + '...'} placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', }} />
                         </Animated.View>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <View style={{ flexDirection: 'row' }}>
@@ -260,10 +231,10 @@ class CategoryProducts extends Component {
                     </ImageBackground>
                 </Header>
                 <View style={{ flexDirection: 'row', height: 50, marginTop: -50, marginBottom: 10, paddingHorizontal: 10 }}>
-                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setState({isGrid : true})}>
+                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setView(true)}>
                         <Image source={grid} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setState({isGrid : false})}>
+                    <TouchableOpacity style={{ margin: 5 }} onPress={() => this.setView(false)}>
                         <Image source={row} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
                 </View>
@@ -287,32 +258,7 @@ class CategoryProducts extends Component {
                             this.state.products.map(
                                 (product , i) => {
                                     return(
-                                        <View key={i} style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '96%', marginBottom: 20 }}>
-                                            <TouchableOpacity onPress={() => this.props.navigation.navigate('product')}>
-                                                <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
-                                                <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                    <Image source={{uri:product.image}}  style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={{ marginHorizontal: 20, flex: 3 }} onPress={() => this.props.navigation.navigate('product')}>
-                                                <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 16 }}>{product.name}</Text>
-                                                <View style={{ alignSelf: 'flex-start' }}>
-                                                    <StarRating
-                                                        disabled={true}
-                                                        maxStars={5}
-                                                        rating={product.rate}
-                                                        fullStarColor={'#26b5c4'}
-                                                        selectedStar={(rating) => this.onStarRatingPress(rating)}
-                                                        starSize={15}
-                                                        starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
-                                                    />
-                                                </View>
-                                                <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>{product.price} {i18n.t('sr')}</Text>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
-                                                <Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
-                                            </TouchableOpacity>
-                                        </View>
+                                        <ProductRow key={i} data={product} navigation={this.props.navigation} />
                                     )
                                 }
                             )

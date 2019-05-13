@@ -31,6 +31,8 @@ class ProductDetails extends Component {
             commentID: 0,
             productReport: '',
             commentReport: '',
+            type: null,
+            isSubmitted: false,
         };
     }
 
@@ -86,7 +88,7 @@ class ProductDetails extends Component {
                 url: CONST.url + 'show_product',
                 method: 'POST',
                 headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
-                data: {id: this.state.id, device_id: deviceID}
+                data: {id: this.state.id, device_id: deviceID, lang: this.props.lang}
             }).then(response => {
                 this.setState({
                     product: response.data.data.details,
@@ -94,7 +96,8 @@ class ProductDetails extends Component {
                     comments: response.data.data.comments,
                     status: response.data.status,
                     redHeart: response.data.data.details.isLiked,
-                    starCount: response.data.data.details.rate
+                    starCount: response.data.data.details.rate,
+                    type: response.data.data.details.type
                 })
             })
         })
@@ -103,7 +106,7 @@ class ProductDetails extends Component {
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', justifyContent: 'center', height: 400, }}>
+                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*45)/100 }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -178,8 +181,46 @@ class ProductDetails extends Component {
         );
     }
 
+    setOrder(){
+        this.setState({ isSubmitted: true });
+        if (this.state.type == 1){
+            axios({
+                method: 'POST',
+                url: CONST.url + 'set_offer',
+                headers: {Authorization: this.props.user.token, },
+                data: {
+                    product_id: this.state.id,
+                    lang: this.props.lang,
+                    type: this.state.type,
+                }}).then(response => {
+                if (response.data.status === 200){
+                    this.props.navigation.navigate('confirmOrder')
+                }
+            })
+        }else {
+            this.props.navigation.navigate('setOffer', { id: this.state.id, type: this.state.type })
+        }
+    }
+
+    renderSubmit(){
+        if (this.state.isSubmitted){
+            return(
+                <DoubleBounce size={20} color="#26b5c4" />
+            )
+        }
+
+        return (
+            <Button onPress={() => this.setOrder()} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
+                <View style={{backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14}} />
+                <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>{i18n.t('order')}</Text>
+                <View style={{backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14}} />
+            </Button>
+        );
+
+    }
+
     render() {
-        console.log(this.state.product);
+        console.log(this.state.id);
 
         return (
             <Container>
@@ -194,8 +235,8 @@ class ProductDetails extends Component {
                         </Button>
                     </View>
                 </Header>
+                { this.renderLoader() }
                 <Content style={{zIndex: -99, marginTop: -50}}>
-                    { this.renderLoader() }
                     <View>
                         <Swiper dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>
                             {
@@ -293,20 +334,8 @@ class ProductDetails extends Component {
                                 </View>
                             </Form>
                         </View>
-                        <View style={{marginTop: 30}}>
-                            <Button onPress={() => this.props.navigation.navigate('confirmOrder')} style={{
-                                borderRadius: 25,
-                                width: 130,
-                                height: 45,
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                alignSelf: 'center',
-                                backgroundColor: '#26b5c4'
-                            }}>
-                                <View style={{backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14}} />
-                                <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>{i18n.t('order')}</Text>
-                                <View style={{backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14}} />
-                            </Button>
+                        <View style={{marginTop: 30, alignItems: 'center', justifyContent: 'center'}}>
+                            { this.renderSubmit() }
                         </View>
 
                         {/* Product Report */}

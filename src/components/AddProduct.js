@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView} from "react-native";
-import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label , Textarea , Picker } from 'native-base'
+import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView, Dimensions} from "react-native";
+import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label, Textarea, Picker, Toast } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
 import i18n from '../../locale/i18n'
@@ -9,7 +9,7 @@ import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
 
-
+const height = Dimensions.get('window').height;
 let base64   = [];
 class AddProduct extends Component {
     constructor(props){
@@ -36,7 +36,8 @@ class AddProduct extends Component {
             status: null,
             selectedCategory: null,
             selectedType: 1,
-            isSubmitted: false
+            isSubmitted: false,
+            isValid: true
         }
     }
 
@@ -53,7 +54,7 @@ class AddProduct extends Component {
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', justifyContent: 'center', height: 400, }}>
+                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*35)/100 }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -83,13 +84,23 @@ class AddProduct extends Component {
             )
         }
 
-        return (
-            <Button onPress={() => this.addProduct()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4', marginBottom: 20 }}>
-                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
-                <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
-                <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
-            </Button>
-        );
+        if (base64.length == 0 || this.state.name == null || this.state.desc == null || this.state.selectedCategory == null){
+            return (
+                <Button disabled onPress={() => this.addProduct()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#999', marginBottom: 20 }}>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
+                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
+                </Button>
+            );
+        }else {
+            return (
+                <Button onPress={() => this.addProduct()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4', marginBottom: 20 }}>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
+                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
+                </Button>
+            );
+        }
     }
 
     activeInput(type){
@@ -182,28 +193,42 @@ class AddProduct extends Component {
     };
 
     addProduct(){
-        this.setState({ isSubmitted: true });
+        if (
+            (this.state.selectedType == 1 && this.state.price == null) ||
+            (this.state.selectedType == 2 && this.state.auctionPrice == null) ||
+            (this.state.selectedType == 3 && this.state.exchangeProduct == null) ||
+            (this.state.selectedType == 4 && this.state.exchangeProduct == null && this.state.extraPrice == null) ||
+            this.state.selectedCategory == null
+        ){
+            Toast.show({
+                text: i18n.t('compeleteData'),
+                type: "danger",
+                duration: 3000
+            });
+        }else {
+            this.setState({ isSubmitted: true });
 
-        axios({
-            method: 'POST',
-            url: CONST.url + 'add_product',
-            headers: {Authorization: this.props.user.token },
-            data: {
-                name: this.state.name,
-                desc: this.state.desc,
-                price: this.state.price,
-                lang: this.props.lang,
-                type: this.state.selectedType,
-                exchange_price: this.state.extraPrice,
-                max_price: this.state.auctionPrice,
-                exchange_product: this.state.exchangeProduct,
-                category_id: this.state.selectedCategory,
-                images: JSON.stringify(base64)
-            }}).then(response => {
-            if (response.data.status === 200){
-                this.props.navigation.navigate('confirm');
-            }
-        })
+            axios({
+                method: 'POST',
+                url: CONST.url + 'add_product',
+                headers: {Authorization: this.props.user.token },
+                data: {
+                    name: this.state.name,
+                    desc: this.state.desc,
+                    price: this.state.price,
+                    lang: this.props.lang,
+                    type: this.state.selectedType,
+                    exchange_price: this.state.extraPrice,
+                    max_price: this.state.auctionPrice,
+                    exchange_product: this.state.exchangeProduct,
+                    category_id: this.state.selectedCategory,
+                    images: JSON.stringify(base64)
+                }}).then(response => {
+                if (response.data.status === 200){
+                    this.props.navigation.navigate('confirm');
+                }
+            })
+        }
     }
 
     renderProductOptions(){
@@ -215,7 +240,6 @@ class AddProduct extends Component {
                         <Input onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                     </Item>
                 </View>
-
             );
         } else if (this.state.selectedType == 2){
             return(
@@ -256,7 +280,6 @@ class AddProduct extends Component {
             )
         }
     }
-
 
     render() {
         if (this.state.imageBrowserOpen) {

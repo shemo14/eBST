@@ -14,11 +14,6 @@ class Finished extends Component {
         header: null
     });
 
-    componentWillMount(){
-        I18nManager.forceRTL(true)
-    }
-
-
     render() {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
