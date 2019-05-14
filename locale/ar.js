@@ -80,6 +80,7 @@ const ar = {
     'exchangeProduct': 'منتج المبادلة',
     'productDesc': 'وصف المنتج',
     'compeleteData': 'الرجاء ادخال كل البيانات بشكل صحيح',
+    'offer': 'عروض',
 }
 
 export default ar;

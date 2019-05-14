@@ -63,7 +63,8 @@ const DrawerNavigator = createDrawerNavigator({
     setOffer: SetOffer,
     incomingOffers: IncomingOffers,
     product: ProductDetails,
-    addProduct: AddProduct
+    addProduct: AddProduct,
+    incomingOffers:IncomingOffers
 }, {
     nitialRouteName: 'home',
     drawerPosition: 'right',
@@ -162,6 +163,12 @@ const AppNavigator = createStackNavigator({
     },
     offers:{
         screen: Offers,
+        navigationOptions: {
+            header: null
+        }
+    },
+    incomingOffers:{
+        screen: IncomingOffers,
         navigationOptions: {
             header: null
         }

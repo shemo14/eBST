@@ -79,7 +79,9 @@ const en = {
     'exchangeProduct': 'exchange product',
     'productDesc': 'product description',
     'exchangeWithDifferencePrice': 'exchange with difference price',
-    'compeleteData': 'Plz enter data correctly'
+    'compeleteData': 'Plz enter data correctly',
+    'offer': 'offers',
+
 }
 
 export default en;

@@ -1,23 +1,14 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity } from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity ,Dimensions} from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, List, ListItem, Icon } from 'native-base';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import i18n from '../../locale/i18n'
+import axios from 'axios'
+import CONST from '../consts'
+import {connect} from "react-redux";
+import { DoubleBounce } from 'react-native-loader';
 
-
-const receiveOffers = [
-    { name: 'موبايل سامسونج', nums: 4 },
-    { name: 'لابتوب ابل اير', nums: 6 },
-    { name: 'اي رزع ف البتنجان', nums: 3 },
-    { name: 'اي كلام بردو هنا عادي يعني', nums: 2 },
-];
-
-const sentOffers = [
-    { name: 'موبايل سامسونج', nums: 4 },
-    { name: 'لابتوب ابل اير', nums: 6 },
-    { name: 'اي رزع ف البتنجان', nums: 3 },
-];
-
+const height = Dimensions.get('window').height;
 
 class Offers extends Component {
     constructor(props) {
@@ -25,8 +16,11 @@ class Offers extends Component {
         this.state = {
             sentOffers: 0,
             receivedOffers: 1,
-            showData: receiveOffers,
-            receiveShow: true
+            showData: [],
+            receiveShow: true,
+            type:1,
+            status: null,
+            
         }
     }
 
@@ -34,12 +28,19 @@ class Offers extends Component {
         drawerLabel: () => null
     });
 
-    onSwipeLeft(gestureState) {
-        this.setState({ showData: receiveOffers, receiveShow: true });
+    componentWillMount(){
+        axios({ method: 'POST', url: CONST.url + 'offers', headers: {Authorization: this.props.user.token }, data: {type:this.state.type , lang: this.props.lang}}).then(response => {
+            this.setState({showData:response.data.data , status:response.data.status})
+        })
+    }
+    onSwipeLeft() {
+        this.setState({ type:1,receiveShow: true , status:null });
+        this.componentWillMount();
     }
 
-    onSwipeRight(gestureState) {
-        this.setState({ showData: sentOffers, receiveShow: false });
+    onSwipeRight() {
+        this.setState({ type:0, receiveShow: false , status:null});
+        this.componentWillMount();
     }
 
     onSwipe(gestureName, gestureState) {
@@ -54,8 +55,25 @@ class Offers extends Component {
                 break;
         }
     }
-
-
+    renderLoader(){
+        if (this.state.status === null){
+            return(
+                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*45)/100 }}>
+                    <DoubleBounce size={20} color="#26b5c4" />
+                </View>
+            );
+        }
+    }
+    renderNoData(){
+        if (this.state.showData.length === 0 && this.state.status != null){
+            return(
+                <View style={{ width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
+                    <Image source={require('../../assets/images/no_data.png')} resizeMode={'contain'} style={{ width: 200, height: 200 }}/>
+                    <Text style={{ fontFamily: 'cairo', fontSize: 16, textAlign: "center", marginTop: 10, color: '#6d6c72' }}>{ i18n.t('noSearchResult') }</Text>
+                </View>
+            );
+        }
+    }
     render() {
 
         const config = {
@@ -83,12 +101,14 @@ class Offers extends Component {
                     </ImageBackground>
                 </Header>
                 <Content>
+                    { this.renderLoader() }
+                    { this.renderNoData() }
                     <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                         <Button onPress={() => this.onSwipeLeft()} style={{ height: 40, backgroundColor: this.state.receiveShow ? '#E2B705' : 'transparent', borderRadius: 30, margin: 10, padding: 5, borderColor: this.state.receiveShow ? '#E2B705' : '#acabae', borderWidth: 1, width: 120, justifyContent: 'center' }} transparent={!this.state.receiveShow}>
-                            <Text style={{ color: this.state.receiveShow ? '#fff' : '#acabae', textAlign: 'center', fontFamily: 'cairo' }}>العروض الواردة</Text>
+                            <Text style={{ color: this.state.receiveShow ? '#fff' : '#acabae', textAlign: 'center', fontFamily: 'cairo' }}>{i18n.t('recievedOffers')}</Text>
                         </Button>
                         <Button onPress={() => this.onSwipeRight()} style={{ height: 40, borderRadius: 30, borderColor: this.state.receiveShow ? '#acabae' : '#E2B705', borderWidth: 1, margin: 10, padding: 5, backgroundColor: this.state.receiveShow ? 'transparent' : '#E2B705', width: 120, justifyContent: 'center' }} transparent={this.state.receiveShow}>
-                            <Text style={{ color: this.state.receiveShow ? '#acabae' : '#fff', textAlign: 'center', fontFamily: 'cairo' }}>العروض المرسلة</Text>
+                            <Text style={{ color: this.state.receiveShow ? '#acabae' : '#fff', textAlign: 'center', fontFamily: 'cairo' }}>{i18n.t('sentOffers')}</Text>
                         </Button>
                     </View>
 
@@ -106,13 +126,13 @@ class Offers extends Component {
                             <List style={{ width: '100%' }}>
                                 {
                                     this.state.showData.map((offer, i) => (
-                                        <ListItem key={i} onPress={() => console.log('ops')} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
+                                        <ListItem key={i} onPress={() => this.props.navigation.navigate('incomingOffers' , {product_id:offer.product_id})} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
                                             <Right style={{ flex: 0 }}>
                                                 <View style={{ top: 30 }}>
                                                     <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} ></View>
                                                     <View style={[styles.block, { transform: [{ rotate: '20deg' }] }]}>
                                                         <Image
-                                                            source={require('../../assets/images/photo.png')}
+                                                            source={{uri:offer.product_image}}
                                                             style={[styles.image, { borderRadius: 10 }]}
                                                             resizeMode={'stretch'}
                                                         />
@@ -120,9 +140,13 @@ class Offers extends Component {
                                                 </View>
                                             </Right>
                                             <Body style={{ marginHorizontal: 20 }}>
-                                                <TouchableOpacity onPress={() => this.props.navigation.navigate('incomingOffers')}>
-                                                <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 15 }}>{offer.name}</Text>
-                                                <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.nums} عروض</Text>
+                                                <TouchableOpacity onPress={() => this.props.navigation.navigate('incomingOffers' , {product_id:offer.product_id})}>
+                                                <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 15 , alignSelf:'flex-start'}}>{offer.product_name}</Text>
+                                                {
+                                                    this.state.type == 1 ? (<Text style={{ color: '#26b5c4', fontFamily: 'cairo'  , alignSelf:'flex-start'}}>{offer.offers_count} {i18n.t('offer')}</Text>) :
+                                                     (<Text style={{ color: '#26b5c4', fontFamily: 'cairo' , alignSelf:'flex-start' }}>{offer.offer_type} </Text>)
+                                                }
+                                                
                                                 </TouchableOpacity>
                                             </Body>
                                             <Left style={{ position: 'absolute', right: -10, top: -10 }}>
@@ -163,5 +187,11 @@ const styles = {
 };
 
 
+const mapStateToProps = ({ profile, lang }) => {
+    return {
+        user: profile.user,
+        lang: lang.lang
+    };
+};
 
-export default Offers;
+export default connect(mapStateToProps, {})(Offers);
