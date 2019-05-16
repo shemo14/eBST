@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions } from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions , I18nManager } from "react-native";
 import {Container, Content, Button, Header, Right, Body, Left, Icon, Input } from 'native-base';
 import i18n from '../../locale/i18n'
 import axios from 'axios'
@@ -107,7 +107,7 @@ class Categories extends Component {
         return (
             <Container>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
-                    <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
+                    <ImageBackground source={  I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
@@ -120,7 +120,7 @@ class Categories extends Component {
                             <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
                                 <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0 }} />
                             </TouchableOpacity>
-                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={'بحث ...'} placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', }} />
+                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={ i18n.t('search') } placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', }} />
                         </Animated.View>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <View style={{ flexDirection: 'row' }}>
@@ -128,7 +128,7 @@ class Categories extends Component {
                                     <Image source={require('../../assets/images/white_search.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </Button>
                                 <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                    <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                                    <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 ,  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                                 </Button>
                             </View>
                         </Left>

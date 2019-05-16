@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions , I18nManager} from "react-native";
 import {Container, Content, List, ListItem, Header, Left, Right, Body , Button} from 'native-base'
 import Swiper from 'react-native-swiper';
 import StarRating from 'react-native-star-rating';
@@ -23,7 +23,8 @@ class IncomingOffers extends Component {
             images:[],
             productDet:[],
             offers:[],
-            offerDet:[]
+            offerDet:[],
+            status:null
         };
     }
 
@@ -36,13 +37,18 @@ class IncomingOffers extends Component {
     }
     offerTwoModal = () => this.setState({ offerTwoModal: !this.state.offerTwoModal });
 
-    acceptOrderOne (){
-        this.props.navigation.navigate('acceptOrder');
-        this.setState({ offerOneModal: !this.state.offerOneModal })
+
+
+
+    offerActiond(status){
+        this.setState({ offerOneModal: !this.state.offerOneModal });
+        axios({ method: 'POST', url: CONST.url + 'offer_action', headers: {Authorization: this.props.user.token }, data: {offer_id: this.state.offerDet.id, lang: this.props.lang , status , product_id:this.state.product_id}}).then(response => {
+            this.setState({offers:response.data.data , status:response.data.status })
+        })
     }
 
     acceptOrderTwo (){
-        this.props.navigation.navigate('acceptOrder');
+        // this.props.navigation.navigate('acceptOrder');
         this.setState({ offerTwoModal: !this.state.offerTwoModal })
     }
 
@@ -55,6 +61,25 @@ class IncomingOffers extends Component {
             this.setState({productDet:response.data.data , status:response.data.status , images:response.data.data.images , offers:response.data.data.offers})
         })
     }
+    renderLoader(){
+        if (this.state.status === null){
+            return(
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
+                    <DoubleBounce size={20} color="#26b5c4" />
+                </View>
+            );
+        }
+    }
+    renderNoData(){
+        if (this.state.offers.length === 0 && this.state.status != null){
+            return(
+                <View style={{ width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center',height: height , alignSelf:'center' , backgroundColor:'#bbb'  }}>
+                    <Image source={require('../../assets/images/no_data.png')} resizeMode={'contain'} style={{ width: 200, height: 200 }}/>
+                    <Text style={{ fontFamily: 'cairo', fontSize: 16, textAlign: "center", marginTop: 10, color: '#6d6c72' }}>{ i18n.t('noSearchResult') }</Text>
+                </View>
+            );
+        }
+    }
 
     render() {
         return (
@@ -66,11 +91,13 @@ class IncomingOffers extends Component {
                         </TouchableOpacity>
                         <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 , fontFamily:'cairo'}}>{i18n.t('incomingOffers')}</Text>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 ,transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>
                 </Header>
                 <Content style={{ zIndex: -99, marginTop: -50 }}>
+                    { this.renderLoader() }
+                    { this.renderNoData() }
                     <View>
                         <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
                         {
@@ -83,7 +110,7 @@ class IncomingOffers extends Component {
                         }
                         </Swiper>
                         <View style={{ top: -210, width: '100%', height: 0}}>
-                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%' }} resizeMode={'contain'}/>
+                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%' , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]  }} resizeMode={'contain'}/>
                         </View>
                     </View>
                     <View style={{padding:20 , marginTop:-70}}>
@@ -158,14 +185,14 @@ class IncomingOffers extends Component {
                                 </List>
                                 <View style={{flexDirection:'row' , marginTop: 20 , justifyContent:'center' }}>
                                     <View style={{marginHorizontal:7}}>
-                                        <Button onPress={() => this.acceptOrderOne()} style={{  borderColor:'#26b5c4' , borderWidth:1 ,borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
+                                        <Button onPress={() => this.offerActiond(2)} style={{  borderColor:'#26b5c4' , borderWidth:1 ,borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                             <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
                                             <Text style={{color:'#fff' , fontSize:14, fontFamily: 'cairo',}}>قبول</Text>
                                             <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                         </Button>
                                     </View>
                                     <View style={{marginHorizontal:7}}>
-                                        <Button onPress={this.offerOneModal} style={{ borderColor:'#acabae' , borderWidth:1 , borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#fff' }}>
+                                        <Button onPress={() => this.offerActiond(1)} style={{ borderColor:'#acabae' , borderWidth:1 , borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#fff' }}>
                                             <Text style={{color:'#acabae' , fontSize:14, fontFamily: 'cairo',}}>رفض</Text>
                                         </Button>
                                     </View>

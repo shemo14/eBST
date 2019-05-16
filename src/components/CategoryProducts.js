@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, AsyncStorage } from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, AsyncStorage , I18nManager} from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, Icon, Input, Picker, Item, CheckBox } from 'native-base';
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
@@ -115,7 +115,7 @@ class CategoryProducts extends Component {
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*35)/100 }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -200,7 +200,7 @@ class CategoryProducts extends Component {
         return (
             <Container>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
-                    <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
+                    <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
@@ -224,7 +224,7 @@ class CategoryProducts extends Component {
                                     <Image source={require('../../assets/images/white_filter.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                                 </Button>
                                 <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                    <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                                    <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 ,  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
                                 </Button>
                             </View>
                         </Left>
