@@ -42,6 +42,7 @@ import Finished from "../components/Finished";
 import EditProduct from "../components/EditProduct";
 import SetOffer from "../components/SetOffer";
 import ConfirmOrder from "../components/ConfirmOrder";
+import AcceptOrder from "../components/AcceptOrder";
 
 const width = Dimensions.get('window').width;
 const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
@@ -63,10 +64,12 @@ const DrawerNavigator = createDrawerNavigator({
     setOffer: SetOffer,
     incomingOffers: IncomingOffers,
     product: ProductDetails,
-    addProduct: AddProduct
+    addProduct: AddProduct,
+    incomingOffers:IncomingOffers,
+    acceptOrder:AcceptOrder
 }, {
     nitialRouteName: 'home',
-    drawerPosition: 'right',
+    drawerPosition: I18nManager.isRTL ?'right' : 'left',
     contentComponent: CustomDrawerContentComponent,
     drawerOpenRoute: 'DrawerOpen',
     drawerCloseRoute: 'DrawerClose',
@@ -162,6 +165,18 @@ const AppNavigator = createStackNavigator({
     },
     offers:{
         screen: Offers,
+        navigationOptions: {
+            header: null
+        }
+    },
+    incomingOffers:{
+        screen: IncomingOffers,
+        navigationOptions: {
+            header: null
+        }
+    },
+    acceptOrder:{
+        screen: AcceptOrder,
         navigationOptions: {
             header: null
         }

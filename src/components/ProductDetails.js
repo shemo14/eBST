@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, AsyncStorage} from "react-native";
+import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, AsyncStorage , I18nManager} from "react-native";
 import {Container, Content, List, ListItem, Header, Left, Right, Body, Textarea, Form, Button, Toast} from 'native-base'
 import Swiper from 'react-native-swiper';
 import StarRating from 'react-native-star-rating';
@@ -193,9 +193,7 @@ class ProductDetails extends Component {
                     lang: this.props.lang,
                     type: this.state.type,
                 }}).then(response => {
-                if (response.data.status === 200){
-                    this.props.navigation.navigate('confirmOrder')
-                }
+                    this.props.navigation.navigate('confirmOrder', { title: i18n.t('confirmOrder'), msg: i18n.t('orderSent') })
             })
         }else {
             this.props.navigation.navigate('setOffer', { id: this.state.id, type: this.state.type })
@@ -231,7 +229,7 @@ class ProductDetails extends Component {
                         </Button>
                         <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo' }}>{ this.state.product.name }</Text>
                         <Button transparent onPress={() => this.props.navigation.goBack()}>
-                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </Button>
                     </View>
                 </Header>
@@ -249,10 +247,10 @@ class ProductDetails extends Component {
                             }
                         </Swiper>
                         <View style={{top: -210, width: '100%', height: 0}}>
-                            <Image source={require('../../assets/images/slider.png')} style={{width: '100%'}} resizeMode={'contain'}/>
+                            <Image source={require('../../assets/images/slider.png')} style={{width: '100%' , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>
                         </View>
                     </View>
-                    <View style={{padding: 20, top: -80}}>
+                    <View style={{padding: 20, marginTop: -80}}>
                         <TouchableOpacity style={{flexDirection: 'row', marginBottom: 15}}>
                             <Image source={require('../../assets/images/gray_store.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
                             <Text style={{ marginHorizontal: 5, color: '#6d6c72', borderBottomWidth: 1, borderBottomColor: '#6d6c72', fontFamily: 'cairo', fontSize: 15, top: -1 }}>{ this.state.product.provider_name }</Text>
@@ -328,21 +326,25 @@ class ProductDetails extends Component {
                                 }
                             </List>
                             <Form>
-                                <Textarea onChangeText={(comment) => this.setState({ comment })} rowSpan={3} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 11, fontFamily: 'cairo', textAlign: 'right' }} bordered placeholder={i18n.t('addComment')} placeholderTextColor={{color: "#acabae"}}/>
+                                <Textarea onChangeText={(comment) => this.setState({ comment })} rowSpan={3} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 11, fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left' }} bordered placeholder={i18n.t('addComment')} placeholderTextColor={{color: "#acabae"}} value={this.state.comment}/>
                                 <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 2, backgroundColor: '#26b5c4', width: 30, height: 30, transform: [{rotate: '45deg'}], position: 'absolute', bottom: -13, right: 7 }}>
                                     { this.renderCommentSubmit() }
                                 </View>
                             </Form>
                         </View>
                         <View style={{marginTop: 30, alignItems: 'center', justifyContent: 'center'}}>
-                            { this.renderSubmit() }
+                        <Button onPress={() => this.setOrder()} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
+                            <View style={{backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14}} />
+                            <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>{i18n.t('order')}</Text>
+                            <View style={{backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14}} />
+                        </Button>
                         </View>
 
                         {/* Product Report */}
                         <Modal isVisible={this.state.isModalVisible === 1 ? true : false} onBackdropPress={() => this._toggleModal(this.state.isModalVisible, 0)}>
                             <View style={{ flex: 1, backgroundColor: '#fff', padding: 10, position: 'absolute', width: '100%' }}>
                                 <Form>
-                                    <Textarea onChangeText={(productReport) => this.setState({ productReport })} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: 'right'}} rowSpan={7} bordered placeholder={i18n.t('reportReason') + '...'} placeholderTextColor={{color: "#acabae"}}/>
+                                    <Textarea onChangeText={(productReport) => this.setState({ productReport })} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left'}} rowSpan={7} bordered placeholder={i18n.t('reportReason') + '...'} placeholderTextColor={{color: "#acabae"}}/>
                                     <View style={{marginTop: 20, marginBottom: 10}}>
                                         <Button onPress={() => this.setProductReport()} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
                                             <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14 }}/>
@@ -351,7 +353,7 @@ class ProductDetails extends Component {
                                         </Button>
                                     </View>
                                 </Form>
-                                <TouchableOpacity onPress={() => this.setProductReport()} style={{top: 5, right: 5, position: 'absolute'}}>
+                                <TouchableOpacity onPress={() => this._toggleModal(this.state.isModalVisible, 0)} style={{top: 5, right: 5, position: 'absolute'}}>
                                     <Image source={require('../../assets/images/refused.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
                                 </TouchableOpacity>
                             </View>
@@ -361,7 +363,7 @@ class ProductDetails extends Component {
                         <Modal isVisible={this.state.isModalVisible === 2 ? true : false} onBackdropPress={() => this._toggleModal(this.state.isModalVisible, 0)}>
                             <View style={{ flex: 1, backgroundColor: '#fff', padding: 10, position: 'absolute', width: '100%' }}>
                                 <Form>
-                                    <Textarea onChangeText={(commentReport) => this.setState({ commentReport })} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: 'right'}} rowSpan={7} bordered placeholder={i18n.t('reportReason') + '...'} placeholderTextColor={{color: "#acabae"}}/>
+                                    <Textarea onChangeText={(commentReport) => this.setState({ commentReport })} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left'}} rowSpan={7} bordered placeholder={i18n.t('reportReason') + '...'} placeholderTextColor={{color: "#acabae"}}/>
                                     <View style={{marginTop: 20, marginBottom: 10}}>
                                         <Button onPress={() => this.setCommentReport()} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
                                             <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14 }}/>

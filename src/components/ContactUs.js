@@ -21,7 +21,7 @@ class ContactUs extends Component {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
-                    <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
+                    <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
@@ -32,7 +32,7 @@ class ContactUs extends Component {
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 ,  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                             </Button>
                         </Left>
                     </ImageBackground>
@@ -68,20 +68,20 @@ class ContactUs extends Component {
                             <View style={{justifyContent:'space-between', flexDirection:'row' , flex:1}}>
                                 <Item regular style={{ borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , height:45 , padding:5 , width:'48%'}}>
                                     <Input placeholder={ i18n.t('name') }
-                                    style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign:'right' }} 
+                                    style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign: I18nManager.isRTL ?'right' : 'left' }} 
                                     // autoCapitalize={none}
                                     />
                                 </Item>
                                 <Item regular style={{ borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35, height:45 , padding:5 , width:'48%'}}>
                                     <Input placeholder={ i18n.t('email') }
-                                     style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign:'right'}} 
+                                     style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign: I18nManager.isRTL ?'right' : 'left'}} 
                                     //  keyboardType={email-address}
                                 
                                      />
                                 </Item>
                             </View>
                             <View style={{ flex:1 , marginTop:10}}>
-                                <Textarea rowSpan={5} style={{paddingTop:10, paddingBottom:10 , paddingLeft:18 , paddingRight:18 , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:30 , fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign:'right'}} placeholder={ i18n.t('message') } />
+                                <Textarea rowSpan={5} style={{paddingTop:10, paddingBottom:10 , paddingLeft:18 , paddingRight:18 , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:30 , fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , textAlign: I18nManager.isRTL ?'right' : 'left'}} placeholder={ i18n.t('message') } />
                             </View>
                             <View style={{ marginTop: 10 , marginBottom:10 }}>
                                 <Button onPress={this._toggleModal} style={{ borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>

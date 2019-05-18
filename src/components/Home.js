@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions , I18nManager} from "react-native";
 import { Container, Content, Button, Footer, Icon, Header } from 'native-base'
 import Swiper from 'react-native-swiper';
 import FooterSection from './Footer';
@@ -47,7 +47,7 @@ class Home extends Component {
                             </View>
                         </Swiper>
                         <View style={{ top: -110, width: '100%', height: 100 }}>
-                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 }} resizeMode={'contain'}/>
+                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>
                         </View>
                     </View>
                     <View style={{ alignItems: 'center', top: -140, position: 'relative', height: 210, left: 10 }}>

@@ -9,6 +9,10 @@ const height = Dimensions.get('window').height;
 class ConfirmOrder extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            title : this.props.navigation.state.params.title,
+            msg : this.props.navigation.state.params.msg,
+        }
     }
 
     static navigationOptions = () => ({
@@ -19,18 +23,18 @@ class ConfirmOrder extends Component {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
-                    <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
+                    <ImageBackground source={ I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ i18n.t('confirmOrder') }</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ this.state.title }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'} />
                             </Button>
                         </Left>
                     </ImageBackground>
@@ -38,7 +42,7 @@ class ConfirmOrder extends Component {
                 <Content>
                     <View style={{ flexDirection:'column' , alignItems:'center' , justifyContent:'center' , marginTop:70 }}>
                         <Image source={require('../../assets/images/confirm_message.png')} style={{ width: (width*50)/100, height: (height*30)/100 , marginBottom:15}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:15 , color:'#6d6c72' , textAlign:'center'}} >{ i18n.t('orderSent') }</Text>
+                        <Text style={{fontFamily:'cairo' , fontSize:15 , color:'#6d6c72' , textAlign:'center'}} >{ this.state.msg }</Text>
                         <View style={{ marginTop: 20 , marginBottom:10 }}>
                             <Button onPress={() => this.props.navigation.navigate('home')} style={{ borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                 <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>

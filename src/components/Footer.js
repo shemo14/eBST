@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Image, ImageBackground, Dimensions } from "react-native";
-import {  Button, Footer, Icon,  } from 'native-base'
+import {  Button, Footer, Icon, FooterTab } from 'native-base'
 
 const width = Dimensions.get('window').width;
 class FooterSection extends Component {
@@ -28,7 +28,7 @@ class FooterSection extends Component {
             return(
                 <Button transparent>
                     <Image source={require('../../assets/images/border_blue.png')} style={{ width: 40, height: 40 }} resizeMode={'contain'}/>
-                    <Image style={{ width: 24, height: 24, position: 'absolute', left: 8 }} resizeMode={'contain'} source={activePath}/>
+                    <Image style={{ width: 24, height: 24, position: 'absolute', left: 28}} resizeMode={'contain'} source={activePath}/>
                 </Button>
             );
         }
@@ -45,9 +45,9 @@ class FooterSection extends Component {
             case 'ads': path = require('../../assets/images/gray_ads.png');
                 break;
         }
-
         return(
-            <Button transparent onPress={() => this.props.navigation.navigate(tabName)}>
+           
+            <Button transparent onPress={() => this.props.navigation.navigate(tabName)} style={{marginRight:tabName=='offers'? 20 : 0 , marginLeft:tabName=='ads'? 20 : 0  }}>
                 <Image style={{ width: 30, height: 30 }} resizeMode={'contain'} source={path}/>
             </Button>
         );
@@ -57,8 +57,8 @@ class FooterSection extends Component {
     render() {
 
         return (
-                <Footer style={{ backgroundColor: 'transparent' }}>
-                    <ImageBackground style={{ width: width + 15, height: 65, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingTop: 5 }} resizeMode={'stretch'} source={require('../../assets/images/footer.png')} >
+                <Footer style={{ backgroundColor: 'fff' }}>
+                    {/* <ImageBackground style={{ width: width + 15, height: 65, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingTop: 5 }} resizeMode={'stretch'} source={require('../../assets/images/footer.png')} >
                         {  this.renderFooterTabs('home') }
 
                         {  this.renderFooterTabs('offers') }
@@ -70,7 +70,25 @@ class FooterSection extends Component {
                         {  this.renderFooterTabs('ads') }
 
                         {  this.renderFooterTabs('fav') }
-                    </ImageBackground>
+                    </ImageBackground> */}
+                    <FooterTab style={{ backgroundColor: 'fff', borderTopWidth:2, borderTopColor:'#eee'  ,width: width , height: 65, flexDirection: 'row', justifyContent: 'space-between' , paddingBottom:10 }}>
+                        
+                        {  this.renderFooterTabs('home') }
+                        
+                       
+                        {  this.renderFooterTabs('offers') }
+                        
+                        <Button onPress={ () => this.props.navigation.navigate('addProduct') } style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 42,
+                         width: 45 , height: 45, alignItems: 'center', justifyContent: 'center', left:'44%' , position:'absolute',
+                         }}>
+                            <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
+                        </Button>
+                        
+                        {  this.renderFooterTabs('ads') }
+                        
+                        {  this.renderFooterTabs('fav') }
+
+                    </FooterTab>
                 </Footer>
         );
     }
