@@ -39,7 +39,7 @@ const styles = ({
     // Register Screen Styles
     registerFormContainerStyle: {
         width: '100%',
-        height: (height*70)/100,
+      //  height: (height*70)/100,
         alignItems: 'center',
         padding: 20,
         justifyContent: 'center'

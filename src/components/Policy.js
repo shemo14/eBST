@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, ImageBackground } from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body } from 'native-base'
+import i18n from '../../locale/i18n'
 
 
 class Policy extends Component {
@@ -9,7 +10,7 @@ class Policy extends Component {
     }
 
     static navigationOptions = () => ({
-        drawerLabel: 'الشروط و الاحكام',
+        drawerLabel: i18n.t('terms'),
         drawerIcon: ( <Image source={require('../../assets/images/white_terms.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
@@ -26,7 +27,7 @@ class Policy extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>احكام وشروط</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{i18n.t('terms')}</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>

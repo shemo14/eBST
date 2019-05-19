@@ -6,6 +6,7 @@ const en = {
     'loginButton': 'login',
     'registerButton': 'register',
     'sendButton': 'send',
+    'guest': 'Guest',
     'verifyCode': 'verify code',
     'newPass': 'new password',
     'verifyNewPass': 'verify new password',
@@ -13,7 +14,9 @@ const en = {
     'edit': 'edit',
     'orderSent': 'Your offer sent successfully',
     'confirmOrder': 'Confirm Order',
+    'verifyPassword': 'Password and password confirmation do not match',
     'username': 'username',
+    'passwordLenght' : 'password less then 6 letters',
     'email': 'email address',
     'visitorRegister': 'register as a visitor',
     'stores': 'stores',
@@ -56,6 +59,8 @@ const en = {
     'contactUs': 'contact us',
     'message': 'message',
     'name': 'name',
+    'profile': 'Profile',
+    'changePassword': 'change password',
     'editAcc': 'edit profile',
     'save': 'save',
     'productDetailsExchanger': 'product details exchanger',
@@ -79,7 +84,17 @@ const en = {
     'exchangeProduct': 'exchange product',
     'productDesc': 'product description',
     'exchangeWithDifferencePrice': 'exchange with difference price',
-    'compeleteData': 'Plz enter data correctly'
+    'compeleteData': 'Plz enter data correctly',
+    'offer': 'offers',
+    'confirmAddProduct': 'Your product added successfully',
+    'terms' : 'Terms and conditions',
+    'settings' : 'settings',
+    'countries' : 'countries',
+    'registerAsTrader': 'register as trader',
+    'emailNotCorrect':  'email not correct',
+    'confirmCode' : 'confirm code',
+    'codeNotCorrect' : 'code not correct'
+
 }
 
 export default en;

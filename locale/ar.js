@@ -80,6 +80,20 @@ const ar = {
     'exchangeProduct': 'منتج المبادلة',
     'productDesc': 'وصف المنتج',
     'compeleteData': 'الرجاء ادخال كل البيانات بشكل صحيح',
+    'offer': 'عروض',
+    'confirmAddProduct': 'تم اضافة المنتج بنجاح',
+    'terms' : 'الشروط و الاحكام',
+    'settings' : 'الاعدادات',
+    'confirmCode' : 'كود التفعيل',
+    'countries' : 'الدول',
+    'guest': 'زائر',
+    'profile': 'حسابي',
+    'changePassword': 'تغير كلمة المرور',
+    'passwordLenght' : 'كلمة المرور اقل من 6 احرف',
+    'verifyPassword': 'كلمة المرور و تأكيد كلمة المرور غير متطابقين',
+    'registerAsTrader': 'التسجيل كتاجر',
+    'codeNotCorrect' : 'كود التفعيل غير صحيح',
+    'emailNotCorrect': 'البريد الالكتروني غير صحيح'
 }
 
 export default ar;

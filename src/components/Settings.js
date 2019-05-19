@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, Dimensions, I18nManager, ImageBackground , TouchableOpacity, Share , Switch} from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body } from 'native-base';
 import Modal from "react-native-modal";
+import i18n from '../../locale/i18n'
 
 
 const width = Dimensions.get('window').width;
@@ -53,7 +54,7 @@ class Settings extends Component {
     };
 
     static navigationOptions = () => ({
-        drawerLabel: 'الاعدادات',
+        drawerLabel: i18n.t('settings'),
         drawerIcon: ( <Image source={require('../../assets/images/white_setting.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
 
@@ -69,7 +70,7 @@ class Settings extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>الاعدادات</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{i18n.t('settings')}</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>

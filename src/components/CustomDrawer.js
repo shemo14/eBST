@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import {Image, View, Text, TouchableOpacity, ImageBackground, AsyncStorage } from 'react-native';
+import {Image, View, Text, TouchableOpacity, ImageBackground, AsyncStorage ,I18nManager } from 'react-native';
 import {Container, Content} from 'native-base';
 import { DrawerItems } from 'react-navigation';
+import {connect} from "react-redux";
+import i18n from '../../locale/i18n'
 
 class CustomDrawer extends Component {
     constructor(props){
@@ -19,15 +21,22 @@ class CustomDrawer extends Component {
     }
 
     render(){
+        let { user } = this.props;
+        if (user === null)
+            user = {
+                avatar: 'http://shams.arabsdesign.com/eBST-backend/images/users/default.png',
+                name: i18n.t('guest')
+            }
+
         return(
             <Container style={{ overflow: 'visible' }}>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
-                    <ImageBackground source={require('../../assets/images/bg_side_bar.png')} resizeMode={'stretch'} style={{ width: null, height: null, flex: 1 }}>
+                    <ImageBackground source={I18nManager.isRTL ? require('../../assets/images/bg_side_bar.png') : require('../../assets/images/bg_side_bar2.png')} resizeMode={'stretch'} style={{ width: null, height: null, flex: 1 }}>
                         <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate('profile')} style={{ height:150, alignItems: 'center', justifyContent: 'center', marginTop: 40, marginLeft: 10 }}>
                             <Image source={require('../../assets/images/img_two.png')} style={{ width: 140, height: 140, position: 'absolute', zIndex: 999 }} resizeMode={'contain'} />
-                            <Image source={require('../../assets/images/profile.jpg')} style={{ width: 140, height: 140 }} resizeMode={'contain'} />
+                            <Image source={{ uri: user.avatar }} style={{ width: 140, height: 140 }} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={{ color: '#acabae', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, top: -5, marginLeft: 10 }}>محمد شمس</Text>
+                        <Text style={{ color: '#acabae', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, top: -5, marginLeft: 10 }}>{ user.name }</Text>
                         <View style={{ marginTop: 50 }}>
                             <DrawerItems {...this.props} labelStyle={{color: '#fff', marginTop: 10, fontSize: 16, marginHorizontal: 5, fontFamily: 'cairo', fontWeight: 'normal'}} onItemPress={
                                 (route, focused) => {
@@ -113,4 +122,12 @@ const styles = {
     },
 };
 
-export default CustomDrawer;
+
+const mapStateToProps = ({ auth, profile }) => {
+    return {
+        auth: auth.user,
+        user: profile.user
+    };
+};
+
+export default connect(mapStateToProps)(CustomDrawer);
