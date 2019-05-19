@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, I18nManager } from "react-native";
 import { Container, Content, Header, Left, Right, Body, Button, Item, Input, Form, Label } from 'native-base'
 import Modal from "react-native-modal";
+import i18n from '../../locale/i18n'
+import {connect} from "react-redux";
 
 const width = Dimensions.get('window').width;
 class Profile extends Component {
@@ -71,11 +73,11 @@ class Profile extends Component {
                         </TouchableOpacity>
                     </Right>
                     <Body style={{width: '100%', alignItems: 'center', alignSelf: 'flex-start'}}>
-                    <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>حسابي</Text>
+                    <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('profile') }</Text>
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
+                            <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Left>
                 </Header>
@@ -83,34 +85,34 @@ class Profile extends Component {
                     <View style={{ height: 300 }}>
                         <View style={styles.slide}>
                             <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 2 }} />
-                            <Image blurRadius={2} source={require('../../assets/images/profile.jpg')} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
+                            <Image blurRadius={2} source={{ uri: this.props.user.avatar }} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
                         </View>
                         <View style={{ top: -210, width: '100%', height: 0, zIndex: 4 }}>
-                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%' }} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </View>
                     </View>
                     <View style={{ zIndex: 5, width: 120, height: 120, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 172, left: 15 }}>
                         <View>
                             <View style={{ width: 90, height: 90, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '45deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
                             <View style={[styles.block, { transform: [{ rotate: '45deg' }] }]}>
-                                <Image source={require('../../assets/images/profile.jpg')} style={styles.image} resizeMode={'stretch'} />
+                                <Image source={{ uri: this.props.user.avatar }} style={styles.image} resizeMode={'stretch'} />
                             </View>
                         </View>
-                        <Text style={{ color: '#6d6c72', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, marginTop: 15}}>محمد شمس</Text>
+                        <Text style={{ color: '#6d6c72', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, marginTop: 15}}>{ this.props.user.name }</Text>
                     </View>
                     <View style={{ padding: 20, width: '100%', marginTop: 30 }}>
                         <View style={{ borderRadius: 30, borderWidth: 1, borderColor: '#c5c5c5', height: 50, justifyContent: 'center', marginBottom: 20 }}>
-                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', backgroundColor: '#fff', position: 'absolute', top: -13, left: 10, paddingHorizontal: 5}}>رقم الهاتف</Text>
-                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, textAlign: 'left', marginHorizontal: 15, width: '90%' }}>01094985095</Text>
+                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', backgroundColor: '#fff', position: 'absolute', top: -13, left: 10, paddingHorizontal: 5}}>{ i18n.t('phoneNumber') }</Text>
+                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, textAlign: 'left', marginHorizontal: 15, width: '90%' }}>{ this.props.user.phone }</Text>
                         </View>
 
                         <View style={{ borderRadius: 30, borderWidth: 1, borderColor: '#c5c5c5', height: 50, justifyContent: 'center' }}>
-                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', backgroundColor: '#fff', position: 'absolute', top: -13, left: 10, paddingHorizontal: 5}}>البريد الالكتروني</Text>
-                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, textAlign: 'left', marginHorizontal: 15, width: '90%' }}>mo7amed.shams3477@gmail.com</Text>
+                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', backgroundColor: '#fff', position: 'absolute', top: -13, left: 10, paddingHorizontal: 5}}>{ i18n.t('email') }</Text>
+                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, textAlign: 'left', marginHorizontal: 15, width: '90%' }}>{ this.props.user.email }</Text>
                         </View>
 
                         <TouchableOpacity onPress={this._toggleModal} >
-                            <Text style={{ textAlign: 'center', marginTop: 30, fontSize: 17, fontFamily: 'cairo', color: '#26b5c4' }}>تغير كلمة المرور</Text>
+                            <Text style={{ textAlign: 'center', marginTop: 30, fontSize: 17, fontFamily: 'cairo', color: '#26b5c4' }}>{ i18n.t('changePassword ') }</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -185,4 +187,10 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Profile;
+const mapStateToProps = ({ profile }) => {
+    return {
+        user: profile.user
+    };
+};
+
+export default connect(mapStateToProps)(Profile);

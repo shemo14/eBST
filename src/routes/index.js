@@ -43,6 +43,7 @@ import EditProduct from "../components/EditProduct";
 import SetOffer from "../components/SetOffer";
 import ConfirmOrder from "../components/ConfirmOrder";
 import AcceptOrder from "../components/AcceptOrder";
+import ConfirmCode from "../components/ConfirmCode";
 
 const width = Dimensions.get('window').width;
 const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
@@ -111,6 +112,12 @@ const AppNavigator = createStackNavigator({
     },
     verify:{
         screen: Verify,
+        navigationOptions: {
+            header: null
+        }
+    },
+    confirmCode:{
+        screen: ConfirmCode,
         navigationOptions: {
             header: null
         }
