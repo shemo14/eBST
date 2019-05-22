@@ -1,35 +1,13 @@
 import React, { Component } from "react";
-import {
-    View,
-    Text,
-    Image,
-    Dimensions,
-    I18nManager,
-    ImageBackground,
-    ScrollView,
-    FlatList,
-    KeyboardAvoidingView, TouchableOpacity, ImageStore
-} from "react-native";
-import {
-    Container,
-    Content,
-    Button,
-    Icon,
-    Header,
-    Left,
-    Right,
-    Body,
-    Item,
-    Label,
-    Input,
-    Form,
-    Textarea, Picker
-} from 'native-base'
+import { View, Text, Image, Dimensions, I18nManager, ImageBackground, ScrollView, FlatList, KeyboardAvoidingView, TouchableOpacity, ImageStore } from "react-native";
+import { Container, Content, Button, Icon, Header, Left, Right, Body, Item, Label, Input, Form, Textarea, Picker } from 'native-base'
 import i18n from '../../locale/i18n'
 import {connect} from "react-redux";
 import {CameraBrowser, ImageBrowser} from "expo-multiple-imagepicker";
 import {Permissions} from "expo";
 import {DoubleBounce} from "react-native-loader";
+import axios from "axios";
+import CONST from "../consts";
 
 const width  = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -43,15 +21,20 @@ class SetOffer extends Component {
             photos: [],
             imageId: null,
             refreshed: false,
-            name: null,
+            name: '',
             nameStatus: 0,
-            price: null,
+            price: '',
             priceStatus: 0,
-            desc: null,
+            extraPrice: '',
+            extraPriceStatus: 0,
+            auctionPrice: '',
+            auctionPriceStatus: 0,
+            desc: '',
             descStatus: 0,
             isValid: true,
-            type: this.props.navigation.state.params.type,
-            id: this.props.navigation.state.params.id,
+            type: 2,
+            id: 15,
+            isSubmitted: false
         }
     }
 
@@ -71,7 +54,17 @@ class SetOffer extends Component {
             )
         }
 
-        if (base64.length == 0 || this.state.name == null || this.state.desc == null || this.state.selectedCategory == null){
+        let notValid = false;
+
+        if (this.state.type == 2 && this.state.auctionPrice === '')
+            notValid = true;
+        else if (this.state.type == 3 && this.state.photos === [] && this.state.name === '' && this.state.desc === '')
+            notValid = true;
+        else if (this.state.type == 4 && this.state.photos === [] && this.state.name === '' && this.state.desc === '' && this.state.extraPrice === '')
+            notValid = true;
+
+
+        if (notValid){
             return (
                 <Button disabled onPress={() => this.addProduct()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#999', marginBottom: 20 }}>
                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
@@ -90,6 +83,27 @@ class SetOffer extends Component {
         }
     }
 
+    setOffer(){
+        this.setState({ isSubmitted: true })
+        axios({
+            method: 'POST',
+            url: CONST.url + 'set_offer',
+            headers: {Authorization: this.props.user.token },
+            data: {
+                name: this.state.name,
+                desc: this.state.desc,
+                price: this.state.price,
+                lang: this.props.lang,
+                type: this.state.selectedType,
+                product_id: this.state.extraPrice,
+                images: JSON.stringify(base64)
+            }}).then(response => {
+            if (response.data.status === 200){
+                this.props.navigation.navigate('confirmOrder', { title: i18n.t('addProduct'), msg: i18n.t('confirmAddProduct') });
+            }
+        })
+    }
+
     activeInput(type){
         if (type === 'name'){
             this.setState({ nameStatus: 1 })
@@ -97,6 +111,8 @@ class SetOffer extends Component {
             this.setState({ priceStatus: 1 })
         }else if (type === 'desc') {
             this.setState({ descStatus: 1 })
+        }else if (type === 'extraPrice') {
+            this.setState({ extraPriceStatus: 1 })
         }
     }
 
@@ -107,6 +123,8 @@ class SetOffer extends Component {
             this.setState({ priceStatus: 0 })
         }else if (type === 'desc') {
             this.setState({ descStatus: 0 })
+        }else if (type === 'extraPrice') {
+            this.setState({ extraPriceStatus: 0 })
         }
     }
 
@@ -164,11 +182,15 @@ class SetOffer extends Component {
     renderForm(){
         if (this.state.type == 2){
             return(
-                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.priceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
-                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productPrice') }</Label>
-                        <Input onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
-                    </Item>
+                <View style={{width: '100%',  alignItems: 'center', padding: 21 }}>
+                    <Form style={{ width: '100%' }}>
+                        <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.priceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
+                            <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
+                                <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('auctionPrice') }</Label>
+                                <Input onChangeText={(auctionPrice) => this.setState({ auctionPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('auctionPrice')} onFocus={() => this.activeInput('auctionPrice')} style={{ width: 200, textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                            </Item>
+                        </View>
+                    </Form>
                 </View>
             )
         }
@@ -193,11 +215,22 @@ class SetOffer extends Component {
                         <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row'  }}>
                             <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                 <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productName') }</Label>
-                                <Input onChangeText={(name) => this.setState({ name })} autoCapitalize={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
+                                <Input onChangeText={(name) => this.setState({ name })} autoCapitalize={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
                             </Item>
                         </View>
+                        {
+                            this.state.type == 4 ?
+                                (
+                                    <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20    }}>
+                                        <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
+                                            <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('extraPrice') }</Label>
+                                            <Input onChangeText={(extraPrice) => this.setState({ extraPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')}  style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
+                                        </Item>
+                                    </View>
+                                ) : <View />
+                        }
                         <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.descStatus === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
-                            <Textarea onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: 'right', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
+                            <Textarea onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
                         </View>
                     </Form>
                 </View>
@@ -216,18 +249,18 @@ class SetOffer extends Component {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
-                    <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
+                    <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ i18n.t('addAds') }</Text>
+                            <Text style={{ color: '#fff', textAlign: 'center', fontSize: 20 , fontFamily:'cairo' }}>{ i18n.t('setOffer') }</Text>
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                             </Button>
                         </Left>
                     </ImageBackground>

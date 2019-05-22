@@ -6,6 +6,7 @@ import axios from 'axios'
 import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import { connect } from 'react-redux';
+import {NavigationEvents} from "react-navigation";
 
 
 const width = Dimensions.get('window').width;
@@ -103,9 +104,16 @@ class Categories extends Component {
         console.log(this.state.status, this.state.categories)
     }
 
+    onFocus(payload){
+        const type = payload.action.params.type;
+        this.setState({ type, status: null })
+        this.componentWillMount()
+    }
+
     render() {
         return (
             <Container>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
                     <ImageBackground source={  I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>

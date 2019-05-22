@@ -10,6 +10,7 @@ import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
 import ProductBlock from './ProductBlock';
 import ProductRow from './ProductRow';
+import {NavigationEvents} from "react-navigation";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -188,6 +189,14 @@ class CategoryProducts extends Component {
         this.componentWillMount();
     }
 
+    onFocus(payload){
+        console.log('this is onWillFocus', payload)
+        const itemId = payload.action.params.id;
+        const productsType = payload.action.params.type;
+        this.setState({ itemId, productsType, status: null })
+        this.componentWillMount()
+    }
+
     render() {
         let grid=require('../../assets/images/multi_product.png');
         let row=require('../../assets/images/gray_one_product.png');
@@ -199,6 +208,7 @@ class CategoryProducts extends Component {
 
         return (
             <Container>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>

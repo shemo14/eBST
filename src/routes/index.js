@@ -66,7 +66,6 @@ const DrawerNavigator = createDrawerNavigator({
     incomingOffers: IncomingOffers,
     product: ProductDetails,
     addProduct: AddProduct,
-    incomingOffers:IncomingOffers,
     acceptOrder:AcceptOrder
 }, {
     nitialRouteName: 'home',
@@ -80,6 +79,13 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
+
+    setOffer:{
+        screen: SetOffer,
+        navigationOptions: {
+            header: null
+        }
+    },
     initScreen:{
         screen: InitScreen,
         navigationOptions: {
@@ -200,20 +206,8 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
-    setOffer:{
-        screen: SetOffer,
-        navigationOptions: {
-            header: null
-        }
-    },
     editProduct:{
         screen: EditProduct,
-        navigationOptions: {
-            header: null
-        }
-    },
-    incomingOffers :{
-        screen: IncomingOffers,
         navigationOptions: {
             header: null
         }

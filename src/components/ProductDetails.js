@@ -9,6 +9,8 @@ import { DoubleBounce } from "react-native-loader"
 import axios from 'axios'
 import CONST from '../consts'
 import {connect} from "react-redux";
+import { NavigationEvents } from 'react-navigation';
+
 
 
 const height = Dimensions.get('window').height;
@@ -21,7 +23,7 @@ class ProductDetails extends Component {
             starCount: 0,
             redHeart: false,
             isModalVisible: false,
-            id: this.props.navigation.state.params.id,
+            id: this.props.navigation.getParam('id', 'NO-ID'),
             comment: '',
             product: [],
             images: [],
@@ -217,18 +219,31 @@ class ProductDetails extends Component {
 
     }
 
-    render() {
-        console.log(this.state.id);
+    onFocus(payload){
+        console.log('will focus',payload)
+        const id = payload.action.params.id;
+        this.setState({ id, status: null })
+        this.componentWillMount()
+    }
 
+    goBack() {
+        const { navigation } = this.props;
+        navigation.goBack();
+        console.log('ops navigation', navigation.state.params);
+        navigation.state.params.id;
+    }
+
+    render() {
         return (
             <Container>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent'}} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center' }}>
                         <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </Button>
                         <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo' }}>{ this.state.product.name }</Text>
-                        <Button transparent onPress={() => this.props.navigation.goBack()}>
+                        <Button transparent onPress={() => this.goBack()}>
                             <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </Button>
                     </View>
@@ -236,7 +251,7 @@ class ProductDetails extends Component {
                 { this.renderLoader() }
                 <Content style={{zIndex: -99, marginTop: -50}}>
                     <View>
-                        <Swiper dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>
+                        <Swiper key={this.state.images.length} dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>
                             {
                                 this.state.images.map((img, i) => (
                                     <View key={i} style={styles.slide}>

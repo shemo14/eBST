@@ -47,6 +47,7 @@ const en = {
     'orderDate': 'order date',
     'addAds': 'add ads',
     'ads': 'ads',
+    'setOffer' : 'SET OFFER',
     'add': 'add',
     'category': 'category',
     'productType': 'product type',

@@ -86,6 +86,7 @@ const ar = {
     'settings' : 'الاعدادات',
     'confirmCode' : 'كود التفعيل',
     'countries' : 'الدول',
+    'setOffer' : 'اضافة عرض',
     'guest': 'زائر',
     'profile': 'حسابي',
     'changePassword': 'تغير كلمة المرور',
