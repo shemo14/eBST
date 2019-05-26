@@ -5,7 +5,6 @@ import styles from '../../assets/styles'
 import { connect } from 'react-redux';
 import { chooseLang } from '../actions';
 
-
 const height = Dimensions.get('window').height;
 class Language extends Component {
     constructor(props){

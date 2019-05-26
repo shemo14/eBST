@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, I18nManager } from "react-native";
-import { Container, Content, Header, Left, Right, Body, Button, Item, Input, Form, Label } from 'native-base'
+import {Container, Content, Header, Left, Right, Body, Button, Item, Input, Form, Label, Toast} from 'native-base'
 import Modal from "react-native-modal";
 import i18n from '../../locale/i18n'
 import {connect} from "react-redux";
+import {DoubleBounce} from "react-native-loader";
+import axios from "axios";
+import CONST from "../consts";
 
 const width = Dimensions.get('window').width;
 class Profile extends Component {
@@ -13,11 +16,41 @@ class Profile extends Component {
             isModalVisible: false,
             oldPasswordStatus: 0,
             newPasswordStatus: 0,
-            verifyPasswordStatus: 0
+            verifyPasswordStatus: 0,
+            oldPass: '',
+            newPass: '',
+            verifyNewPass: '',
+            isSubmitted: false
         };
     }
 
     _toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible });
+
+    renderSubmit(){
+        if (this.state.isSubmitted){
+            return(
+                <DoubleBounce size={20} color="#26b5c4" />
+            )
+        }
+
+        if (this.state.oldPass == '' || this.state.newPass == '' || this.state.verifyNewPass == ''){
+            return (
+                <Button disabled style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#999', marginBottom: 20 }}>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
+                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('update') }</Text>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
+                </Button>
+            );
+        }else {
+            return (
+                <Button onPress={() => this.onChangePassword()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4', marginBottom: 20 }}>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
+                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('update') }</Text>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
+                </Button>
+            );
+        }
+    }
 
     activeInput(type){
         if (type === 'oldPassword'){
@@ -41,9 +74,9 @@ class Profile extends Component {
         let source ='';
         if (type === 'oldPassword'){
             if (this.state.oldPasswordStatus){
-                source = require('../../assets/images/lactic_phone.png')
+                source = require('../../assets/images/lactic_lock.png')
             } else{
-                source = require('../../assets/images/bold_gray_phone.png')
+                source = require('../../assets/images/gray_lock.png')
             }
         }else if (type === 'newPassword'){
             if (this.state.newPasswordStatus ){
@@ -61,6 +94,35 @@ class Profile extends Component {
         }
 
         return source;
+    }
+
+    onChangePassword(){
+        if (this.state.newPass === this.state.verifyNewPass){
+            this.setState({ isSubmitted: true });
+            axios({
+                method: 'POST',
+                url: CONST.url + 'update_password',
+                headers: {Authorization: this.props.user.token},
+                data: {
+                    old_password: this.state.oldPass,
+                    new_password: this.state.newPass,
+                    lang: this.props.lang,
+                }
+            }).then(response => {
+                this.setState({ isSubmitted: false, isModalVisible: !this.state.isModalVisible, oldPass: '', newPass: '', verifyNewPass: '' });
+                Toast.show({
+                    text: response.data.msg,
+                    type:  response.data.status == 200 ? "success" : "danger",
+                    duration: 3000
+                });
+            })
+        } else{
+            Toast.show({
+                text: i18n.t('verifyPassword'),
+                type: "danger",
+                duration: 3000
+            });
+        }
     }
 
     render() {
@@ -112,7 +174,7 @@ class Profile extends Component {
                         </View>
 
                         <TouchableOpacity onPress={this._toggleModal} >
-                            <Text style={{ textAlign: 'center', marginTop: 30, fontSize: 17, fontFamily: 'cairo', color: '#26b5c4' }}>{ i18n.t('changePassword ') }</Text>
+                            <Text style={{ textAlign: 'center', marginTop: 30, fontSize: 17, fontFamily: 'cairo', color: '#26b5c4' }}>{ i18n.t('changePassword') }</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -121,8 +183,8 @@ class Profile extends Component {
                             <Form>
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row'  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>كلمة المرور القديمة</Label>
-                                        <Input secureTextEntry onBlur={() => this.unActiveInput('oldPassword')} onFocus={() => this.activeInput('oldPassword')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
+                                        <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('oldPass') }</Label>
+                                        <Input onChangeText={(oldPass) => this.setState({ oldPass })} value={this.state.oldPass} secureTextEntry onBlur={() => this.unActiveInput('oldPassword')} onFocus={() => this.activeInput('oldPassword')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
                                     </Item>
 
                                     <Image source={this.renderInputImage('oldPassword')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
@@ -131,8 +193,8 @@ class Profile extends Component {
 
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.passwordStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>كلمة المرور الجديدة</Label>
-                                        <Input secureTextEntry onBlur={() => this.unActiveInput('newPassword')} onFocus={() => this.activeInput('newPassword')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('newPass') }</Label>
+                                        <Input onChangeText={(newPass) => this.setState({ newPass })} value={this.state.newPass} secureTextEntry onBlur={() => this.unActiveInput('newPassword')} onFocus={() => this.activeInput('newPassword')} style={{ width: 200, textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                                     </Item>
 
                                     <Image source={this.renderInputImage('newPassword')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
@@ -140,19 +202,15 @@ class Profile extends Component {
 
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.verifyPasswordStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
-                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>تأكيد كلمة المرور الجديدة</Label>
-                                        <Input secureTextEntry onBlur={() => this.unActiveInput('verifyPassword')} onFocus={() => this.activeInput('verifyPassword')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                                        <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('verifyNewPass') }</Label>
+                                        <Input onChangeText={(verifyNewPass) => this.setState({ verifyNewPass })} value={this.state.verifyNewPass} secureTextEntry onBlur={() => this.unActiveInput('verifyPassword')} onFocus={() => this.activeInput('verifyPassword')} style={{ width: 200, textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                                     </Item>
 
                                     <Image source={this.renderInputImage('verifyPassword')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
                                 </View>
 
-                                <View style={{ marginTop: 20, marginBottom: 10 }}>
-                                    <Button onPress={this._toggleModal} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
-                                        <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14 }} />
-                                        <Text style={{ color: '#fff', fontSize: 15, fontFamily: 'cairo', }}>ارسال</Text>
-                                        <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14 }} />
-                                    </Button>
+                                <View style={{ marginTop: 20, marginBottom: 10, justifyContent: 'center', alignItems: 'center' }}>
+                                    { this.renderSubmit() }
                                 </View>
                             </Form>
                             <TouchableOpacity onPress={this._toggleModal} style={{ top: 5, right: 5, position: 'absolute' }}>
@@ -187,9 +245,10 @@ const styles = StyleSheet.create({
     },
 });
 
-const mapStateToProps = ({ profile }) => {
+const mapStateToProps = ({ profile, lang }) => {
     return {
-        user: profile.user
+        user: profile.user,
+        lang: lang.lang
     };
 };
 

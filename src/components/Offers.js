@@ -20,7 +20,6 @@ class Offers extends Component {
             receiveShow: true,
             type:1,
             status: null,
-            
         }
     }
 
@@ -33,6 +32,7 @@ class Offers extends Component {
             this.setState({showData:response.data.data , status:response.data.status})
         })
     }
+
     onSwipeLeft() {
         this.setState({ type:1,receiveShow: true , status:null });
         this.componentWillMount();

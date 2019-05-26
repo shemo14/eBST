@@ -9,6 +9,7 @@ import axios from 'axios'
 import CONST from '../consts'
 import {connect} from "react-redux";
 import { DoubleBounce } from 'react-native-loader';
+import {NavigationEvents} from "react-navigation";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
@@ -19,7 +20,7 @@ class IncomingOffers extends Component {
         this.state = {
             offerOneModal: false,
             offerTwoModal: false,
-            product_id:this.props.navigation.state.params.product_id,
+            id :this.props.navigation.state.params.product_id,
             images:[],
             productDet:[],
             offers:[],
@@ -42,7 +43,7 @@ class IncomingOffers extends Component {
 
     offerActiond(status){
         this.setState({ offerOneModal: !this.state.offerOneModal });
-        axios({ method: 'POST', url: CONST.url + 'offer_action', headers: {Authorization: this.props.user.token }, data: {offer_id: this.state.offerDet.id, lang: this.props.lang , status , product_id:this.state.product_id}}).then(response => {
+        axios({ method: 'POST', url: CONST.url + 'offer_action', headers: {Authorization: this.props.user.token }, data: {offer_id: this.state.offerDet.id, lang: this.props.lang , status , product_id:this.state.id}}).then(response => {
             this.setState({offers:response.data.data , status:response.data.status })
         })
     }
@@ -57,14 +58,14 @@ class IncomingOffers extends Component {
     });
 
     componentWillMount(){
-        axios({ method: 'POST', url: CONST.url + 'product_offers', headers: {Authorization: this.props.user.token }, data: {product_id:this.state.product_id , lang: this.props.lang}}).then(response => {
+        axios({ method: 'POST', url: CONST.url + 'product_offers', headers: {Authorization: this.props.user.token }, data: {product_id: this.state.id , lang: this.props.lang}}).then(response => {
             this.setState({productDet:response.data.data , status:response.data.status , images:response.data.data.images , offers:response.data.data.offers})
         })
     }
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height, alignSelf:'center' , backgroundColor:'#fff' }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -81,9 +82,16 @@ class IncomingOffers extends Component {
         }
     }
 
+    onFocus(payload){
+        const id = payload.action.params.product_id;
+        this.setState({ id, status: null });
+        this.componentWillMount();
+    }
+
     render() {
         return (
             <Container>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
                         <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} >
@@ -115,7 +123,7 @@ class IncomingOffers extends Component {
                     </View>
                     <View style={{padding:20 , marginTop:-70}}>
                         <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:14 , marginBottom:0 , alignSelf:'flex-start' }}>{this.state.productDet.name}</Text>
-                        <Text style={{color:'#26b5c4' ,  fontFamily:'cairo', fontSize:14, marginBottom:5 , alignSelf:'flex-start' }}>سعر المنتج {this.state.productDet.price} ريال</Text>
+                        <Text style={{color:'#26b5c4' ,  fontFamily:'cairo', fontSize:14, marginBottom:5 , alignSelf:'flex-start' }}>{ i18n.t('productPrice') } : {this.state.productDet.price}  { i18n.t('RS') }</Text>
                         <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:14 ,lineHeight:20 , alignSelf:'flex-start' }}>{this.state.productDet.desc}</Text>
                     
                         <View style={{marginTop:10}}>
@@ -136,7 +144,7 @@ class IncomingOffers extends Component {
                                             <TouchableOpacity onPress={() =>this.offerOneModal(offer.offer_id)}>
                                                 <Text style={{color:'#6d6c72' , fontSize:13, fontFamily:'cairo' , marginBottom:2, alignSelf:'flex-start' }}>{offer.name}</Text>
                                                 <View style={{flexDirection:'row'}}>
-                                                    <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>نوع العرض: </Text>
+                                                    <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('offerType') }: </Text>
                                                     <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{offer.type}</Text>
                                                 </View>
                                             </TouchableOpacity>
@@ -169,15 +177,15 @@ class IncomingOffers extends Component {
                                                 <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.name}</Text>
                                             </View>
                                             <View style={{flexDirection:'row'}}>
-                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>نوع العرض: </Text>
+                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('offerType') }: </Text>
                                                 <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.type}</Text>
                                             </View>
                                             <View style={{flexDirection:'row'}}>
-                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>عرض السعر: </Text>
+                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('offerPrice') }: </Text>
                                                 <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.price} رس</Text>
                                             </View>
                                             <View style={{flexDirection:'row'}}>
-                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>رقم الجوال: </Text>
+                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('phone') }: </Text>
                                                 <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.phone}</Text>
                                             </View>
                                         </Body>
@@ -187,13 +195,13 @@ class IncomingOffers extends Component {
                                     <View style={{marginHorizontal:7}}>
                                         <Button onPress={() => this.offerActiond(2)} style={{  borderColor:'#26b5c4' , borderWidth:1 ,borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
                                             <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
-                                            <Text style={{color:'#fff' , fontSize:14, fontFamily: 'cairo',}}>قبول</Text>
+                                            <Text style={{color:'#fff' , fontSize:14, fontFamily: 'cairo',}}>{ i18n.t('accept') }</Text>
                                             <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
                                         </Button>
                                     </View>
                                     <View style={{marginHorizontal:7}}>
                                         <Button onPress={() => this.offerActiond(1)} style={{ borderColor:'#acabae' , borderWidth:1 , borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#fff' }}>
-                                            <Text style={{color:'#acabae' , fontSize:14, fontFamily: 'cairo',}}>رفض</Text>
+                                            <Text style={{color:'#acabae' , fontSize:14, fontFamily: 'cairo',}}>{ i18n.t('refuse') }</Text>
                                         </Button>
                                     </View>
                                 </View>

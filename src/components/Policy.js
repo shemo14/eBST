@@ -1,12 +1,20 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground } from "react-native";
+import {View, Text, Image, ImageBackground, Dimensions, I18nManager} from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body } from 'native-base'
 import i18n from '../../locale/i18n'
+import {connect} from "react-redux";
+import axios from "axios";
+import CONST from "../consts";
+import {DoubleBounce} from "react-native-loader";
 
-
+const height = Dimensions.get('window').height;
 class Policy extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            policy: '',
+            status: null
+        }
     }
 
     static navigationOptions = () => ({
@@ -15,12 +23,34 @@ class Policy extends Component {
     });
 
 
+    componentWillMount() {
+        axios({
+            url: CONST.url + 'policy',
+            method: 'POST',
+            data: {lang: this.props.lang}
+        }).then(response => {
+            this.setState({
+                policy: response.data.data.policy,
+                status: response.data.status,
+            })
+        })
+    }
+
+    renderLoader(){
+        if (this.state.status === null){
+            return(
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
+                    <DoubleBounce size={20} color="#26b5c4" />
+                </View>
+            );
+        }
+    }
 
     render() {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
-                    <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
+                    <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
@@ -31,51 +61,15 @@ class Policy extends Component {
                         </Body>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                                <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                             </Button>
                         </Left>
                     </ImageBackground>
                 </Header>
-                <Content style={{paddingTop:15}}>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/lactic_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>1</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
-                    </View>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/yellow_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>2</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
-                    </View>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/lactic_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>3</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
-                    </View>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/yellow_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>4</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
-                    </View>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/lactic_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>5</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
-                    </View>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/yellow_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>6</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
-                    </View>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/lactic_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>7</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
-                    </View>
-                    <View style={{ paddingHorizontal:15 , justifyContent:'center' , flexDirection:'row' , marginBottom:10}}>
-                        <Image source={require('../../assets/images/yellow_half_circle.png')} style={{ width: 20, height: 20 , top:4}} resizeMode={'contain'} />
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#fff' , top:3 , left:10 , position:'absolute' }}>8</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' , lineHeight:25 , marginLeft:10}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص .</Text>
+                <Content>
+                    { this.renderLoader() }
+                    <View style={{ padding:15 , justifyContent:'center' , marginTop:30}}>
+                        <Text style={{fontFamily:'cairo' , fontSize:14 , color:'#6d6c72' , lineHeight:25 , textAlign:'center'}}>{ this.state.policy }</Text>
                     </View>
                 </Content>
                 <Image source={require('../../assets/images/info.png')} style={{zIndex:-1 ,width: 170, height: 170 , bottom:0 , right:-10 , position:'absolute' }} resizeMode={'contain'} />
@@ -86,4 +80,9 @@ class Policy extends Component {
 }
 
 
-export default Policy;
+const mapStateToProps = ({ lang }) => {
+    return {
+        lang: lang.lang
+    };
+};
+export default connect(mapStateToProps, {})(Policy);

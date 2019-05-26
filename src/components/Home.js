@@ -22,10 +22,10 @@ class Home extends Component {
             <Container>
                 <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent'}} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.openDrawer()}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.openDrawer()}>
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate('notifications')}>
                             <Image source={require('../../assets/images/notification.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>

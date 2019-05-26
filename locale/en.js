@@ -7,11 +7,19 @@ const en = {
     'registerButton': 'register',
     'sendButton': 'send',
     'guest': 'Guest',
+    'confirm': 'confirm',
+    'language': 'Language',
+    'stopNotification': 'Stop Notification',
+    'shareApp': 'Share Application',
     'verifyCode': 'verify code',
+    'noNotifications': 'no notifications',
+    'oldPass': 'old password',
     'newPass': 'new password',
     'verifyNewPass': 'verify new password',
     'verify': 'verify',
+    'update': 'update',
     'edit': 'edit',
+    'confirmSetOffer': 'your offer sent successfully',
     'orderSent': 'Your offer sent successfully',
     'confirmOrder': 'Confirm Order',
     'verifyPassword': 'Password and password confirmation do not match',
@@ -61,7 +69,7 @@ const en = {
     'message': 'message',
     'name': 'name',
     'profile': 'Profile',
-    'changePassword': 'change password',
+    'changePassword': 'Change Password',
     'editAcc': 'edit profile',
     'save': 'save',
     'productDetailsExchanger': 'product details exchanger',
@@ -94,8 +102,11 @@ const en = {
     'registerAsTrader': 'register as trader',
     'emailNotCorrect':  'email not correct',
     'confirmCode' : 'confirm code',
-    'codeNotCorrect' : 'code not correct'
-
+    'offerType' : 'offer type',
+    'offerPrice' : 'offer price',
+    'RS' : 'RS',
+    'accept' : 'accept',
+    'refuse' : 'refuse',
 }
 
 export default en;

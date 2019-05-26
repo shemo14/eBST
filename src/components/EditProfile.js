@@ -1,9 +1,25 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { Container, Content, Header, Left, Body, Button, Item, Input, Form, Label } from 'native-base'
-import Modal from "react-native-modal";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    I18nManager,
+    Dimensions,
+    KeyboardAvoidingView
+} from "react-native";
+import { Container, Content, Header, Left, Body, Button, Item, Input, Form, Label, Picker, Icon, CheckBox, Textarea } from 'native-base'
 import i18n from '../../locale/i18n'
+import axios from "axios";
+import CONST from "../consts";
+import {DoubleBounce} from "react-native-loader";
+import {connect} from "react-redux";
+import {ImagePicker, Permissions } from 'expo';
+import { updateProfile } from '../actions/ProfileAction'
 
+
+const height = Dimensions.get('window').height;
 class EditProfile extends Component {
     constructor(props) {
         super(props);
@@ -11,7 +27,34 @@ class EditProfile extends Component {
             nameStatus:0,
             phoneStatus: 0,
             mailStatus: 0,
+            countries: [],
+            status: null,
+            name: this.props.user.name,
+            phone: this.props.user.phone,
+            email: this.props.user.email,
+            desc: this.props.user.desc,
+            isTrader: this.props.user.type ? true : false,
+            selectedCountry: this.props.user.country_id,
+            userImage: null,
+            base64: null,
+            isSubmitted: false
         };
+    }
+
+    componentWillMount() {
+        axios.post(CONST.url + 'countries', { lang: this.props.lang }).then(response => {
+            this.setState({ countries: response.data.data })
+        });
+    }
+
+    renderLoader(){
+        if (this.state.status === null){
+            return(
+                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*45)/100 }}>
+                    <DoubleBounce size={20} color="#26b5c4" />
+                </View>
+            );
+        }
     }
 
     _toggleModal = () => this.setState({ isModalVisible: !this.state.isModalVisible });
@@ -41,6 +84,73 @@ class EditProfile extends Component {
         return source;
     }
 
+    renderSubmit(){
+        if (this.state.isSubmitted){
+            return(
+                <DoubleBounce size={20} color="#26b5c4" />
+            )
+        }
+
+        if (this.state.name == '' || this.state.email == '' || this.state.phone == '' || this.state.selectedCountry == null){
+            return (
+                <Button disabled style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#999', marginBottom: 20 }}>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
+                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('update') }</Text>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
+                </Button>
+            );
+        }else {
+            return (
+                <Button onPress={() => this.onUpdateProfile()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4', marginBottom: 20 }}>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
+                    <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('update') }</Text>
+                    <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
+                </Button>
+            );
+        }
+    }
+
+    askPermissionsAsync = async () => {
+        await Permissions.askAsync(Permissions.CAMERA);
+        await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    };
+
+    _pickImage = async () => {
+        this.askPermissionsAsync();
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [4, 3],
+            base64: true,
+        });
+
+        if (!result.cancelled) {
+            this.setState({ userImage: result.uri, base64: result.base64 });
+        }
+    };
+
+    onUpdateProfile(){
+        const data = {
+            name: this.state.name,
+            phone: this.state.phone,
+            country_id: this.state.selectedCountry,
+            image: this.state.base64,
+            email: this.state.email,
+            device_id: null,
+            type: this.state.isTrader ? 1 : 0,
+            desc: this.state.desc,
+            lang: this.props.lang,
+            token: this.props.user.token
+        };
+
+        this.setState({ isSubmitted: true });
+        this.props.updateProfile(data);
+    }
+
+    componentWillReceiveProps(newProps){
+        this.setState({ isSubmitted: false });
+    }
 
     render() {
         return (
@@ -51,66 +161,97 @@ class EditProfile extends Component {
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
+                            <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Left>
                 </Header>
                 <Content style={{ zIndex: -1, marginTop: -50 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
-                    <View style={{ height: 300 }}>
-                        <View style={styles.slide}>
-                            <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 2 }} />
-                            <Image blurRadius={2} source={require('../../assets/images/profile.jpg')} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
-                        </View>
-                        <View style={{ top: -210, width: '100%', height: 0, zIndex: 4 }}>
-                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%' }} resizeMode={'contain'} />
-                        </View>
-                    </View>
-                    <View style={{ zIndex: 5, width: 120, height: 120, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 172, left: 15 }}>
-                        <View>
-                            <View style={{ width: 90, height: 90, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '45deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
-                            <View style={[styles.block, { transform: [{ rotate: '45deg' }] }]}>
-                                <Image source={require('../../assets/images/profile.jpg')} style={styles.image} resizeMode={'stretch'} />
+                    <KeyboardAvoidingView behavior={'padding'} style={{width:'100%', height: null, flex: 1,}}>
+                        <View style={{ height: 300 }}>
+                            <View style={styles.slide}>
+                                <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 2 }} />
+                                <Image blurRadius={2} source={{ uri: this.props.user.avatar }} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
+                            </View>
+                            <View style={{ top: -210, width: '100%', height: 0, zIndex: 4 }}>
+                                <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                             </View>
                         </View>
-                        <Text style={{ color: '#6d6c72', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, marginTop: 15}}>محمد شمس</Text>
-                    </View>
-                    <View style={{ padding: 20, width: '100%', marginTop: 30 }}>
-                        <Form style={{width: '100%'}}>
-                            <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row' }}>
-                                <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                    <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('username') }</Label>
-                                    <Input auto-capitalization={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}/>
-                                </Item>
-                                <Image source={this.renderInputImage('name')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
-                            </View>
-
-                            <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
-                                <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                    <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('phoneNumber') }</Label>
-                                    <Input keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}/>
-                                </Item>
-
-                                <Image source={this.renderInputImage('phone')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
-                            </View>
-
-                            <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.mailStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
-                                <Item floatingLabel style={{  borderBottomWidth: 0, top: -18,  marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
-                                    <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13  }}>{ i18n.t('email') }</Label>
-                                    <Input keyboardType={'email-address'} onBlur={() => this.unActiveInput('mail')} onFocus={() => this.activeInput('mail')} style={{  width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}/>
-                                </Item>
-
-                                <Image source={this.renderInputImage('mail')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
-                            </View>
-                        </Form>
-
-                        <View style={{marginTop: 30}}>
-                            <Button onPress={() => this.props.navigation.navigate('confirm')} style={{ borderRadius: 25, width: 130, height: 50, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
-                                <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14 }} />
-                                <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>{ i18n.t('save') }</Text>
-                                <View style={{ backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14 }} />
-                            </Button>
+                        <View style={{ zIndex: 5, width: 120, height: 120, backgroundColor: 'transparent', justifyContent: 'center', alignItems: 'center', position: 'absolute', top: 172, left: 15 }}>
+                            <TouchableOpacity onPress={this._pickImage}>
+                                <View style={{ width: 90, height: 90, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '45deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
+                                <View style={[styles.block, { transform: [{ rotate: '45deg' }] }]}>
+                                    {this.state.userImage != null ? <Image source={{ uri: this.state.userImage }} style={styles.image} resizeMode={'stretch'} /> : <Image source={{ uri: this.props.user.avatar }} style={styles.image} resizeMode={'stretch'} />}
+                                </View>
+                            </TouchableOpacity>
+                            <Text style={{ color: '#6d6c72', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, marginTop: 15}}>{ this.props.user.name }</Text>
                         </View>
-                    </View>
+                        <View style={{ padding: 20, width: '100%', marginTop: 30 }}>
+                            <Form style={{width: '100%'}}>
+                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row' }}>
+                                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
+                                        <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('username') }</Label>
+                                        <Input onChangeText={name => this.setState({ name })} value={this.state.name} auto-capitalization={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL?'right' : 'left', fontSize: 15, top: 17 }}/>
+                                    </Item>
+                                    <Image source={this.renderInputImage('name')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
+                                </View>
+
+                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
+                                    <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
+                                        <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('phoneNumber') }</Label>
+                                        <Input onChangeText={phone => this.setState({ phone })} value={this.state.phone} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL?'right' : 'left', fontSize: 15, top: 17 }}/>
+                                    </Item>
+
+                                    <Image source={this.renderInputImage('phone')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
+                                </View>
+
+                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.mailStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
+                                    <Item floatingLabel style={{  borderBottomWidth: 0, top: -18,  marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
+                                        <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13  }}>{ i18n.t('email') }</Label>
+                                        <Input onChangeText={email => this.setState({ email })} value={this.state.email} keyboardType={'email-address'} onBlur={() => this.unActiveInput('mail')} onFocus={() => this.activeInput('mail')} style={{  width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL?'right' : 'left', fontSize: 15, top: 17 }}/>
+                                    </Item>
+
+                                    <Image source={this.renderInputImage('mail')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
+                                </View>
+
+                                <View>
+                                    <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#acabae', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%', padding: 5 }} regular >
+                                        <Picker
+                                            mode="dropdown"
+                                            iosIcon={<Icon name="arrow-down" />}
+                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                            placeholderStyle={{ color: "#c5c5c5" }}
+                                            placeholderIconColor="#fff"
+                                            selectedValue={this.state.selectedCountry}
+                                            onValueChange={(value) => this.setState({ selectedCountry: value })}
+                                        >
+                                            <Picker.Item label={i18n.t('countries')} value={null} />
+                                            {
+                                                this.state.countries.map((country, i) => (
+                                                    <Picker.Item key={i} label={country.name} value={country.id} />
+                                                ))
+                                            }
+                                        </Picker>
+                                        <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
+                                    </Item>
+                                </View>
+                                {
+                                    this.state.isTrader ? (
+                                        <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.descStatus === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
+                                            <Textarea onChangeText={desc => this.setState({ desc })} value={this.state.desc} onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign:I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
+                                        </View>
+                                    ) : (<View/>)
+                                }
+                                <TouchableOpacity onPress={() => this.setState({ isTrader: !this.state.isTrader })} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center'  }}>
+                                    <CheckBox onPress={() => this.setState({ isTrader: !this.state.isTrader, desc: null })} checked={this.state.isTrader} style={{marginHorizontal: 20, borderRadius: 2}} color='#26b5c4'/>
+                                    <Text style={{fontFamily: 'cairo', color: '#6d6c72'}}>{ i18n.t('registerAsTrader') }</Text>
+                                </TouchableOpacity>
+                            </Form>
+
+                            <View style={{marginTop: 30, justifyContent: 'center', alignItems:  'center'}}>
+                                { this.renderSubmit() }
+                            </View>
+                        </View>
+                    </KeyboardAvoidingView>
                 </Content>
             </Container>
         );
@@ -138,4 +279,11 @@ const styles = StyleSheet.create({
     },
 });
 
-export default EditProfile;
+const mapStateToProps = ({ profile, lang }) => {
+    return {
+        user: profile.user,
+        lang: lang.lang
+    };
+};
+
+export default connect(mapStateToProps, {updateProfile})(EditProfile);

@@ -79,13 +79,6 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
-
-    setOffer:{
-        screen: SetOffer,
-        navigationOptions: {
-            header: null
-        }
-    },
     initScreen:{
         screen: InitScreen,
         navigationOptions: {
@@ -130,6 +123,12 @@ const AppNavigator = createStackNavigator({
     },
     DrawerNavigator: {
         screen: DrawerNavigator,
+        navigationOptions: {
+            header: null
+        }
+    },
+    setOffer:{
+        screen: SetOffer,
         navigationOptions: {
             header: null
         }

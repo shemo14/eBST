@@ -8,6 +8,7 @@ import {Permissions} from "expo";
 import {DoubleBounce} from "react-native-loader";
 import axios from "axios";
 import CONST from "../consts";
+import {NavigationEvents} from "react-navigation";
 
 const width  = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -32,8 +33,8 @@ class SetOffer extends Component {
             desc: '',
             descStatus: 0,
             isValid: true,
-            type: 2,
-            id: 15,
+            type: this.props.navigation.state.params.type,
+            id: this.props.navigation.state.params.id,
             isSubmitted: false
         }
     }
@@ -58,15 +59,14 @@ class SetOffer extends Component {
 
         if (this.state.type == 2 && this.state.auctionPrice === '')
             notValid = true;
-        else if (this.state.type == 3 && this.state.photos === [] && this.state.name === '' && this.state.desc === '')
+        else if (this.state.type == 3 && this.state.photos.length === 0 && this.state.name === '' && this.state.desc === '')
             notValid = true;
-        else if (this.state.type == 4 && this.state.photos === [] && this.state.name === '' && this.state.desc === '' && this.state.extraPrice === '')
+        else if (this.state.type == 4 && this.state.photos.length === 0 && this.state.name === '' && this.state.desc === '' && this.state.extraPrice === '')
             notValid = true;
-
 
         if (notValid){
             return (
-                <Button disabled onPress={() => this.addProduct()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#999', marginBottom: 20 }}>
+                <Button disabled style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#999', marginBottom: 20 }}>
                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
                     <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
@@ -74,7 +74,7 @@ class SetOffer extends Component {
             );
         }else {
             return (
-                <Button onPress={() => this.addProduct()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4', marginBottom: 20 }}>
+                <Button onPress={() => this.setOffer()} style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4', marginBottom: 20 }}>
                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
                     <Text style={{color:'#fff' , fontSize:15, fontFamily: 'cairo',}}>{ i18n.t('sendButton') }</Text>
                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
@@ -83,6 +83,14 @@ class SetOffer extends Component {
         }
     }
 
+    isNull = (val) => {
+        if (val === '' || val === ' ' || val.length === 0){
+            return null;
+        }
+
+        return val;
+    };
+
     setOffer(){
         this.setState({ isSubmitted: true })
         axios({
@@ -90,16 +98,16 @@ class SetOffer extends Component {
             url: CONST.url + 'set_offer',
             headers: {Authorization: this.props.user.token },
             data: {
-                name: this.state.name,
-                desc: this.state.desc,
-                price: this.state.price,
+                name: this.isNull(this.state.name),
+                desc: this.isNull(this.state.desc),
+                price: this.isNull(this.state.price),
                 lang: this.props.lang,
-                type: this.state.selectedType,
-                product_id: this.state.extraPrice,
+                type: this.state.type,
+                product_id: this.state.id,
                 images: JSON.stringify(base64)
             }}).then(response => {
             if (response.data.status === 200){
-                this.props.navigation.navigate('confirmOrder', { title: i18n.t('addProduct'), msg: i18n.t('confirmAddProduct') });
+                this.props.navigation.navigate('confirmOrder', { title: i18n.t('setOffer'), msg: i18n.t('confirmSetOffer') });
             }
         })
     }
@@ -187,7 +195,7 @@ class SetOffer extends Component {
                         <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.priceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                             <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                 <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('auctionPrice') }</Label>
-                                <Input onChangeText={(auctionPrice) => this.setState({ auctionPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('auctionPrice')} onFocus={() => this.activeInput('auctionPrice')} style={{ width: 200, textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                                <Input value={this.state.auctionPrice} onChangeText={(auctionPrice) => this.setState({ auctionPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('auctionPrice')} onFocus={() => this.activeInput('auctionPrice')} style={{ width: 200, textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 15, top: 17 }}  />
                             </Item>
                         </View>
                     </Form>
@@ -215,7 +223,7 @@ class SetOffer extends Component {
                         <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row'  }}>
                             <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                 <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productName') }</Label>
-                                <Input onChangeText={(name) => this.setState({ name })} autoCapitalize={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
+                                <Input value={this.state.name} onChangeText={(name) => this.setState({ name })} autoCapitalize={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
                             </Item>
                         </View>
                         {
@@ -224,18 +232,25 @@ class SetOffer extends Component {
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20    }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                             <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('extraPrice') }</Label>
-                                            <Input onChangeText={(extraPrice) => this.setState({ extraPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')}  style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
+                                            <Input value={this.state.extraPrice} onChangeText={(extraPrice) => this.setState({ extraPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')}  style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
                                         </Item>
                                     </View>
                                 ) : <View />
                         }
                         <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.descStatus === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
-                            <Textarea onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
+                            <Textarea value={this.state.desc} onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
                         </View>
                     </Form>
                 </View>
             </View>
         );
+    }
+
+    onFocus(payload){
+        const id   = payload.action.params.id;
+        const type = payload.action.params.type;
+        this.setState({ id, type, photos: [], refreshed: false, name: '', nameStatus: 0, price: '', priceStatus: 0, extraPrice: '', extraPriceStatus: 0, auctionPrice: '', auctionPriceStatus: 0, desc: '', descStatus: 0, isValid: true, isSubmitted: false });
+        base64   = []
     }
 
     render() {
@@ -248,6 +263,7 @@ class SetOffer extends Component {
 
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>

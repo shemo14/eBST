@@ -1,10 +1,10 @@
 import React from 'react';
-import { View, AsyncStorage } from 'react-native';
+import { View, Platform } from 'react-native';
 import Routes from './src/routes'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistedStore } from './src/store';
-import { Font } from 'expo';
+import { Font, Notifications } from 'expo';
 import { Root } from 'native-base'
 import './ReactotronConfig';
 
@@ -32,9 +32,19 @@ export default class App extends React.Component {
     //  await AsyncStorage.clear()
   }
 
+  componentDidMount() {
+    if (Platform.OS === 'android') {
+      Notifications.createChannelAndroidAsync('orders', {
+        name: 'Orders',
+        priority: 'max',
+        vibrate: [0, 250, 250, 250],
+      })
+    }
+  }
+
   render() {
     if (!this.state.fontLoaded) {
-      return <View />;
+      return <View/>;
     }
 
     return (

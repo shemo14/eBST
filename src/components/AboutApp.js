@@ -2,18 +2,49 @@ import React, { Component } from "react";
 import { View, Text, Image, Dimensions, I18nManager, ImageBackground , TouchableOpacity} from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body , List, ListItem , Icon } from 'native-base'
 import i18n from '../../locale/i18n'
+import {connect} from "react-redux";
+import {DoubleBounce} from "react-native-loader";
+import axios from "axios";
+import CONST from "../consts";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 class AboutApp extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            aboutUs: '',
+            status: null
+        }
     }
 
     static navigationOptions = () => ({
         drawerLabel: i18n.t('aboutApp'),
         drawerIcon: ( <Image source={require('../../assets/images/white_about_app.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
+
+    componentWillMount() {
+        axios({
+            url: CONST.url + 'about_us',
+            method: 'POST',
+            data: {lang: this.props.lang}
+        }).then(response => {
+            this.setState({
+                aboutUs: response.data.data.about_us,
+                status: response.data.status,
+            })
+        })
+    }
+
+    renderLoader(){
+        if (this.state.status === null){
+            return(
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
+                    <DoubleBounce size={20} color="#26b5c4" />
+                </View>
+            );
+        }
+    }
 
     render() {
         return (
@@ -36,9 +67,9 @@ class AboutApp extends Component {
                     </ImageBackground>
                 </Header>
                 <Content style={{}}>
+                    { this.renderLoader() }
                     <View style={{ padding:15 , justifyContent:'center' , marginTop:30}}>
-                        <Text style={{fontFamily:'cairo' , fontSize:14 , color:'#6d6c72' , lineHeight:25 , textAlign:'center'}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</Text>
-                        <Text style={{fontFamily:'cairo' , fontSize:14 , color:'#6d6c72' , lineHeight:25 , textAlign:'center'}}>هذا النص هو مثال لنص يمكن أن يستبدل في نفس المساحة، لقد تم توليد هذا النص من مولد النص العربى، حيث يمكنك أن تولد مثل هذا النص أو العديد من النصوص الأخرى إضافة إلى زيادة عدد الحروف التى يولدها التطبيق.</Text>
+                        <Text style={{fontFamily:'cairo' , fontSize:14 , color:'#6d6c72' , lineHeight:25 , textAlign:'center'}}>{ this.state.aboutUs }</Text>
                     </View>
                 </Content>
                 <Image source={require('../../assets/images/question_mark.png')} style={{ width: 170, height: 170 , bottom:0 , left:0 }} resizeMode={'contain'} />
@@ -49,4 +80,9 @@ class AboutApp extends Component {
 }
 
 
-export default AboutApp;
+const mapStateToProps = ({ lang }) => {
+    return {
+        lang: lang.lang
+    };
+};
+export default connect(mapStateToProps, {})(AboutApp);
