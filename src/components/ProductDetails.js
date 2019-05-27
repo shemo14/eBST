@@ -35,6 +35,7 @@ class ProductDetails extends Component {
             commentReport: '',
             type: null,
             isSubmitted: false,
+            views: 0
         };
     }
 
@@ -94,12 +95,24 @@ class ProductDetails extends Component {
             }).then(response => {
                 this.setState({
                     product: response.data.data.details,
+                    views: response.data.data.details.views,
                     images: response.data.data.images,
                     comments: response.data.data.comments,
                     status: response.data.status,
                     redHeart: response.data.data.details.isLiked,
                     starCount: response.data.data.details.rate,
                     type: response.data.data.details.type
+                })
+            })
+
+
+            axios({
+                url: CONST.url + 'view_product',
+                method: 'POST',
+                data: {product_id: this.state.id, device_id: deviceID }
+            }).then(response => {
+                this.setState({
+                    views: response.data.data.views,
                 })
             })
         })
@@ -291,7 +304,7 @@ class ProductDetails extends Component {
                                         fontSize: 12,
                                         marginHorizontal: 2,
                                         fontFamily: 'cairo'
-                                    }}>{ this.state.product.views }</Text>
+                                    }}>{ this.state.views }</Text>
                                     <Image source={require('../../assets/images/gray_seen.png')}
                                            style={{width: 20, height: 20}} resizeMode={'contain'}/>
                                 </View>

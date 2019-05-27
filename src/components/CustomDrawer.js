@@ -16,8 +16,8 @@ class CustomDrawer extends Component {
     }
 
     async logout(){
-        this.props.navigation.navigate('login');
-        await AsyncStorage.clear()
+        this.props.navigation.navigate('language');
+        AsyncStorage.clear()
     }
 
     render(){
@@ -34,7 +34,7 @@ class CustomDrawer extends Component {
                     <ImageBackground source={I18nManager.isRTL ? require('../../assets/images/bg_side_bar.png') : require('../../assets/images/bg_side_bar2.png')} resizeMode={'stretch'} style={{ width: null, height: null, flex: 1 }}>
                         <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate('profile')} style={{ height:150, alignItems: 'center', justifyContent: 'center', marginTop: 40, marginLeft: 10 }}>
                             <Image source={require('../../assets/images/img_two.png')} style={{ width: 140, height: 140, position: 'absolute', zIndex: 999 }} resizeMode={'contain'} />
-                            <Image source={{ uri: user.avatar }} style={{ width: 140, height: 140 }} resizeMode={'contain'} />
+                            <Image source={{ uri: user.avatar }} style={{ width: 140, height: 140 }} resizeMode={'cover'} />
                         </TouchableOpacity>
                         <Text style={{ color: '#acabae', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, top: -5, marginLeft: 10 }}>{ user.name }</Text>
                         <View style={{ marginTop: 50 }}>
@@ -49,7 +49,7 @@ class CustomDrawer extends Component {
                             }
                             />
                         </View>
-                        <View style={{ flex: 1 }}>
+                        <View style={{ flex: 1, marginBottom: 15 }}>
                             <TouchableOpacity onPress={() => this.logout()}>
                                 <Image source={require('../../assets/images/white_logout.png')} style={{ height: 40, width: 40, alignSelf: 'flex-end', marginHorizontal: 20 }} resizeMode={'contain'}  />
                             </TouchableOpacity>

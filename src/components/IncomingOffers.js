@@ -82,6 +82,13 @@ class IncomingOffers extends Component {
         }
     }
 
+    deleteOffer(id){
+        this.setState({ status : null });
+        axios({ method: 'POST', url: CONST.url + 'delete_offer', headers: {Authorization: this.props.user.token }, data: {offer_id: id , lang: this.props.lang}}).then(response => {
+            this.componentWillMount()
+        })
+    }
+
     onFocus(payload){
         const id = payload.action.params.product_id;
         this.setState({ id, status: null });
@@ -150,7 +157,7 @@ class IncomingOffers extends Component {
                                             </TouchableOpacity>
                                         </Body>
                                         <Left style={{ position: 'absolute', right: -13, top: -13 }}>
-                                            <TouchableOpacity  onPress={() => alert('opsssssssss')} style={{  backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
+                                            <TouchableOpacity  onPress={() => this.deleteOffer(offer.id)} style={{ backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center', width: 30, height: 30 }}>
                                                 <Image source={require('../../assets/images/gray_remove.png')} style={{ width: 25, height: 25}} resizeMode={'cover'}/>
                                             </TouchableOpacity>
                                         </Left>

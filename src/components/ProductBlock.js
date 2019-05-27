@@ -45,7 +45,12 @@ class ProductBlock extends Component {
         }
     }
 
+    componentWillReceiveProps(props) {
+        this.setState({ redHeart: props.data.isLiked })
+    }
+
     render() {
+
         return (
             <View style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, margin: 5, overflow: 'hidden' }}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })} style={{ width: '100%' }}>

@@ -1,5 +1,17 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, TouchableHighlight, ListView, ImageBackground, Animated, Dimensions,} from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    TouchableHighlight,
+    ListView,
+    ImageBackground,
+    Animated,
+    Dimensions,
+    I18nManager,
+} from "react-native";
 import { Container, Content, Header, Left, Right, Body, Button, Icon, Input } from 'native-base'
 import StarRating from 'react-native-star-rating';
 import { SwipeListView, SwipeRow } from 'react-native-swipe-list-view';
@@ -151,7 +163,7 @@ class MyProducts extends Component {
                     </TouchableOpacity>
                 </Right>
                 <Body style={{width: '100%', alignItems: 'center', alignSelf: 'flex-start'}}>
-                    <Text style={{textAlign: 'center', color: '#fff', marginLeft: 20, fontSize: 20, fontFamily: 'cairo'}}>منتجاتي</Text>
+                    <Text style={{textAlign: 'center', color: '#fff', marginLeft: 20, fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('myProducts') }</Text>
                 </Body>
                 <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: -8, position: 'absolute', borderColor: '#e2b705', right: 75 }}>
                     <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
@@ -164,7 +176,7 @@ class MyProducts extends Component {
                         <Image source={require('../../assets/images/white_search.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('home')}>
-                        <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25}}
+                        <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}}
                                resizeMode={'contain'}/>
                     </TouchableOpacity>
                 </Left>
@@ -214,7 +226,31 @@ class MyProducts extends Component {
     render() {
         return (
             <Container>
-                { this.renderHeader() }
+                <Header style={{ zIndex: 3, marginTop: 40, height: 10, backgroundColor: 'transparent', paddingHorizontal: 10 }} noShadow>
+                    <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate('editProfile')}>
+                            <Image source={require('../../assets/images/white_edit.png')} style={{width: 25, height: 25, top: 3}} resizeMode={'contain'}/>
+                        </TouchableOpacity>
+                    </Right>
+                    <Body style={{width: '100%', alignItems: 'center', alignSelf: 'flex-start'}}>
+                    <Text style={{textAlign: 'center', color: '#fff', marginLeft: 20, fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('myProducts') }</Text>
+                    </Body>
+                    <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: -8, position: 'absolute', borderColor: '#e2b705', right: 75 }}>
+                        <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
+                            <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0 }} />
+                        </TouchableOpacity>
+                        <Input value={this.state.search} onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={i18n.t('search') + '...'} placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', }} />
+                    </Animated.View>
+                    <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
+                        <TouchableOpacity style={{ marginHorizontal: 5, marginRight: 10 }} onPress={() => this.setAnimate()}>
+                            <Image source={require('../../assets/images/white_search.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('home')} style={{ width: 30, height: 30 }}>
+                            <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}}
+                                   resizeMode={'contain'}/>
+                        </TouchableOpacity>
+                    </Left>
+                </Header>
                 <Content style={{ zIndex: -1, marginTop: -50 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
                     <View style={{ height: 300 }}>
                         <View style={styles.slide}>
@@ -222,7 +258,7 @@ class MyProducts extends Component {
                             <Image source={{ uri: this.props.user.avatar }} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
                         </View>
                         <View style={{ top: -210, width: '100%', height: 0, zIndex: 4 }}>
-                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%' }} resizeMode={'contain'} />
+                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </View>
                     </View>
                     { this.renderLoader() }
@@ -348,9 +384,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     rowBack: {
-        alignItems: 'flex-end',
+        alignItems: I18nManager.isRTL ? 'flex-end' : 'flex-start',
         flex: 1,
-        paddingLeft: 15,
+        paddingLeft: I18nManager.isRTL ? 15 : 0,
         height: 75,
         marginHorizontal: 15,
         marginTop: 8

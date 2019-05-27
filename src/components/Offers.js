@@ -7,6 +7,7 @@ import axios from 'axios'
 import CONST from '../consts'
 import {connect} from "react-redux";
 import { DoubleBounce } from 'react-native-loader';
+import {NavigationEvents} from "react-navigation";
 
 const height = Dimensions.get('window').height;
 
@@ -74,6 +75,19 @@ class Offers extends Component {
             );
         }
     }
+
+    deleteOffer(id){
+        this.setState({ status : null });
+        axios({ method: 'POST', url: CONST.url + 'delete_offer', headers: {Authorization: this.props.user.token }, data: {offer_id: id , lang: this.props.lang}}).then(response => {
+            this.componentWillMount()
+        })
+    }
+
+    onFocus(payload){
+        this.setState({ status: null })
+        this.componentWillMount()
+    }
+
     render() {
 
         const config = {
@@ -83,6 +97,7 @@ class Offers extends Component {
 
         return (
             <Container>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
                     <ImageBackground source={ I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
@@ -149,9 +164,9 @@ class Offers extends Component {
                                                 
                                                 </TouchableOpacity>
                                             </Body>
-                                            <Left style={{ position: 'absolute', right: -10, top: -10 }}>
-                                                <TouchableOpacity onPress={() => alert('testy')} style={{ borderWidth: 1, borderRadius: 5, width: 20, height: 20, transform: [{ rotate: '45deg' }], borderColor: '#acabae', backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
-                                                    <Icon name={'close'} type={'EvilIcons'} style={{ transform: [{ rotate: '-45deg' }], color: '#acabae' }} />
+                                            <Left style={{ position: 'absolute', right: -13, top: -13 }}>
+                                                <TouchableOpacity  onPress={() => this.deleteOffer(offer.id)} style={{ backgroundColor: 'transparent', alignItems: 'center', justifyContent: 'center', width: 30, height: 30 }}>
+                                                    <Image source={require('../../assets/images/gray_remove.png')} style={{ width: 25, height: 25}} resizeMode={'cover'}/>
                                                 </TouchableOpacity>
                                             </Left>
                                         </ListItem>

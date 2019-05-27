@@ -4,11 +4,19 @@ import { Container, Content, Button, Footer, Icon, Header } from 'native-base'
 import Swiper from 'react-native-swiper';
 import FooterSection from './Footer';
 import i18n from '../../locale/i18n'
+import axios from 'axios'
+import CONST from '../consts'
+import { DoubleBounce } from 'react-native-loader';
 
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 class Home extends Component {
     constructor(props){
         super(props);
+        this.state = {
+            adsImgs:[],
+            status: null,
+        }
     }
 
     static navigationOptions = () => ({
@@ -16,6 +24,23 @@ class Home extends Component {
         drawerLabel: i18n.t('home') ,
         drawerIcon: ( <Image source={require('../../assets/images/white_home.png')} style={{ height: 40, width: 40 }} resizeMode={'contain'} /> )
     });
+
+    componentWillMount(){
+        axios.get(CONST.url+'home_ads').then(response=>{
+            this.setState({adsImgs:response.data.data , status:response.data.status})
+        })
+
+    }
+
+    renderLoader(){
+        if (this.state.status === null){
+            return(
+                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*45)/100 }}>
+                    <DoubleBounce size={20} color="#26b5c4" />
+                </View>
+            );
+        }
+    }
 
     render() {
         return (
@@ -30,21 +55,19 @@ class Home extends Component {
                         </TouchableOpacity>
                     </View>
                 </Header>
+                { this.renderLoader() }
                 <Content style={{ zIndex: -99, marginTop: -50 }}>
                     <View>
-                        <Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
-                            <View style={styles.slide}>
-                                <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
-                                <Image source={require('../../assets/images/photo.png')} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
-                            </View>
-                            <View style={styles.slide}>
-                                <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
-                                <Image source={require('../../assets/images/photo.png')} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
-                            </View>
-                            <View style={styles.slide}>
-                                <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
-                                <Image source={require('../../assets/images/photo.png')} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
-                            </View>
+                        <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
+                            {
+                                this.state.adsImgs.map((img, i) => (
+                                    <View style={styles.slide} key={i}>
+                                        <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
+                                        <Image source={{ uri: img.image }} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
+                                    </View>
+                                ))
+                            }
+
                         </Swiper>
                         <View style={{ top: -110, width: '100%', height: 100 }}>
                             <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>

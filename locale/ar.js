@@ -108,6 +108,8 @@ const ar = {
     'RS' : 'رس',
     'accept' : 'قبول',
     'refuse' : 'رفض',
+    'bestShow' : 'الاكثر تصفح',
+    'myProducts': 'منتجاتي',
 }
 
 export default ar;

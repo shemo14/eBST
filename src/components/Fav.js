@@ -1,5 +1,16 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, AsyncStorage } from "react-native";
+import {
+    View,
+    Text,
+    Image,
+    ImageBackground,
+    TouchableOpacity,
+    FlatList,
+    Animated,
+    Dimensions,
+    AsyncStorage,
+    I18nManager
+} from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, Icon, Input, } from 'native-base';
 import i18n from '../../locale/i18n'
 import axios from 'axios'
@@ -8,6 +19,7 @@ import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
 import ProductBlock from './ProductBlock';
 import ProductRow from './ProductRow';
+import {NavigationEvents} from "react-navigation";
 
 const height = Dimensions.get('window').height;
 class Fav extends Component {
@@ -73,7 +85,7 @@ class Fav extends Component {
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*35)/100 }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -90,6 +102,11 @@ class Fav extends Component {
         this.componentWillMount();
     }
 
+    onFocus(payload){
+        this.setState({ status: null });
+        this.componentWillMount()
+    }
+
     render() {
         let grid=require('../../assets/images/multi_product.png');
         let row=require('../../assets/images/gray_one_product.png');
@@ -101,8 +118,9 @@ class Fav extends Component {
 
         return (
             <Container>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
-                    <ImageBackground source={require('../../assets/images/header.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
+                    <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                                 <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
@@ -114,7 +132,7 @@ class Fav extends Component {
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <Button transparent onPress={() => this.props.navigation.goBack()}>
-                                    <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
+                                    <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                                 </Button>
                             </View>
                         </Left>
@@ -143,7 +161,7 @@ class Fav extends Component {
                         />
                     </View>
 
-                    <View style={{ marginTop: 10, alignItems: 'center' , height: this.state.isGrid ? 0 : 'auto'}}>
+                    <View style={{ marginTop: 10, alignItems: 'center' , height: this.state.isGrid ? 0 : 'auto', overflow: this.state.isGrid ? 'hidden' : 'visible'}}>
                         {
                             this.state.products.map(
                                 (product , i) => {

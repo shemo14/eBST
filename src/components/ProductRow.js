@@ -41,6 +41,10 @@ class ProductRow extends Component {
         })
     }
 
+    componentWillReceiveProps(props) {
+        this.setState({ redHeart: props.data.isLiked })
+    }
+
 
     render() {
         return (

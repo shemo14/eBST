@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import {DoubleBounce} from "react-native-loader";
 import axios from "axios";
 import CONST from "../consts";
+import {NavigationEvents} from "react-navigation";
 
 const height = Dimensions.get('window').height;
 class Notifications extends Component {
@@ -68,9 +69,15 @@ class Notifications extends Component {
         }
     }
 
+    onFocus(payload){
+        this.setState({ status: null })
+        this.componentWillMount()
+    }
+
     render() {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
@@ -97,11 +104,15 @@ class Notifications extends Component {
                         <List style={{width:'100%'}}>
                             {
                                 this.state.notifications.map((notification, i) => {
-                                    let navigator = 'product';
-                                    // if(notification.type == )
-                                    (
+                                    let navigator = '';
+                                    if(notification.type == 3 || notification.type == 4)
+                                        navigator = 'product';
+                                    else if (notification.type == 2)
+                                        navigator = 'offers';
+
+                                    return (
                                         <ListItem key={i} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '97%', marginLeft: 0, marginBottom: 15 , paddingTop:0, paddingBottom:0 , paddingRight:0 , borderLeftWidth:0 }}>
-                                            <TouchableOpacity onPress={() => alert('ops')} style={{ width:'100%' ,  borderLeftColor: i%2 == 0 ? '#e2b705' : '#26b5c4' , borderLeftWidth:4 , height:'101.8%' , borderRadius: 5 , padding:10}}>
+                                            <TouchableOpacity onPress={() => this.props.navigation.navigate(navigator, { id: notification.product_id })} style={{ width:'100%' ,  borderLeftColor: i%2 == 0 ? '#e2b705' : '#26b5c4' , borderLeftWidth:4 , height:'101.8%' , borderRadius: 5 , padding:10}}>
                                                 <View style={{ width:'100%' }}>
                                                     <View style={{flexDirection:'row' , justifyContent:'space-between' , width:'100%'}}>
                                                         <Text style={{ color: '#6d6c72', fontFamily: 'cairoBold' , fontSize:13 }}>{ notification.title }</Text>

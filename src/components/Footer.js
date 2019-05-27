@@ -17,7 +17,7 @@ class FooterSection extends Component {
             switch (tabName) {
                 case 'home': activePath = require('../../assets/images/blue_home.png');
                     break;
-                case 'fav': activePath = require('../../assets/images/blue_fav.png');
+                case 'bestProducts': activePath = require('../../assets/images/gray_best_seller.png');
                     break;
                 case 'offers': activePath = require('../../assets/images/blue_offers.png');
                     break;
@@ -38,7 +38,7 @@ class FooterSection extends Component {
         switch (tabName) {
             case 'home': path = require('../../assets/images/gray_home.png');
                 break;
-            case 'fav': path = require('../../assets/images/gray_fav.png');
+            case 'bestProducts': path = require('../../assets/images/gray_best_seller.png');
                 break;
             case 'offers': path = require('../../assets/images/gray_offers.png');
                 break;
@@ -86,7 +86,7 @@ class FooterSection extends Component {
                         
                         {  this.renderFooterTabs('ads') }
                         
-                        {  this.renderFooterTabs('fav') }
+                        {  this.renderFooterTabs('bestProducts') }
 
                     </FooterTab>
                 </Footer>
