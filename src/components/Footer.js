@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Image, ImageBackground, Dimensions } from "react-native";
 import {  Button, Footer, Icon, FooterTab } from 'native-base'
+import {connect} from "react-redux";
 
 const width = Dimensions.get('window').width;
 class FooterSection extends Component {
@@ -47,7 +48,7 @@ class FooterSection extends Component {
         }
         return(
            
-            <Button transparent onPress={() => this.props.navigation.navigate(tabName)} style={{marginRight:tabName=='offers'? 20 : 0 , marginLeft:tabName=='ads'? 20 : 0  }}>
+            <Button transparent onPress={() => this.props.navigation.navigate( this.props.user ?  tabName : 'login')} style={{marginRight:tabName=='offers'? 20 : 0 , marginLeft:tabName=='ads'? 20 : 0  }}>
                 <Image style={{ width: 30, height: 30 }} resizeMode={'contain'} source={path}/>
             </Button>
         );
@@ -78,7 +79,7 @@ class FooterSection extends Component {
                        
                         {  this.renderFooterTabs('offers') }
                         
-                        <Button onPress={ () => this.props.navigation.navigate('addProduct') } style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 42,
+                        <Button onPress={ () => this.props.navigation.navigate(this.props.user ? 'addProduct' : 'login') } style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 42,
                          width: 45 , height: 45, alignItems: 'center', justifyContent: 'center', left:'44%' , position:'absolute',
                          }}>
                             <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
@@ -95,4 +96,10 @@ class FooterSection extends Component {
 }
 
 
-export default FooterSection;
+const mapStateToProps = ({ profile }) => {
+    return {
+        user: profile.user,
+    };
+};
+
+export default connect(mapStateToProps, {})(FooterSection);

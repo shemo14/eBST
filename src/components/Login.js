@@ -126,6 +126,7 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(newProps){
+        // console.log(newProps);
         if (newProps.auth !== null && newProps.auth.status === 200){
 
             if (this.state.userId === null){

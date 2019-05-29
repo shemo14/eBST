@@ -8,6 +8,7 @@ import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import Modal from "react-native-modal";
 import Swiper from 'react-native-swiper';
+import {connect} from "react-redux";
 
 const height = Dimensions.get('window').height;
 class Ads extends Component {
@@ -141,7 +142,7 @@ class Ads extends Component {
                 </View>
 
                 <View style={{ position: 'absolute', bottom: 5, flex: 1, width: '100%' }}>
-                    <Button onPress={() => this.props.navigation.navigate('addAds')} style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 43, height: 43, alignItems: 'center', justifyContent: 'center', right: 4, alignSelf: 'center'       }}>
+                    <Button onPress={() => this.props.navigation.navigate(this.props.user ? 'addAds' : 'login')} style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 43, height: 43, alignItems: 'center', justifyContent: 'center', right: 4, alignSelf: 'center'       }}>
                         <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
                     </Button>
                 </View>
@@ -180,4 +181,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     }
 });
-export default Ads;
+const mapStateToProps = ({ profile }) => {
+    return {
+        user: profile.user,
+    };
+};
+
+export default connect(mapStateToProps, {})(Ads);

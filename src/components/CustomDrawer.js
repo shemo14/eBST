@@ -32,13 +32,15 @@ class CustomDrawer extends Component {
             <Container style={{ overflow: 'visible' }}>
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <ImageBackground source={I18nManager.isRTL ? require('../../assets/images/bg_side_bar.png') : require('../../assets/images/bg_side_bar2.png')} resizeMode={'stretch'} style={{ width: null, height: null, flex: 1 }}>
-                        <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate('profile')} style={{ height:150, alignItems: 'center', justifyContent: 'center', marginTop: 40, marginLeft: 10 }}>
+                        <TouchableOpacity activeOpacity={1} onPress={() => this.props.navigation.navigate(this.props.user ? 'profile' : 'login')} style={{ height:150, alignItems: 'center', justifyContent: 'center', marginTop: 40, marginLeft: 10 }}>
                             <Image source={require('../../assets/images/img_two.png')} style={{ width: 140, height: 140, position: 'absolute', zIndex: 999 }} resizeMode={'contain'} />
                             <Image source={{ uri: user.avatar }} style={{ width: 140, height: 140 }} resizeMode={'cover'} />
                         </TouchableOpacity>
                         <Text style={{ color: '#acabae', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, top: -5, marginLeft: 10 }}>{ user.name }</Text>
                         <View style={{ marginTop: 50 }}>
-                            <DrawerItems {...this.props} labelStyle={{color: '#fff', marginTop: 10, fontSize: 16, marginHorizontal: 5, fontFamily: 'cairo', fontWeight: 'normal'}} onItemPress={
+                            <DrawerItems
+                                items={this.props.user ? this.props.items : this.props.items.filter((item) => item.routeName !== 'acceptedOrders' && item.routeName !== 'myProducts') }
+                                {...this.props} labelStyle={{color: '#fff', marginTop: 10, fontSize: 16, marginHorizontal: 5, fontFamily: 'cairo', fontWeight: 'normal'}} onItemPress={
                                 (route, focused) => {
                                     if (route.route.key === 'logout') {
                                         this.logout()

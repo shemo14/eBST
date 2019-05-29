@@ -141,7 +141,8 @@ class AcceptedOrders extends Component {
                                         <ListItem key={i} onPress={() => console.log('ops')} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
                                         
                                             <Body style={{ marginHorizontal: 20 }}>
-                                                <TouchableOpacity onPress={() => this.props.navigation.navigate("exchangeAndPriceOrderDetails")} >
+                                                {/*onPress={() => this.props.navigation.navigate("exchangeAndPriceOrderDetails")}*/}
+                                                <TouchableOpacity>
                                                     <View style={{flexDirection:'row'}}>
                                                         <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderNumber') } : </Text>
                                                         <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.id}</Text>
