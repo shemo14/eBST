@@ -40,15 +40,18 @@ class ProductDetails extends Component {
     }
 
     onStarRatingPress(rating) {
-        this.setState({ starCount: rating });
-        axios({
-            url: CONST.url + 'rate',
-            method: 'POST',
-            headers: {Authorization: this.props.user.token},
-            data: {product_id: this.state.id, rate: rating, lang: this.props.lang}
-        }).then(response => {
-            this.setState({ starCount: response.data.data.rate })
-        })
+        if (this.props.user ) {
+            this.setState({starCount: rating});
+            axios({
+                url: CONST.url + 'rate',
+                method: 'POST',
+                headers: {Authorization: this.props.user.token},
+                data: {product_id: this.state.id, rate: rating, lang: this.props.lang}
+            }).then(response => {
+                this.setState({starCount: response.data.data.rate})
+            })
+        }else
+            this.props.navigation.navigate('login')
     }
 
     redHeart() {
@@ -75,10 +78,13 @@ class ProductDetails extends Component {
     }
 
     _toggleModal = (type, commentID) => {
-        if (this.state.isModalVisible == type)
-            this.setState({isModalVisible: null});
-        else
-            this.setState({isModalVisible: type, commentID});
+        if (this.props.user ){
+            if (this.state.isModalVisible == type)
+                this.setState({isModalVisible: null});
+            else
+                this.setState({isModalVisible: type, commentID});
+        } else
+            this.props.navigation.navigate('login')
     }
 
     static navigationOptions = () => ({
@@ -247,6 +253,7 @@ class ProductDetails extends Component {
     }
 
     render() {
+        const name = this.state.product.name;
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
@@ -284,7 +291,7 @@ class ProductDetails extends Component {
                             <Text style={{ marginHorizontal: 5, color: '#6d6c72', borderBottomWidth: 1, borderBottomColor: '#6d6c72', fontFamily: 'cairo', fontSize: 15, top: -1 }}>{ this.state.product.provider_name }</Text>
                         </TouchableOpacity>
 
-                        <Text style={{color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, marginBottom: 5, alignSelf: 'flex-start'}}>{ this.state.product.name }</Text>
+                        <Text style={{color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, marginBottom: 5, alignSelf: 'flex-start'}}>{ name }</Text>
                         <Text style={{color: '#acabae', fontFamily: 'cairo', fontSize: 15, lineHeight: 20, alignSelf: 'flex-start'}}>{ this.state.product.desc }</Text>
                         <Text style={{color: '#26b5c4', fontFamily: 'cairo', fontSize: 15, marginBottom: 5, alignSelf: 'flex-start'}}>{i18n.t('productPrice')} { this.state.product.price } {i18n.t('sr')}</Text>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between',}}>
@@ -353,19 +360,28 @@ class ProductDetails extends Component {
                                     ))
                                 }
                             </List>
-                            <Form>
-                                <Textarea onChangeText={(comment) => this.setState({ comment })} rowSpan={3} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 11, fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left' }} bordered placeholder={i18n.t('addComment')} placeholderTextColor={{color: "#acabae"}} value={this.state.comment}/>
-                                <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 2, backgroundColor: '#26b5c4', width: 30, height: 30, transform: [{rotate: '45deg'}], position: 'absolute', bottom: -13, right: 7 }}>
-                                    { this.renderCommentSubmit() }
-                                </View>
-                            </Form>
+                            {
+                                this.props.user ? (
+                                    <Form>
+                                        <Textarea onChangeText={(comment) => this.setState({ comment })} rowSpan={3} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 11, fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left' }} bordered placeholder={i18n.t('addComment')} placeholderTextColor={{color: "#acabae"}} value={this.state.comment}/>
+                                        <View style={{ alignItems: 'center', justifyContent: 'center', borderRadius: 2, backgroundColor: '#26b5c4', width: 30, height: 30, transform: [{rotate: '45deg'}], position: 'absolute', bottom: -13, right: 7 }}>
+                                            { this.renderCommentSubmit() }
+                                        </View>
+                                    </Form>
+                                ) : (<View/>)
+                            }
+
                         </View>
                         <View style={{marginTop: 30, alignItems: 'center', justifyContent: 'center'}}>
-                        <Button onPress={() => this.setOrder()} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
-                            <View style={{backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14}} />
-                            <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>{i18n.t('order')}</Text>
-                            <View style={{backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14}} />
-                        </Button>
+                            {
+                                this.props.user ? (
+                                    <Button onPress={() => this.setOrder()} style={{ borderRadius: 25, width: 130, height: 45, alignItems: 'center', justifyContent: 'center', alignSelf: 'center', backgroundColor: '#26b5c4' }}>
+                                        <View style={{backgroundColor: '#fff', height: 1, width: 30, top: -14, left: -14}} />
+                                        <Text style={{color: '#fff', fontSize: 15, fontFamily: 'cairo',}}>{i18n.t('order')}</Text>
+                                        <View style={{backgroundColor: '#fff', height: 1, width: 30, top: 14, right: -14}} />
+                                    </Button>
+                                ) : (<View/>)
+                            }
                         </View>
 
                         {/* Product Report */}

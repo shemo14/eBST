@@ -86,18 +86,17 @@ class AddAds extends Component {
             });
 
             const imgs = this.state.photos;
-
-            for (var i =1; i < imgs.length; i++){
-                ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
+            console.log(imgs);
+            for (var i =0; i < imgs.length; i++){
+                ImageStore.getBase64ForTag(imgs[i+1].file, (base64Data) => {
                     base64.push(base64Data);
                 }, (reason) => console.error(reason));
             }
-
-
         }).catch((e) => console.log(e))
     };
 
     addAds(){
+        console.log(base64.length, this.state.photos.length)
         this.setState({ isSubmitted: true })
         console.log(base64.length, base64)
         axios({ method: 'POST', url: CONST.url + 'add_ads', headers: {Authorization: this.props.user.token }, data: {lang: this.props.lang, images: JSON.stringify(base64)}}).then(response => {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, TouchableOpacity, AsyncStorage } from "react-native";
+import { View, Text, Image, TouchableOpacity, AsyncStorage, I18nManager } from "react-native";
 import StarRating from 'react-native-star-rating';
 import i18n from '../../locale/i18n'
 import axios from 'axios'
@@ -49,16 +49,23 @@ class ProductBlock extends Component {
         this.setState({ redHeart: props.data.isLiked })
     }
 
-    render() {
+    renderPrice(type, typeText){
+        if(type == 1)
+            return this.props.data.price + ' ' + i18n.t('sr')
 
+        return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
+    }
+
+    render() {
+        console.log(this.props.data)
         return (
             <View style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, margin: 5, overflow: 'hidden' }}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })} style={{ width: '100%' }}>
-                    <Image source={{uri:this.props.data.image}} resizeMode={'stretch'} style={{ width: '100%', height: 100, flex: 1 }} />
+                    <Image source={{uri:this.props.data.image}} resizeMode={'contain'} style={{ width: '100%', height: 100, flex: 1 }} />
                 </TouchableOpacity>
                 <View style={{ width: '100%', padding: 5 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })}>
-                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17, alignSelf: 'flex-start' }}>{this.props.data.name}</Text>
+                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17, alignSelf: 'flex-start' }}>{this.props.data.name.substring(0, 15)}...</Text>
                     </TouchableOpacity>
                     <View style={{ alignSelf: 'flex-start' }}>
                         <StarRating
@@ -72,8 +79,8 @@ class ProductBlock extends Component {
                         />
                     </View>
                     <View style={{ flexDirection: 'row', flex: 1, width: '100%' }}>
-                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', flex: 2, alignSelf: 'flex-start' }}>{this.props.data.price} {i18n.t('sr')}</Text>
-                        <TouchableOpacity onPress={() => this.setFav()}>
+                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', flex: 1, alignSelf: 'flex-start' }}>{ this.renderPrice(this.props.data.type, this.props.data.type_text) }</Text>
+                        <TouchableOpacity onPress={() => this.setFav()} style={{ flex: 1, alignSelf: 'flex-start' }}>
                             <Image source={this.renderImage()} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>

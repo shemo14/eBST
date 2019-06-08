@@ -13,15 +13,9 @@ export const userLogin = ({phone, password, token}, lang) => {
 };
 
 
-export const userLogout = ({ user_id }) => {
+export const tempAuth = () => {
     return (dispatch) => {
-        dispatch({type: 'user_logout'});
-
-        axios.post( CONST.url + 'logout', { user_id })
-            .then(() => {
-                AsyncStorage.clear();
-            })
-            .catch(error => console.warn(error.data));
+        dispatch({type: 'temp_auth'});
     };
 };
 

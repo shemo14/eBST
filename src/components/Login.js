@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { userLogin, profile } from '../actions'
 import { Permissions, Notifications } from 'expo'
 import {DoubleBounce} from "react-native-loader";
+import {NavigationEvents} from "react-navigation";
 
 class Login extends Component {
     constructor(props){
@@ -88,7 +89,7 @@ class Login extends Component {
             if (this.state.phoneStatus){
                 source = require('../../assets/images/lactic_phone.png')
             } else{
-                source = require('../../assets/images/bold_gray_phone.png')
+                source = require('../../assets/images/gray_phone.png')
             }
         }else{
             if (this.state.passwordStatus){
@@ -102,7 +103,6 @@ class Login extends Component {
     }
 
     async componentWillMount() {
-
         const { status: existingStatus } = await Permissions.getAsync(
             Permissions.NOTIFICATIONS
         );
@@ -126,8 +126,9 @@ class Login extends Component {
     }
 
     componentWillReceiveProps(newProps){
-        // console.log(newProps);
+        console.log('login new props ...', newProps.auth, 'user new props ...', newProps.user, 'user fucken props ...', this.props.user);
         if (newProps.auth !== null && newProps.auth.status === 200){
+            console.log('im in this fucken condition');
 
             if (this.state.userId === null){
                 this.setState({ userId: newProps.auth.data.id });
@@ -137,7 +138,7 @@ class Login extends Component {
             this.props.navigation.navigate('DrawerNavigator');
         }
 
-        if (this.props.profile !== null) {
+        if (newProps.auth !== null) {
             Toast.show({
                 text: newProps.auth.msg,
                 type: newProps.auth.status === 200 ? "success" : "danger",
@@ -148,9 +149,14 @@ class Login extends Component {
         this.setState({ isLoaded: false });
     }
 
+    onFocus(){
+        this.componentWillMount()
+    }
+
     render() {
         return (
             <Container>
+                <NavigationEvents onWillFocus={() => this.onFocus()} />
                 <Content contentContainerStyle={{ flexGrow: 1 }}>
                     <ImageBackground source={require('../../assets/images/background.png')} resizeMode={'cover'} style={styles.imageBackgroundStyle}>
                         <Image source={require('../../assets/images/logo.png')} style={styles.logoStyle} resizeMode={'contain'} />

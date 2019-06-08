@@ -56,7 +56,7 @@ class BestProducts extends Component {
                 url: CONST.url + 'best_products',
                 method: 'POST',
                 headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
-                data: { device_id: deviceID,}
+                data: { device_id: deviceID, lang: this.props.lang}
             }).then(response => {
                 this.setState({products: response.data.data, status: response.data.status, refreshed: false})
             })

@@ -74,7 +74,7 @@ class EditProfile extends Component {
     renderInputImage(type){
         let source ='';
         if (type === 'phone'){
-            source = this.state.phoneStatus ? require('../../assets/images/lactic_phone.png') : require('../../assets/images/bold_gray_phone.png') ;
+            source = this.state.phoneStatus ? require('../../assets/images/lactic_phone.png') : require('../../assets/images/gray_phone.png') ;
         }else if (type === 'mail'){
             source = this.state.mailStatus ? require('../../assets/images/lactic_email.png') : require('../../assets/images/gray_email.png');
         }else if (type === 'name'){

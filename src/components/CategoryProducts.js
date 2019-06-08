@@ -28,6 +28,7 @@ class CategoryProducts extends Component {
             isGrid:true,
             itemId:this.props.navigation.state.params.id,
             productsType:this.props.navigation.state.params.type,
+            name:this.props.navigation.state.params.name,
             products:[],
             status: null,
             search: '',
@@ -45,7 +46,7 @@ class CategoryProducts extends Component {
                 url: CONST.url + 'category_products',
                 method: 'POST',
                 headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
-                data: {category_id: this.state.itemId, device_id: deviceID, type: this.state.productsType}
+                data: {category_id: this.state.itemId, device_id: deviceID, type: this.state.productsType, lang: this.props.lang}
             }).then(response => {
                 this.setState({products: response.data.data, status: response.data.status})
             })
@@ -217,7 +218,7 @@ class CategoryProducts extends Component {
                             </Button>
                         </Right>
                         <Body style={{ width: '100%', alignItems: 'center', alignSelf: 'flex-start', top: 40 }}>
-                        <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>{i18n.t('products')}</Text>
+                        <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>{ this.state.name }</Text>
                         </Body>
                         <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: 32, position: 'absolute', borderColor: '#e2b705', marginLeft: 10 }}>
                             <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
@@ -263,7 +264,7 @@ class CategoryProducts extends Component {
                         />
                     </View>
 
-                    <View style={{ marginTop: 10, alignItems: 'center' , height: this.state.isGrid ? 0 : 'auto'}}>
+                    <View style={{ marginTop: 10, alignItems: 'center' , height: this.state.isGrid ? 0 : 'auto', overflow: this.state.isGrid ? 'hidden' : 'visible'}}>
                         {
                             this.state.products.map(
                                 (product , i) => {

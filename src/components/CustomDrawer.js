@@ -4,6 +4,7 @@ import {Container, Content} from 'native-base';
 import { DrawerItems } from 'react-navigation';
 import {connect} from "react-redux";
 import i18n from '../../locale/i18n'
+import { logout, tempAuth } from '../actions'
 
 class CustomDrawer extends Component {
     constructor(props){
@@ -15,9 +16,15 @@ class CustomDrawer extends Component {
         }
     }
 
-    async logout(){
-        this.props.navigation.navigate('language');
-        AsyncStorage.clear()
+    logout(){
+        this.props.logout({ token: this.props.user.token })
+        this.props.tempAuth();
+
+        this.props.navigation.navigate('login');
+    }
+
+    filterItems(item){
+        return item.routeName !== 'acceptedOrders' && item.routeName !== 'myProducts' && item.routeName !== 'settings';
     }
 
     render(){
@@ -39,22 +46,30 @@ class CustomDrawer extends Component {
                         <Text style={{ color: '#acabae', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, top: -5, marginLeft: 10 }}>{ user.name }</Text>
                         <View style={{ marginTop: 50 }}>
                             <DrawerItems
-                                items={this.props.user ? this.props.items : this.props.items.filter((item) => item.routeName !== 'acceptedOrders' && item.routeName !== 'myProducts') }
                                 {...this.props} labelStyle={{color: '#fff', marginTop: 10, fontSize: 16, marginHorizontal: 5, fontFamily: 'cairo', fontWeight: 'normal'}} onItemPress={
-                                (route, focused) => {
-                                    if (route.route.key === 'logout') {
-                                        this.logout()
-                                    }else {
-                                        this.props.navigation.navigate(route.route.key);
+                                    (route, focused) => {
+                                        if (route.route.key === 'logout') {
+                                            this.logout()
+                                        }else {
+                                            this.props.navigation.navigate(route.route.key);
+                                        }
                                     }
                                 }
-                            }
+                                items={this.props.user !== null ? this.props.items : this.props.items.filter((item) =>  this.filterItems(item) ) }
                             />
                         </View>
                         <View style={{ flex: 1, marginBottom: 15 }}>
-                            <TouchableOpacity onPress={() => this.logout()}>
-                                <Image source={require('../../assets/images/white_logout.png')} style={{ height: 40, width: 40, alignSelf: 'flex-end', marginHorizontal: 20 }} resizeMode={'contain'}  />
-                            </TouchableOpacity>
+                            {
+                                this.props.user ? (
+                                    <TouchableOpacity onPress={() => this.logout()}>
+                                        <Image source={require('../../assets/images/white_logout.png')} style={{ height: 40, width: 40, alignSelf: 'flex-end', marginHorizontal: 20 }} resizeMode={'contain'}  />
+                                    </TouchableOpacity>
+                                ) : (
+                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('login')}>
+                                        <Image source={require('../../assets/images/login.png')} style={{ height: 40, width: 40, alignSelf: 'flex-end', marginHorizontal: 20 }} resizeMode={'contain'}  />
+                                    </TouchableOpacity>
+                                )
+                            }
                         </View>
                     </ImageBackground>
                 </Content>
@@ -124,7 +139,6 @@ const styles = {
     },
 };
 
-
 const mapStateToProps = ({ auth, profile }) => {
     return {
         auth: auth.user,
@@ -132,4 +146,4 @@ const mapStateToProps = ({ auth, profile }) => {
     };
 };
 
-export default connect(mapStateToProps)(CustomDrawer);
+export default connect(mapStateToProps, { logout, tempAuth })(CustomDrawer);

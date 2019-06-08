@@ -87,6 +87,12 @@ const AppNavigator = createStackNavigator({
             header: null
         }
     },
+    DrawerNavigator: {
+        screen: DrawerNavigator,
+        navigationOptions: {
+            header: null
+        }
+    },
     language:{
         screen: Language,
         navigationOptions: {
@@ -119,12 +125,6 @@ const AppNavigator = createStackNavigator({
     },
     confirmCode:{
         screen: ConfirmCode,
-        navigationOptions: {
-            header: null
-        }
-    },
-    DrawerNavigator: {
-        screen: DrawerNavigator,
         navigationOptions: {
             header: null
         }

@@ -48,10 +48,12 @@ class Language extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({ auth, profile, lang }) => {
     return {
-        lang: state.lang
-    }
+        auth: auth.user,
+        user: profile.user,
+        lang: lang.lang
+    };
 };
 
 export default connect(mapStateToProps, { chooseLang })(Language);

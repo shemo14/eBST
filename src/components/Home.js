@@ -7,6 +7,7 @@ import i18n from '../../locale/i18n'
 import axios from 'axios'
 import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
+import {NavigationEvents} from "react-navigation";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -32,6 +33,10 @@ class Home extends Component {
 
     }
 
+    componentWillReceiveProps(nextProps) {
+        console.log('this is home CWRP ..||', nextProps);
+    }
+
     renderLoader(){
         if (this.state.status === null){
             return(
@@ -42,15 +47,21 @@ class Home extends Component {
         }
     }
 
+    onFocus(){
+        this.setState({ status: null })
+        this.componentWillMount()
+    }
+
     render() {
         return (
             <Container>
+                <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
                 <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent'}} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
                         <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.openDrawer()}>
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate('notifications')}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate(this.props.user ? 'notifications' : 'login')}>
                             <Image source={require('../../assets/images/notification.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </View>

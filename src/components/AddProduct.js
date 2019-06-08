@@ -184,7 +184,7 @@ class AddProduct extends Component {
 
             const imgs = this.state.photos;
 
-            for (var i =1; i < imgs.length; i++) {
+            for (var i =0; i < imgs.length; i++) {
                 ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
                     base64.push(base64Data);
                 }, (reason) => console.error(reason));

@@ -64,7 +64,7 @@ class Categories extends Component {
 
     renderItems = (item) => {
         return(
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('categoryProducts', { id: item.id, type: this.state.type })} activeOpacity={1} style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, marginBottom: 10 }}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('categoryProducts', { id: item.id, type: this.state.type, name: item.name })} activeOpacity={1} style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, marginBottom: 10 }}>
                 <View style={{ margin: 2, flex: 1 }}>
                     <Image source={require('../../assets/images/img.png')} style={{ width: 130, height: 130, position: 'absolute', zIndex: 999 }}/>
                     <Image source={{ uri: item.image }} resizeMode={'cover'} style={{ width: 130, height: 130 }}/>

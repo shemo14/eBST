@@ -4,10 +4,9 @@ import Routes from './src/routes'
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistedStore } from './src/store';
-import { Font, Notifications } from 'expo';
+import { Font, Notifications, Permissions } from 'expo';
 import { Root } from 'native-base'
 import './ReactotronConfig';
-
 
 export default class App extends React.Component {
   constructor(props){
@@ -39,6 +38,16 @@ export default class App extends React.Component {
         priority: 'max',
         vibrate: [0, 250, 250, 250],
       })
+    }
+
+    Notifications.addListener(this.handleNotification);
+  }
+
+  handleNotification = (notification) => {
+    console.log(notification);
+
+    if (notification && notification.origin !== 'received') {
+      this.props.navigation.navigate('notifications');
     }
   }
 

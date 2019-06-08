@@ -11,6 +11,8 @@ export default (state = INITIAL_STATE, action) => {
             return ({...state, loading: false, user: action.data });
         case ('user_logout') :
             return ({...state, user: null});
+        case ('temp_auth') :
+            return ({...state, user: null});
         default :
             return state;
     }

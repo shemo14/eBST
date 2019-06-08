@@ -22,6 +22,7 @@ import axios from "axios";
 import CONST from "../consts";
 import _ from 'lodash'
 import ProductRow from './ProductRow';
+import {NavigationEvents} from "react-navigation";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -223,9 +224,15 @@ class MyProducts extends Component {
         return (<Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />);
     }
 
+    onFocus(){
+        this.setState({ status: null })
+        this.componentWillMount()
+    }
+
     render() {
         return (
             <Container>
+                <NavigationEvents onWillFocus={() => this.onFocus()} />
                 <Header style={{ zIndex: 3, marginTop: 40, height: 10, backgroundColor: 'transparent', paddingHorizontal: 10 }} noShadow>
                     <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
                         <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate('editProfile')}>

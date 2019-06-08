@@ -96,7 +96,7 @@ const ar = {
     'update': 'تعديل',
     'profile': 'حسابي',
     'oldPass': 'كلمة المرور القديمة',
-    'changePassword': 'تغير كلمة المرور',
+    'changePassword': 'تغيير كلمة المرور',
     'passwordLenght' : 'كلمة المرور اقل من 6 احرف',
     'verifyPassword': 'كلمة المرور و تأكيد كلمة المرور غير متطابقين',
     'registerAsTrader': 'التسجيل كتاجر',

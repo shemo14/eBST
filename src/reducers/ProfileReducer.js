@@ -7,8 +7,8 @@ export default ( state = INIT_STATE, action ) => {
             return ({ ...state, user: action.data });
         case ('update_profile'):
             return ({ ...state, user: action.data });
-        case ('join_as_provider'):
-            return ({ ...state, user: action.data });
+        case ('logout'):
+            return ({ ...state, user: null });
         default :
             return state;
     }}

@@ -68,7 +68,7 @@ class Register extends Component {
             if (this.state.phoneStatus){
                 source = require('../../assets/images/lactic_phone.png')
             } else{
-                source = require('../../assets/images/bold_gray_phone.png')
+                source = require('../../assets/images/gray_phone.png')
             }
         }else if (type === 'mail'){
             if (this.state.mailStatus ){

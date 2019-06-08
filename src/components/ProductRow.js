@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage } from "react-native";
+import {View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage, I18nManager} from "react-native";
 import StarRating from 'react-native-star-rating';
 import i18n from '../../locale/i18n'
 import {connect} from "react-redux";
@@ -45,18 +45,24 @@ class ProductRow extends Component {
         this.setState({ redHeart: props.data.isLiked })
     }
 
+    renderPrice(type, typeText){
+        if(type == 1)
+            return this.props.data.price + ' ' + i18n.t('sr')
+
+        return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
+    }
 
     render() {
         return (
             <View style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '96%', marginBottom: 20 }}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })}>
-                    <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
+                    <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#c5c5c5', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
                     <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                        <Image source={{uri:this.props.data.image}}  style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                        <Image source={{uri:this.props.data.image}}  style={[styles.image, { borderRadius: 10 }]} resizeMode={'contain'} />
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity style={{ marginHorizontal: 20, flex: 3 }} onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })}>
-                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 16, alignSelf: 'flex-start' }}>{this.props.data.name}</Text>
+                    <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 16, alignSelf: 'flex-start' }}>{this.props.data.name.substring(0, 15)}...</Text>
                     <View style={{ alignSelf: 'flex-start' }}>
                         <StarRating
                             disabled={true}
@@ -68,7 +74,7 @@ class ProductRow extends Component {
                             starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                         />
                     </View>
-                    <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>{this.props.data.price} {i18n.t('sr')}</Text>
+                    <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>{ this.renderPrice(this.props.data.type, this.props.data.type_text) }</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.setFav()} style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                     <Image source={this.renderImage()} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
