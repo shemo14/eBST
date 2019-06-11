@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage, I18nManager} from "react-native";
+import {View, Text, StyleSheet, Image, TouchableOpacity, AsyncStorage, I18nManager, Platform} from "react-native";
 import StarRating from 'react-native-star-rating';
 import i18n from '../../locale/i18n'
 import {connect} from "react-redux";
@@ -95,11 +95,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 70,
         height: 70,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: '#fff'
     },
     image: {
-        width: '105%',
-        height: '105%',
+        width: Platform.OS === 'ios' ? '120%' : '105%',
+        height: Platform.OS === 'ios' ? '120%' : '105%',
         borderWidth: 4,
         transform: [{ rotate: '-15deg' }, { scale: 1.1 }]
     },

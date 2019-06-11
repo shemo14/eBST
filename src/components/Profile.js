@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, I18nManager } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, I18nManager, Platform } from "react-native";
 import {Container, Content, Header, Left, Right, Body, Button, Item, Input, Form, Label, Toast} from 'native-base'
 import Modal from "react-native-modal";
 import i18n from '../../locale/i18n'
@@ -128,7 +128,7 @@ class Profile extends Component {
     render() {
         return (
             <Container>
-                <Header style={{ zIndex: 3, marginTop: 40, height: 10, backgroundColor: 'transparent', paddingHorizontal: 10 }} noShadow>
+                <Header style={{ zIndex: 3, marginTop: 40, height: 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
                     <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile')}>
                             <Image source={require('../../assets/images/white_edit.png')} style={{width: 25, height: 25, top: 3}} resizeMode={'contain'}/>
@@ -143,7 +143,7 @@ class Profile extends Component {
                         </TouchableOpacity>
                     </Left>
                 </Header>
-                <Content style={{ zIndex: -1, marginTop: -50 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
+                <Content style={{ zIndex: -1, marginTop: -60 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
                     <View style={{ height: 300 }}>
                         <View style={styles.slide}>
                             <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 2 }} />
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     image: {
-        width: '105%',
-        height: '105%',
+        width: Platform.OS === 'ios' ? '120%' :  '105%',
+        height: Platform.OS === 'ios' ? '120%' :  '105%',
         borderWidth: 4,
         transform: [{ rotate: '-45deg' }, { scale: 1.3 }]
     },

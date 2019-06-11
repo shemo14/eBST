@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity, ImageBackground, Dimensions , KeyboardAvoidingView , I18nManager, AsyncStorage } from "react-native";
-import {Container, Content, Form, Item, Input, Label, Button, CheckBox, Toast, Picker, Icon} from 'native-base'
+import {Container, Content, Form, Item, Input, Label, Button, CheckBox, Toast, Picker, Header, Right} from 'native-base'
 import styles from '../../assets/styles'
 import i18n from '../../locale/i18n'
 import {DoubleBounce} from "react-native-loader";
@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import CONST from '../consts'
 
 const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+
 class Register extends Component {
     constructor(props){
         super(props);
@@ -199,14 +201,21 @@ class Register extends Component {
     render() {
         return (
             <Container>
-                <Content contentContainerStyle={{ flexGrow: 1 }}>
+                <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent', borderBottomWidth: 0}} noShadow>
+                    <Right style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 20, alignItems: 'center'}}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate(this.props.user ? 'notifications' : 'login')}>
+                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25,  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
+                        </TouchableOpacity>
+                    </Right>
+                </Header>
+                <Content style={{ zIndex: -99, marginTop: -60 }} contentContainerStyle={{ flexGrow: 1 }}>
                     <KeyboardAvoidingView behavior={'padding'} style={{width:'100%', height: null, flex: 1,}}>
                         <ImageBackground source={require('../../assets/images/background.png')} resizeMode={'cover'} style={styles.imageBackgroundStyle}>
                             <Image source={require('../../assets/images/logo.png')} style={styles.logoStyle} resizeMode={'contain'}/>
 
                             <View style={styles.registerFormContainerStyle}>
                                 <Form style={{width: '100%'}}>
-                                    <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row' }}>
+                                    <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginBottom: 10 }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
                                             <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('username') }</Label>
                                             <Input onChangeText={(username) => this.setState({ username })} auto-capitalization={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL?'right' : 'left', fontSize: 15, top: 17 }}/>
@@ -236,12 +245,12 @@ class Register extends Component {
                                         <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#acabae', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%', padding: 5 }} regular >
                                             <Picker
                                                 mode="dropdown"
-                                                iosIcon={<Icon name="arrow-down" />}
-                                                style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                                style={{ width: width - 80, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
                                                 placeholderStyle={{ color: "#c5c5c5" }}
-                                                placeholderIconColor="#fff"
                                                 selectedValue={this.state.selectedCountry}
                                                 onValueChange={(value) => this.setState({ selectedCountry: value })}
+                                                textStyle={{ color: "#acabae" }}
+                                                itemTextStyle={{ color: '#c5c5c5' }}
                                             >
                                                 <Picker.Item label={i18n.t('countries')} value={null} />
                                                 {

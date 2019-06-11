@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView, Dimensions , I18nManager} from "react-native";
+import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView, Dimensions , I18nManager, Platform, ImageEditor} from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label, Textarea, Picker, Toast } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
@@ -10,6 +10,8 @@ import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
 
 const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
+
 let base64   = [];
 class AddProduct extends Component {
     constructor(props){
@@ -35,7 +37,7 @@ class AddProduct extends Component {
             categories: [],
             status: null,
             selectedCategory: null,
-            selectedType: 1,
+            selectedType: "1",
             isSubmitted: false,
             isValid: true
         }
@@ -185,9 +187,27 @@ class AddProduct extends Component {
             const imgs = this.state.photos;
 
             for (var i =0; i < imgs.length; i++) {
-                ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
+                const imageURL = imgs[i].file;
+                Image.getSize(imageURL, (width, height) => {
+                var imageSize = {
+                    size: {
+                        width,
+                        height
+                      },
+                      offset: {
+                        x: 0,
+                        y: 0,
+                      },
+                };
+
+                ImageEditor.cropImage(imageURL, imageSize, (imageURI) => {
+                    console.log(imageURI);
+                    ImageStore.getBase64ForTag(imageURI, (base64Data) => {
                     base64.push(base64Data);
-                }, (reason) => console.error(reason));
+                    ImageStore.removeImageForTag(imageURI);
+                    }, (reason) => console.log(reason) )
+                }, (reason) => console.log(reason) )
+                }, (reason) => console.log(reason))
             }
 
             }).catch((e) => console.log(e))
@@ -293,7 +313,7 @@ class AddProduct extends Component {
 
         return (
             <Container style={{ backgroundColor: 'transparent' }}>
-                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                 <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -343,10 +363,9 @@ class AddProduct extends Component {
                                     <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
                                         <Picker
                                             mode="dropdown"
-                                            iosIcon={<Icon name="arrow-down" />}
-                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                            style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
                                             placeholderStyle={{ color: "#c5c5c5" }}
-                                            placeholderIconColor="#fff"
+                                            textStyle={{ color: "#acabae" }}
                                             selectedValue={this.state.selectedCategory}
                                             onValueChange={(value) => this.setState({ selectedCategory: value })}
                                         >
@@ -364,10 +383,9 @@ class AddProduct extends Component {
                                     <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
                                         <Picker
                                             mode="dropdown"
-                                            iosIcon={<Icon name="arrow-down" />}
-                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                            style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
                                             placeholderStyle={{ color: "#c5c5c5" }}
-                                            placeholderIconColor="#fff"
+                                            textStyle={{ color: "#acabae" }}
                                             selectedValue={this.state.selectedType}
                                             onValueChange={(value) => this.setType(value)}
                                         >

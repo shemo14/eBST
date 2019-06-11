@@ -56,7 +56,7 @@ class Home extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent'}} noShadow>
+                <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent', borderBottomWidth: 0}} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
                         <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.openDrawer()}>
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
@@ -67,9 +67,9 @@ class Home extends Component {
                     </View>
                 </Header>
                 { this.renderLoader() }
-                <Content style={{ zIndex: -99, marginTop: -50 }}>
+                <Content style={{ zIndex: -99, marginTop: -60 }}>
                     <View>
-                        <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{ width: '100%', height: 300 }} showsButtons={false} autoplay={true}>
+                        <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{ width: '100%', height: 300, flex: 1 }} showsButtons={false} autoplay={true}>
                             {
                                 this.state.adsImgs.map((img, i) => (
                                     <View style={styles.slide} key={i}>

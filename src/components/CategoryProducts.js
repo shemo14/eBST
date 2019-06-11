@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, AsyncStorage , I18nManager} from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions, AsyncStorage , I18nManager, Platform} from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, Icon, Input, Picker, Item, CheckBox } from 'native-base';
 import Modal from "react-native-modal";
 import StarRating from 'react-native-star-rating';
@@ -210,7 +210,7 @@ class CategoryProducts extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -279,7 +279,7 @@ class CategoryProducts extends Component {
 
                 <Modal isVisible={this.state.visibleModal === 1} onBackdropPress={() => this.setState({ visibleModal: null })}>
                     <View style={{ width: '115%', position: 'absolute', top: -20, backgroundColor: '#26b5c4', justifyContent: 'center', alignItems: 'center', height: 300, alignSelf: 'center' }}>
-                        <View style={{ width: '100%', height: 40, top: -8, position: 'absolute', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginTop: 15 }} noShadow>
+                        <View style={{ width: '100%', height: 40, top: -8, position: 'absolute', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginTop:  Platform.OS === 'ios' ? 35 : 15 }} noShadow>
                             <TouchableOpacity onPress={() => this.productFilter()}>
                                 <Image source={require('../../assets/images/check_mark.png')} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
                             </TouchableOpacity>
@@ -293,9 +293,8 @@ class CategoryProducts extends Component {
                                 <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#fff', height: 50, marginTop: 5, borderRadius: 30, width: '80%', paddingHorizontal: '30%' }} regular >
                                     <Picker
                                         mode="dropdown"
-                                        iosIcon={<Icon name="arrow-down" />}
-                                        style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", fontWeight: 'normal', color: "#fff" }}
-                                        placeholder="المدن"
+                                        style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", fontWeight: 'normal', color: "#fff" }}
+                                        placeholder={i18n.t('countries')}
                                         placeholderStyle={{ color: "#fff" }}
                                         placeholderIconColor="#fff"
                                         selectedValue={this.state.selectedCountry}

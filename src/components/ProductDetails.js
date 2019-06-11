@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, AsyncStorage , I18nManager} from "react-native";
+import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, AsyncStorage , I18nManager, Platform} from "react-native";
 import {Container, Content, List, ListItem, Header, Left, Right, Body, Textarea, Form, Button, Toast} from 'native-base'
 import Swiper from 'react-native-swiper';
 import StarRating from 'react-native-star-rating';
@@ -174,7 +174,7 @@ class ProductDetails extends Component {
                 url: CONST.url + 'comment_report',
                 method: 'POST',
                 headers: {Authorization: this.props.user.token},
-                data: {comment_id: this.state.id, lang: this.props.lang, report: this.state.commentReport}
+                data: {comment_id: this.state.commentID, lang: this.props.lang, report: this.state.commentReport}
             }).then(response => {
                 this.setState({ commentReport: '', isModalVisible: null })
                 Toast.show({
@@ -257,26 +257,26 @@ class ProductDetails extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent'}} noShadow>
+                <Header style={{zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent', borderBottomWidth: 0}} noShadow>
                     <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center' }}>
                         <Button transparent onPress={() => this.props.navigation.openDrawer()}>
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </Button>
-                        <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo' }}>{ this.state.product.name }</Text>
+                        {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo' }}>{ this.state.product.name }</Text> */}
                         <Button transparent onPress={() => this.goBack()}>
                             <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </Button>
                     </View>
                 </Header>
                 { this.renderLoader() }
-                <Content style={{zIndex: -99, marginTop: -50}}>
+                <Content style={{zIndex: -99, marginTop: -60}}>
                     <View>
-                        <Swiper key={this.state.images.length} dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} style={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>
+                        <Swiper key={this.state.images.length} dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>
                             {
                                 this.state.images.map((img, i) => (
                                     <View key={i} style={styles.slide}>
                                         <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }}/>
-                                        <Image source={{ uri: img }} style={{width: '100%', height: 300, position: 'absolute', zIndex: 1}} resizeMode={'cover'}/>
+                                        <Image source={{ uri: img }} style={{width: '100%', height: 300, position: 'absolute', zIndex: 1}} resizeMode={'contain'}/>
                                     </View>
                                 ))
                             }
@@ -341,9 +341,9 @@ class ProductDetails extends Component {
                                         <ListItem key={i} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, paddingRight: 7, paddingLeft: 7, paddingVertical: 0, marginBottom: 10 }}>
                                             <Right style={{flex: 0, right: 5, alignSelf: 'flex-start', top: -15}}>
                                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('product')}>
-                                                    <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{rotate: '15deg'}], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6}}></View>
+                                                    <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#c5c5c5', borderRadius: 10, transform: [{rotate: '15deg'}], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6}}></View>
                                                     <View style={[styles.block, {transform: [{rotate: '15deg'}]}]}>
-                                                        <Image source={{uri: comment.user_avatar}} style={[styles.image, {borderRadius: 10}]} resizeMode={'stretch'}/>
+                                                        <Image source={{uri: comment.user_avatar}} style={[styles.image, {borderRadius: 10}]} resizeMode={'contain'}/>
                                                     </View>
                                                 </TouchableOpacity>
                                             </Right>
@@ -385,7 +385,7 @@ class ProductDetails extends Component {
                         </View>
 
                         {/* Product Report */}
-                        <Modal isVisible={this.state.isModalVisible === 1 ? true : false} onBackdropPress={() => this._toggleModal(this.state.isModalVisible, 0)}>
+                        <Modal avoidKeyboard={true} isVisible={this.state.isModalVisible === 1 ? true : false} onBackdropPress={() => this._toggleModal(this.state.isModalVisible, 0)}>
                             <View style={{ flex: 1, backgroundColor: '#fff', padding: 10, position: 'absolute', width: '100%' }}>
                                 <Form>
                                     <Textarea onChangeText={(productReport) => this.setState({ productReport })} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left'}} rowSpan={7} bordered placeholder={i18n.t('reportReason') + '...'} placeholderTextColor={{color: "#acabae"}}/>
@@ -404,7 +404,7 @@ class ProductDetails extends Component {
                         </Modal>
 
                         {/* Comment Report */}
-                        <Modal isVisible={this.state.isModalVisible === 2 ? true : false} onBackdropPress={() => this._toggleModal(this.state.isModalVisible, 0)}>
+                        <Modal avoidKeyboard={true} isVisible={this.state.isModalVisible === 2 ? true : false} onBackdropPress={() => this._toggleModal(this.state.isModalVisible, 0)}>
                             <View style={{ flex: 1, backgroundColor: '#fff', padding: 10, position: 'absolute', width: '100%' }}>
                                 <Form>
                                     <Textarea onChangeText={(commentReport) => this.setState({ commentReport })} style={{ borderRadius: 5, padding: 7, color: '#acabae', fontSize: 13, fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left'}} rowSpan={7} bordered placeholder={i18n.t('reportReason') + '...'} placeholderTextColor={{color: "#acabae"}}/>
@@ -439,11 +439,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 50,
         height: 50,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: '#fff'
     },
     image: {
-        width: '105%',
-        height: '105%',
+        width: Platform.OS === 'ios' ? '120%' : '105%',
+        height: Platform.OS === 'ios' ? '120%' : '105%',
         borderWidth: 4,
         transform: [{rotate: '-15deg'}, {scale: 1.1}]
     },

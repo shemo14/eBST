@@ -81,222 +81,264 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
+    profile:{
+        screen: Profile,
+        navigationOptions: {
+            header: null,
+            gesturesEnabled: false
+        }
+    },
+    
     initScreen:{
         screen: InitScreen,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     DrawerNavigator: {
         screen: DrawerNavigator,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     language:{
         screen: Language,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     login:{
         screen: Login,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     register:{
         screen: Register,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     forgetPassword:{
         screen: ForgetPassword,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     verify:{
         screen: Verify,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     confirmCode:{
         screen: ConfirmCode,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     setOffer:{
         screen: SetOffer,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     addProduct: {
         screen: AddProduct,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     categories:{
         screen: Categories,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     confirmOrder:{
         screen: ConfirmOrder,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     notifications:{
         screen: Notifications,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     aboutApp:{
         screen: AboutApp,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     ads:{
         screen: Ads,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     addAds:{
         screen: AddAds,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     bestProducts:{
         screen: BestProducts,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     offers:{
         screen: Offers,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     incomingOffers:{
         screen: IncomingOffers,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     acceptOrder:{
         screen: AcceptOrder,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     categoryProducts:{
         screen: CategoryProducts,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     myProducts :{
         screen: MyProducts,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     editProduct:{
         screen: EditProduct,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     product:{
         screen: ProductDetails,
         navigationOptions: {
-            header: null
-        }
-    },
-    profile:{
-        screen: Profile,
-        navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     editProfile:{
         screen: EditProfile,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     policy:{
         screen: Policy,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     contactUs:{
         screen: ContactUs,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     settings:{
         screen: Settings,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     acceptedOrders: {
         screen: AcceptedOrders,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     fav: {
         screen: Fav,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     buyOrderDetails: {
         screen: BuyOrderDetails,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     biddingOrderDetails: {
         screen: BiddingOrderDetails,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     exchangeAndPriceOrderDetails: {
         screen: ExchangeAndPriceOrderDetails,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     exchangeOrderDetails: {
         screen: ExchangeOrderDetails,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
     finished: {
         screen: Finished,
         navigationOptions: {
-            header: null
+            header: null,
+            gesturesEnabled: false
         }
     },
+},
+{
+  navigationOptions: {
+    gesturesEnabled: false
+  }
 });
 
 export default createAppContainer(AppNavigator);

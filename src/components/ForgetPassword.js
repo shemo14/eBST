@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity, ImageBackground, Dimensions , I18nManager } from "react-native";
-import {Container, Content, Form, Item, Input, Label, Button} from 'native-base'
+import {Container, Content, Form, Item, Input, Label, Button, Header, Right} from 'native-base'
 import i18n from '../../locale/i18n'
 
 const height = Dimensions.get('window').height;
@@ -42,7 +42,14 @@ class ForgetPassword extends Component {
     render() {
         return (
             <Container>
-                <Content contentContainerStyle={{ flexGrow: 1 }}>
+                <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent', borderBottomWidth: 0}} noShadow>
+                    <Right style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 20, alignItems: 'center'}}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate(this.props.user ? 'notifications' : 'login')}>
+                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25,  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
+                        </TouchableOpacity>
+                    </Right>
+                </Header>
+                <Content style={{ zIndex: -99, marginTop: -60 }} contentContainerStyle={{ flexGrow: 1 }}>
                     <ImageBackground source={require('../../assets/images/background.png')} resizeMode={'cover'} style={{ width: null, height: null, flex: 1, alignItems: 'center' }}>
                         <Image source={require('../../assets/images/logo.png')} style={{ width: 130, height: 130, top: 75 }} resizeMode={'contain'} />
 

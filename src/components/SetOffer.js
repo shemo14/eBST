@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, Image, Dimensions, I18nManager, ImageBackground, ScrollView, FlatList, KeyboardAvoidingView, TouchableOpacity, ImageStore } from "react-native";
-import { Container, Content, Button, Icon, Header, Left, Right, Body, Item, Label, Input, Form, Textarea, Picker } from 'native-base'
+import { View, Text, Image, Dimensions, I18nManager, ImageBackground, Platform, FlatList, KeyboardAvoidingView, TouchableOpacity, ImageStore, ImageEditor } from "react-native";
+import { Container, Content, Button, Icon, Header, Left, Right, Body, Item, Label, Input, Form, Textarea } from 'native-base'
 import i18n from '../../locale/i18n'
 import {connect} from "react-redux";
 import {CameraBrowser, ImageBrowser} from "expo-multiple-imagepicker";
@@ -178,10 +178,28 @@ class SetOffer extends Component {
 
             const imgs = this.state.photos;
 
-            for (var i =0; i < imgs.length; i++) {
-                ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
+            for (var i = 0; i < imgs.length; i++) {
+                const imageURL = imgs[i].file;
+                Image.getSize(imageURL, (width, height) => {
+                var imageSize = {
+                    size: {
+                        width,
+                        height
+                      },
+                      offset: {
+                        x: 0,
+                        y: 0,
+                      },
+                };
+
+                ImageEditor.cropImage(imageURL, imageSize, (imageURI) => {
+                    console.log(imageURI);
+                    ImageStore.getBase64ForTag(imageURI, (base64Data) => {
                     base64.push(base64Data);
-                }, (reason) => console.error(reason));
+                    ImageStore.removeImageForTag(imageURI);
+                    }, (reason) => console.log(reason) )
+                }, (reason) => console.log(reason) )
+                }, (reason) => console.log(reason))
             }
 
         }).catch((e) => console.log(e))
@@ -264,7 +282,7 @@ class SetOffer extends Component {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>

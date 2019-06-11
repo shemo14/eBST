@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions , I18nManager } from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity, FlatList, Animated, Dimensions , I18nManager, Platform } from "react-native";
 import {Container, Content, Button, Header, Right, Body, Left, Icon, Input } from 'native-base';
 import i18n from '../../locale/i18n'
 import axios from 'axios'
@@ -9,7 +9,8 @@ import { connect } from 'react-redux';
 import {NavigationEvents} from "react-navigation";
 
 
-const width = Dimensions.get('window').width;
+const width  = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 class Categories extends Component {
     constructor(props){
         super(props);
@@ -77,7 +78,7 @@ class Categories extends Component {
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', justifyContent: 'center', height: 400, }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -114,7 +115,7 @@ class Categories extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={  I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
