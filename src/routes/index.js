@@ -81,14 +81,6 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
-    profile:{
-        screen: Profile,
-        navigationOptions: {
-            header: null,
-            gesturesEnabled: false
-        }
-    },
-    
     initScreen:{
         screen: InitScreen,
         navigationOptions: {

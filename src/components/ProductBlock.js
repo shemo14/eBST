@@ -52,8 +52,9 @@ class ProductBlock extends Component {
     renderPrice(type, typeText){
         if(type == 1)
             return this.props.data.price + ' ' + i18n.t('sr')
-
-        return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
+        
+        if(typeText)    
+            return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
     }
 
     render() {
@@ -65,7 +66,7 @@ class ProductBlock extends Component {
                 </TouchableOpacity>
                 <View style={{ width: '100%', padding: 5 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })}>
-                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17, alignSelf: 'flex-start' }}>{this.props.data.name.substring(0, 15)}...</Text>
+                        <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17, alignSelf: 'flex-start' }}>{ this.props.data.name ? this.props.data.name.substring(0, 15) + '...' : ''}</Text>
                     </TouchableOpacity>
                     <View style={{ alignSelf: 'flex-start' }}>
                         <StarRating

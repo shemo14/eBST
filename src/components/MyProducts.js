@@ -11,6 +11,7 @@ import {
     Animated,
     Dimensions,
     I18nManager,
+    Platform
 } from "react-native";
 import { Container, Content, Header, Left, Right, Body, Button, Icon, Input } from 'native-base'
 import StarRating from 'react-native-star-rating';
@@ -233,7 +234,7 @@ class MyProducts extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={() => this.onFocus()} />
-                <Header style={{ zIndex: 3, marginTop: 40, height: 10, backgroundColor: 'transparent', paddingHorizontal: 10 }} noShadow>
+                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 45, height: Platform.OS === 'ios' ? 50 : 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
                     <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
                         <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate('editProfile')}>
                             <Image source={require('../../assets/images/white_edit.png')} style={{width: 25, height: 25, top: 3}} resizeMode={'contain'}/>
@@ -242,7 +243,7 @@ class MyProducts extends Component {
                     <Body style={{width: '100%', alignItems: 'center', alignSelf: 'flex-start'}}>
                     <Text style={{textAlign: 'center', color: '#fff', marginLeft: 20, fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('myProducts') }</Text>
                     </Body>
-                    <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: -8, position: 'absolute', borderColor: '#e2b705', right: 75 }}>
+                    <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: Platform.OS === 'ios' ? 10 : -8, position: 'absolute', borderColor: '#e2b705', right: 80 }}>
                         <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
                             <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0 }} />
                         </TouchableOpacity>
@@ -258,7 +259,7 @@ class MyProducts extends Component {
                         </TouchableOpacity>
                     </Left>
                 </Header>
-                <Content style={{ zIndex: -1, marginTop: -50 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
+                <Content style={{ zIndex: -1, marginTop: Platform.OS === 'ios' ? -100 : -60 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
                     <View style={{ height: 300 }}>
                         <View style={styles.slide}>
                             <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 2 }} />
@@ -326,11 +327,11 @@ class MyProducts extends Component {
                                             <TouchableHighlight
                                                 style={styles.rowFront}
                                                 underlayColor={'#AAA'}>
-                                                <View style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '96%', marginBottom: 10, marginTop: 9 }}>
+                                                <View style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '95%', marginBottom: 10, marginTop: 17, }}>
                                                     <TouchableOpacity onPress={() => this.props.navigation.navigate('product', {id: data.id})}>
-                                                        <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
+                                                        <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#c5c5c5', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
                                                         <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                            <Image source={{ uri: data.image }} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                            <Image source={{ uri: data.image }} style={[styles.image, { borderRadius: 10 }]} resizeMode={'contain'} />
                                                         </View>
                                                     </TouchableOpacity>
                                                     <TouchableOpacity style={{ marginHorizontal: 20, flex: 3 }} onPress={() => this.props.navigation.navigate('product', {id: data.id})}>
@@ -374,11 +375,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 70,
         height: 70,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: '#fff'
     },
     image: {
-        width: '105%',
-        height: '105%',
+        width:  Platform.OS === 'ios' ? '120%' :  '105%',
+        height: Platform.OS === 'ios' ? '120%' :  '105%',
         borderWidth: 4,
         transform: [{ rotate: '-15deg' }, { scale: 1.1 }]
     },
@@ -388,7 +390,8 @@ const styles = StyleSheet.create({
         borderBottomWidth: 0,
         justifyContent: 'center',
         height: 85,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        marginBottom: 10
     },
     rowBack: {
         alignItems: I18nManager.isRTL ? 'flex-end' : 'flex-start',
@@ -396,7 +399,7 @@ const styles = StyleSheet.create({
         paddingLeft: I18nManager.isRTL ? 15 : 0,
         height: 75,
         marginHorizontal: 15,
-        marginTop: 8
+        marginTop: 12
     },
 });
 

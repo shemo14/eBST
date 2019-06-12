@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, Dimensions, I18nManager, ImageBackground , TouchableOpacity, Share , Switch} from "react-native";
+import { View, Text, Image, Dimensions, I18nManager, ImageBackground , TouchableOpacity, Share , Switch, Platform} from "react-native";
 import { Container, Content, Button, Header, Left, Right, Body } from 'native-base';
 import Modal from "react-native-modal";
 import i18n from '../../locale/i18n'
@@ -84,7 +84,7 @@ class Settings extends Component {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <NavigationEvents onWillFocus={() => this.onFocus()} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -105,12 +105,12 @@ class Settings extends Component {
                     <View style={{ paddingHorizontal:15 , justifyContent:'center'}}>
                         <View style={{marginBottom:10 ,flexDirection:'row' , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , padding:15 , height:45 , alignItems:'center' , justifyContent:'space-between' , width:'90%' , alignSelf:'center'}}>
                             <TouchableOpacity style={{width:'100%' ,flexDirection:'row',justifyContent:'space-between'}} onPress={this._toggleModal}>
-                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' }}>{ i18n.t('language') }</Text>
+                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72', height: 20 }}>{ i18n.t('language') }</Text>
                                 <Image source={require('../../assets/images/gray_back.png')} style={{ width: 20, height: 20 , alignSelf:'flex-end',  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]  }} resizeMode={'contain'} />
                             </TouchableOpacity >
                         </View>
                         <View style={{marginBottom:10 ,flexDirection:'row' , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , padding:15 , height:45 , alignItems:'center' , justifyContent:'space-between' , width:'90%' , alignSelf:'center'}}>
-                            <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' }}>{ i18n.t('stopNotification') }</Text>
+                            <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72', height: 20 }}>{ i18n.t('stopNotification') }</Text>
                             <Switch
                                 onValueChange={(value) => this.stopNotification(value)}
                                 style={{right:-10 }}
@@ -122,7 +122,7 @@ class Settings extends Component {
                         </View>
                         <View style={{marginBottom:10 ,flexDirection:'row' , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , padding:15 , height:45 , alignItems:'center' , justifyContent:'space-between' , width:'90%' , alignSelf:'center'}}>
                             <TouchableOpacity style={{width:'100%' ,flexDirection:'row' ,justifyContent:'space-between'}} onPress={this.onShare}>
-                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' }}>{ i18n.t('shareApp') }</Text>
+                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72', height: 20 }}>{ i18n.t('shareApp') }</Text>
                                 <Image source={require('../../assets/images/gray_share.png')} style={{ width: 20, height: 20 , alignSelf:'flex-end' }} resizeMode={'contain'} />
                             </TouchableOpacity >
                         </View>

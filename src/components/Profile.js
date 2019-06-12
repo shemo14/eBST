@@ -128,14 +128,14 @@ class Profile extends Component {
     render() {
         return (
             <Container>
-                <Header style={{ zIndex: 3, marginTop: 40, height: 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
+                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 45, height: Platform.OS === 'ios' ? 50 : 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
                     <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile')}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile')} style={{ width: 30, height: 30 }}>
                             <Image source={require('../../assets/images/white_edit.png')} style={{width: 25, height: 25, top: 3}} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Right>
-                    <Body style={{width: '100%', alignItems: 'center', alignSelf: 'flex-start'}}>
-                    <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('profile') }</Text>
+                    <Body style={{width: '100%', flex: 1, alignItems: 'center', alignSelf: 'flex-start'}}>
+                        <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('profile') }</Text>
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
                         <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.goBack()}>
@@ -143,7 +143,7 @@ class Profile extends Component {
                         </TouchableOpacity>
                     </Left>
                 </Header>
-                <Content style={{ zIndex: -1, marginTop: -60 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
+                <Content style={{ zIndex: -1, marginTop: Platform.OS === 'ios' ? -100 : -60 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
                     <View style={{ height: 300 }}>
                         <View style={styles.slide}>
                             <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 2 }} />

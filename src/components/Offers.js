@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, TouchableOpacity ,Dimensions , I18nManager} from "react-native";
+import { View, Text, Image, ImageBackground, TouchableOpacity ,Dimensions , I18nManager, Platform} from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, List, ListItem, Icon } from 'native-base';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import i18n from '../../locale/i18n'
@@ -98,7 +98,7 @@ class Offers extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={ I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -146,11 +146,7 @@ class Offers extends Component {
                                                 <View style={{ top: 30 }}>
                                                     <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} ></View>
                                                     <View style={[styles.block, { transform: [{ rotate: '20deg' }] }]}>
-                                                        <Image
-                                                            source={{uri:offer.product_image}}
-                                                            style={[styles.image, { borderRadius: 10 }]}
-                                                            resizeMode={'stretch'}
-                                                        />
+                                                        <Image source={{uri:offer.product_image}} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                                     </View>
                                                 </View>
                                             </Right>

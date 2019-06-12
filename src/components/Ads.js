@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, Dimensions, I18nManager, ImageBackground, StyleSheet } from "react-native";
+import { View, Text, Image, Dimensions, I18nManager, ImageBackground, StyleSheet, Platform } from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
 import MasonryList from "react-native-masonry-list";
 import i18n from '../../locale/i18n'
@@ -118,7 +118,7 @@ class Ads extends Component {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0  }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>

@@ -8,6 +8,8 @@ import axios from 'axios'
 import CONST from '../consts'
 import { DoubleBounce } from 'react-native-loader';
 import {NavigationEvents} from "react-navigation";
+import {connect} from "react-redux";
+
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -119,4 +121,11 @@ const styles = StyleSheet.create({
     }
 });
 
-export default Home;
+
+const mapStateToProps = ({ profile }) => {
+    return {
+        user: profile.user,
+    };
+};
+
+export default connect(mapStateToProps, {})(Home);

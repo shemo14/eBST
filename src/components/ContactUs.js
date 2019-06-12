@@ -8,7 +8,8 @@ import {
     ImageBackground,
     TouchableOpacity,
     Linking,
-    KeyboardAvoidingView
+    KeyboardAvoidingView, 
+    Platform
 } from "react-native";
 import {
     Container,
@@ -127,7 +128,7 @@ class ContactUs extends Component {
     render() {
         return (
             <Container >
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -150,15 +151,15 @@ class ContactUs extends Component {
                         <View style={{ paddingHorizontal:15 , justifyContent:'center'}}>
                             <View style={{marginBottom:10 ,flexDirection:'row' , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , padding:15 , height:45 , alignItems:'center'}}>
                                 <Image source={require('../../assets/images/location.png')} style={{ width: 20, height: 20  , marginRight:10 }} resizeMode={'contain'} />
-                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' }}>{ this.state.info.address }</Text>
+                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72', height: 20 }}>{ this.state.info.address }</Text>
                             </View>
                             <View style={{marginBottom:10 ,flexDirection:'row' , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , padding:15 , height:45 , alignItems:'center'}}>
                                 <Image source={require('../../assets/images/phone.png')} style={{ width: 20, height: 20  , marginRight:10 }} resizeMode={'contain'} />
-                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' }}>{ this.state.info.phone }</Text>
+                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72', height: 20 }}>{ this.state.info.phone }</Text>
                             </View>
                             <View style={{marginBottom:10 ,flexDirection:'row' , borderWidth:1 , borderColor:'#c5c5c5' , borderRadius:35 , padding:15 , height:45 , alignItems:'center'}}>
                                 <Image source={require('../../assets/images/lactic_email.png')} style={{ width: 20, height: 20  , marginRight:10 }} resizeMode={'contain'} />
-                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72' }}>{ this.state.info.email }</Text>
+                                <Text style={{fontFamily:'cairo' , fontSize:13 , color:'#6d6c72', height: 20 }}>{ this.state.info.email }</Text>
                             </View>
                             <View style={{marginTop:10 ,marginBottom:20 ,flexDirection:'row' , padding:15 , height:45 , alignItems:'center', justifyContent:'center'}}>
                                 {

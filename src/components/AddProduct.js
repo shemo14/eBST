@@ -384,7 +384,6 @@ class AddProduct extends Component {
                                         <Picker
                                             mode="dropdown"
                                             style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
-                                            placeholderStyle={{ color: "#c5c5c5" }}
                                             textStyle={{ color: "#acabae" }}
                                             selectedValue={this.state.selectedType}
                                             onValueChange={(value) => this.setType(value)}

@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     I18nManager,
     Dimensions,
-    KeyboardAvoidingView
+    KeyboardAvoidingView,
+    Platform
 } from "react-native";
 import { Container, Content, Header, Left, Body, Button, Item, Input, Form, Label, Picker, Icon, CheckBox, Textarea } from 'native-base'
 import i18n from '../../locale/i18n'
@@ -20,6 +21,7 @@ import { updateProfile } from '../actions/ProfileAction'
 
 
 const height = Dimensions.get('window').height;
+const width = Dimensions.get('window').width;
 class EditProfile extends Component {
     constructor(props) {
         super(props);
@@ -155,9 +157,9 @@ class EditProfile extends Component {
     render() {
         return (
             <Container>
-                <Header style={{ zIndex: 3, marginTop: 40, height: 10, backgroundColor: 'transparent', paddingHorizontal: 10 }} noShadow>
+                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 45, height: Platform.OS === 'ios' ? 50 : 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
                     <Body style={{width: '100%', alignItems: 'center', alignSelf: 'flex-start'}}>
-                    <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('editAcc') }</Text>
+                        <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('editAcc') }</Text>
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
@@ -165,7 +167,7 @@ class EditProfile extends Component {
                         </TouchableOpacity>
                     </Left>
                 </Header>
-                <Content style={{ zIndex: -1, marginTop: -50 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
+                <Content style={{ zIndex: -1, marginTop: Platform.OS === 'ios' ? -100 : -60 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
                     <KeyboardAvoidingView behavior={'padding'} style={{width:'100%', height: null, flex: 1,}}>
                         <View style={{ height: 300 }}>
                             <View style={styles.slide}>
@@ -185,9 +187,9 @@ class EditProfile extends Component {
                             </TouchableOpacity>
                             <Text style={{ color: '#6d6c72', fontFamily: 'cairo', textAlign: 'center', fontSize: 18, marginTop: 15}}>{ this.props.user.name }</Text>
                         </View>
-                        <View style={{ padding: 20, width: '100%', marginTop: 30 }}>
+                        <View style={{ padding: 20, width: '100%' }}>
                             <Form style={{width: '100%'}}>
-                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row' }}>
+                                <View style={{  marginBottom: 4,borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row' }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
                                         <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('username') }</Label>
                                         <Input onChangeText={name => this.setState({ name })} value={this.state.name} auto-capitalization={false} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL?'right' : 'left', fontSize: 15, top: 17 }}/>
@@ -195,7 +197,7 @@ class EditProfile extends Component {
                                     <Image source={this.renderInputImage('name')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
                                 </View>
 
-                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
+                                <View style={{ marginBottom: 4, borderRadius: 35, borderWidth: 1, borderColor: this.state.phoneStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
                                         <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('phoneNumber') }</Label>
                                         <Input onChangeText={phone => this.setState({ phone })} value={this.state.phone} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('phone')} onFocus={() => this.activeInput('phone')} style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL?'right' : 'left', fontSize: 15, top: 17 }}/>
@@ -204,7 +206,7 @@ class EditProfile extends Component {
                                     <Image source={this.renderInputImage('phone')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
                                 </View>
 
-                                <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.mailStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
+                                <View style={{ marginBottom: 4, borderRadius: 35, borderWidth: 1, borderColor: this.state.mailStatus === 1 ? '#26b5c4' : '#acabae', height: 50, padding: 5, flexDirection: 'row', marginTop: 20 }}>
                                     <Item floatingLabel style={{  borderBottomWidth: 0, top: -18,  marginTop: 0, position: 'absolute', width: '88%', paddingHorizontal: 10 }} bordered>
                                         <Label style={{ top: 9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13  }}>{ i18n.t('email') }</Label>
                                         <Input onChangeText={email => this.setState({ email })} value={this.state.email} keyboardType={'email-address'} onBlur={() => this.unActiveInput('mail')} onFocus={() => this.activeInput('mail')} style={{  width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL?'right' : 'left', fontSize: 15, top: 17 }}/>
@@ -214,15 +216,13 @@ class EditProfile extends Component {
                                 </View>
 
                                 <View>
-                                    <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#acabae', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%', padding: 5 }} regular >
+                                    <Item style={{ marginBottom: 4, borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#acabae', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%', padding: 5 }} regular >
                                         <Picker
                                             mode="dropdown"
-                                            iosIcon={<Icon name="arrow-down" />}
-                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
-                                            placeholderStyle={{ color: "#c5c5c5" }}
-                                            placeholderIconColor="#fff"
+                                            style={{ width: width - 80, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
                                             selectedValue={this.state.selectedCountry}
                                             onValueChange={(value) => this.setState({ selectedCountry: value })}
+                                            textStyle={{ color: "#acabae" }}
                                         >
                                             <Picker.Item label={i18n.t('countries')} value={null} />
                                             {
@@ -272,8 +272,8 @@ const styles = StyleSheet.create({
         overflow: 'hidden'
     },
     image: {
-        width: '105%',
-        height: '105%',
+        width: Platform.OS === 'ios' ? '120%' :  '105%',
+        height: Platform.OS === 'ios' ? '120%' :  '105%',
         borderWidth: 4,
         transform: [{ rotate: '-45deg' }, { scale: 1.3 }]
     },

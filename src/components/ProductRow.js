@@ -49,7 +49,8 @@ class ProductRow extends Component {
         if(type == 1)
             return this.props.data.price + ' ' + i18n.t('sr')
 
-        return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
+        if(typeText)    
+            return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
     }
 
     render() {
