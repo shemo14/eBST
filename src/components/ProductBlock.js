@@ -57,6 +57,7 @@ class ProductBlock extends Component {
             return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
     }
 
+    
     render() {
         console.log(this.props.data)
         return (

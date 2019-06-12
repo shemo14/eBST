@@ -74,6 +74,11 @@ class CategoryProducts extends Component {
         }
     }
 
+    componentWillReceiveProps(newProps){
+        console.log('this is my category new props ...', newProps);
+        this.setState({ name: newProps.navigation.state.params.name });
+    }
+
     onStarRatingPress(rating) {
         this.setState({
             starCount: rating
@@ -224,7 +229,7 @@ class CategoryProducts extends Component {
                             <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
                                 <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0 }} />
                             </TouchableOpacity>
-                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={i18n.t('search') + '...'} placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', }} />
+                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={i18n.t('search') + '...'} placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left' }} />
                         </Animated.View>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <View style={{ flexDirection: 'row' }}>
@@ -249,13 +254,14 @@ class CategoryProducts extends Component {
                         <Image source={row} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
                 </View>
-                <Content style={{ padding: 10 }}>
+                <Content>
 
                     { this.renderLoader() }
                     { this.renderNoData() }
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'center' , height: this.state.isGrid ? 'auto' : 0}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center' , height: this.state.isGrid ? 'auto' : 0, width: '100%', padding: 10 }}>
                         <FlatList
+                            style={{ alignSelf: 'center', width: '100%'}}
                             data={this.state.products}
                             renderItem={({ item }) => this.renderItems(item)}
                             numColumns={2}

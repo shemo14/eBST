@@ -168,14 +168,16 @@ class AddAds extends Component {
                     </ImageBackground>
                 </Header>
 
-                <Content style={{ padding: 20 , marginBottom:20}}>
-                    <FlatList
-                        data={this.state.photos}
-                        renderItem={({item}) => this.renderItems(item, this.state.imageId)}
-                        numColumns={3}
-                        keyExtractor={this._keyExtractor}
-                        extraData={this.state.refreshed}
-                    />
+                <Content style={{ marginBottom:20}}>
+                    <View style={{ padding: 10 }}>
+                        <FlatList
+                            data={this.state.photos}
+                            renderItem={({item}) => this.renderItems(item, this.state.imageId)}
+                            numColumns={3}
+                            keyExtractor={this._keyExtractor}
+                            extraData={this.state.refreshed}
+                        />
+                    </View>
                 </Content>
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                     { this.renderSubmit() }

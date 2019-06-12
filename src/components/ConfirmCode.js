@@ -120,8 +120,6 @@ class ConfirmCode extends Component {
                                     <Image source={this.renderInputImage('phone')} style={{ width: 25, height: 25, right: 15, top: 9, position: 'absolute', flex: 1 }} resizeMode={'contain'}/>
                                 </View>
                             </Form>
-
-
                             <View style={{ marginTop: 20, justifyContent: 'center', alignItems: 'center' }}>
                                 { this.renderSubmit() }
                             </View>

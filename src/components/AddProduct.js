@@ -258,7 +258,7 @@ class AddProduct extends Component {
                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.priceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                         <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productPrice') }</Label>
-                        <Input onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign:I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                        <Input onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign:I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 15, top: 17, }}  />
                     </Item>
                 </View>
             );
@@ -331,10 +331,11 @@ class AddProduct extends Component {
                     </ImageBackground>
                 </Header>
 
-                <Content style={{ padding: 10 }}>
+                <Content>
                     { this.renderLoader() }
 
                     <KeyboardAvoidingView behavior={'padding'} style={{width:'100%', height: null, flex: 1,}}>
+                        <View style={{ padding: 10 }}>
                         <View style={{ width: undefined, height: 100, flex: 1, justifyContent: 'center', alignItems: 'center', margin: 2  }}>
                             <Button onPress={() => this.state.photos.length === 5 ?  alert("ops") : this.setState({imageBrowserOpen: true})} transparent style={{ borderRadius: 5, borderColor: '#c6c5c5', borderWidth: 1, width: 70, height: 70, transform: [{ rotate: '-45deg'}], alignItems: 'center', justifyContent: 'center', alignSelf: 'center' }}>
                                 <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#c6c5c5', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
@@ -401,6 +402,7 @@ class AddProduct extends Component {
                                     { this.renderSubmit() }
                                 </View>
                             </Form>
+                        </View>
                         </View>
                     </KeyboardAvoidingView>
                 </Content>

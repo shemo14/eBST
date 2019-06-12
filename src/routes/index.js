@@ -67,6 +67,7 @@ const DrawerNavigator = createDrawerNavigator({
     incomingOffers: IncomingOffers,
     product: ProductDetails,
     addProduct: AddProduct,
+    editProduct: EditProduct,
     acceptOrder:AcceptOrder,
     bestProducts:BestProducts
 }, {

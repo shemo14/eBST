@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity, I18nManager , KeyboardAvoidingView, Dimensions} from "react-native";
+import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity, I18nManager , KeyboardAvoidingView, Dimensions, Platform, ImageEditor} from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label, Textarea, Picker, Toast } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
@@ -10,6 +10,7 @@ import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
 
 const height = Dimensions.get('window').height;
+const width  = Dimensions.get('window').width; 
 let base64   = [];
 class EditProduct extends Component {
     constructor(props){
@@ -62,7 +63,7 @@ class EditProduct extends Component {
                 name: response.data.data.details.name,
                 desc: response.data.data.details.desc,
                 selectedCategory: response.data.data.details.category_id,
-                selectedType: response.data.data.details.type,
+                selectedType:  JSON.stringify(response.data.data.details.type),
                 price: JSON.stringify(response.data.data.details.price),
                 exchangeProduct: response.data.data.details.exchange_product,
                 extraPrice: response.data.data.details.exchange_price,
@@ -180,6 +181,7 @@ class EditProduct extends Component {
     }
 
     renderItems = (item, imageId) => {
+
         return(
             <View style={{ margin: 2}}>
                 <TouchableOpacity onPress={() => this.deleteImage(item)} style={{ backgroundColor: 'rgba(0, 0, 0, 0.4)', position: 'absolute', zIndex: 999, height: imageId === item.md5 ? 60 : 0, width: 60, alignItems: 'center', justifyContent: 'center', borderRadius: 3 }}>
@@ -206,9 +208,27 @@ class EditProduct extends Component {
             const imgs = this.state.photos;
 
             for (var i =1; i < imgs.length; i++) {
-                ImageStore.getBase64ForTag(imgs[i].file, (base64Data) => {
+                const imageURL = imgs[i].file;
+                Image.getSize(imageURL, (width, height) => {
+                var imageSize = {
+                    size: {
+                        width,
+                        height
+                      },
+                      offset: {
+                        x: 0,
+                        y: 0,
+                      },
+                };
+
+                ImageEditor.cropImage(imageURL, imageSize, (imageURI) => {
+                    console.log(imageURI);
+                    ImageStore.getBase64ForTag(imageURI, (base64Data) => {
                     base64.push(base64Data);
-                }, (reason) => console.error(reason));
+                    ImageStore.removeImageForTag(imageURI);
+                    }, (reason) => console.log(reason) )
+                }, (reason) => console.log(reason) )
+                }, (reason) => console.log(reason))
             }
 
         }).catch((e) => console.log(e))
@@ -260,7 +280,7 @@ class EditProduct extends Component {
                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.priceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                         <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productPrice') }</Label>
-                        <Input value={this.state.price} onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                        <Input value={this.state.price} onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('price')} onFocus={() => this.activeInput('price')} style={{ width: 200, color: '#26b5c4', fontSize: 15, top: 17 }}  />
                     </Item>
                 </View>
             );
@@ -279,7 +299,7 @@ class EditProduct extends Component {
                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.exchangeProductStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                         <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('exchangeProduct') }</Label>
-                        <Input value={JSON.stringify(this.state.exchangeProduct)} onChangeText={(exchangeProduct) => this.setState({ exchangeProduct })} onBlur={() => this.unActiveInput('exchangeProduct')} onFocus={() => this.activeInput('exchangeProduct')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                        <Input value={JSON.stringify(this.state.exchangeProduct)} onChangeText={(exchangeProduct) => this.setState({ exchangeProduct })} onBlur={() => this.unActiveInput('exchangeProduct')} onFocus={() => this.activeInput('exchangeProduct')} style={{ width: 200, color: '#26b5c4', fontSize: 15, top: 17 }}  />
                     </Item>
                 </View>
             )
@@ -289,14 +309,14 @@ class EditProduct extends Component {
                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.exchangeProductStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                             <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('exchangeProduct') }</Label>
-                            <Input value={JSON.stringify(this.state.exchangeProduct)} onChangeText={(exchangeProduct) => this.setState({ exchangeProduct })} onBlur={() => this.unActiveInput('exchangeProduct')} onFocus={() => this.activeInput('exchangeProduct')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                            <Input value={JSON.stringify(this.state.exchangeProduct)} onChangeText={(exchangeProduct) => this.setState({ exchangeProduct })} onBlur={() => this.unActiveInput('exchangeProduct')} onFocus={() => this.activeInput('exchangeProduct')} style={{ width: 200, color: '#26b5c4', fontSize: 15, top: 17 }}  />
                         </Item>
                     </View>
 
                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.extraPriceStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20  }}>
                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                             <Label style={{ top:15, backgroundColor: '#fff', alignSelf: 'flex-start', paddingTop: 0, fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('extraPrice') }</Label>
-                            <Input value={this.state.extraPrice} onChangeText={(extraPrice) => this.setState({ extraPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')} style={{ width: 200, textAlign: 'right', color: '#26b5c4', fontSize: 15, top: 17 }}  />
+                            <Input value={this.state.extraPrice} onChangeText={(extraPrice) => this.setState({ extraPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')} style={{ width: 200, color: '#26b5c4', fontSize: 15, top: 17 }}  />
                         </Item>
                     </View>
                 </View>
@@ -315,7 +335,7 @@ class EditProduct extends Component {
 
         return (
             <Container style={{ backgroundColor: 'transparent' }}>
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -355,21 +375,19 @@ class EditProduct extends Component {
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row'  }}>
                                     <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                         <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('productName') }</Label>
-                                        <Input value={this.state.name} onChangeText={(name) => this.setState({ name })} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', textAlign: 'right', fontSize: 15, top: 17 }}  />
+                                        <Input value={this.state.name} onChangeText={(name) => this.setState({ name })} onBlur={() => this.unActiveInput('name')} onFocus={() => this.activeInput('name')} style={{ width: 200, color: '#26b5c4', fontSize: 15, top: 17 }}  />
                                     </Item>
                                 </View>
                                 <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.descStatus === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
-                                    <Textarea value={this.state.desc} onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign: 'right', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
+                                    <Textarea value={this.state.desc} onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
                                 </View>
                                 <View>
                                     <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
                                         <Picker
                                             mode="dropdown"
-                                            iosIcon={<Icon name="arrow-down" />}
-                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
-                                            placeholderStyle={{ color: "#c5c5c5" }}
-                                            placeholderIconColor="#fff"
+                                            style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
                                             selectedValue={this.state.selectedCategory}
+                                            textStyle={{ color: "#acabae" }}
                                             onValueChange={(value) => this.setState({ selectedCategory: value })}
                                         >
                                             {
@@ -385,10 +403,8 @@ class EditProduct extends Component {
                                     <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
                                         <Picker
                                             mode="dropdown"
-                                            iosIcon={<Icon name="arrow-down" />}
-                                            style={{ width: undefined, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
-                                            placeholderStyle={{ color: "#c5c5c5" }}
-                                            placeholderIconColor="#fff"
+                                            style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                            textStyle={{ color: "#acabae" }}
                                             selectedValue={this.state.selectedType}
                                             onValueChange={(value) => this.setType(value)}
                                         >

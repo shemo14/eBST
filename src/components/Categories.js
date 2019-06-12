@@ -129,7 +129,7 @@ class Categories extends Component {
                             <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
                                 <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0 }} />
                             </TouchableOpacity>
-                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={ i18n.t('search') } placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', }} />
+                            <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={ i18n.t('search') } placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left'}} />
                         </Animated.View>
                         <Left style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <View style={{ flexDirection: 'row' }}>

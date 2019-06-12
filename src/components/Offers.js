@@ -19,7 +19,7 @@ class Offers extends Component {
             receivedOffers: 1,
             showData: [],
             receiveShow: true,
-            type:1,
+            type: 1,
             status: null,
         }
     }
@@ -35,13 +35,17 @@ class Offers extends Component {
     }
 
     onSwipeLeft() {
-        this.setState({ type:1,receiveShow: true , status:null });
-        this.componentWillMount();
+        this.setState({ receiveShow: true , status:null });
+        axios({ method: 'POST', url: CONST.url + 'offers', headers: {Authorization: this.props.user.token }, data: {type: 1 , lang: this.props.lang}}).then(response => {
+            this.setState({showData:response.data.data , status:response.data.status})
+        })
     }
 
     onSwipeRight() {
         this.setState({ type:0, receiveShow: false , status:null});
-        this.componentWillMount();
+        axios({ method: 'POST', url: CONST.url + 'offers', headers: {Authorization: this.props.user.token }, data: {type: 0 , lang: this.props.lang}}).then(response => {
+            this.setState({showData:response.data.data , status:response.data.status})
+        })
     }
 
     onSwipe(gestureName, gestureState) {
@@ -65,12 +69,13 @@ class Offers extends Component {
             );
         }
     }
+
     renderNoData(){
         if (this.state.showData.length === 0 && this.state.status != null){
             return(
                 <View style={{ width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                     <Image source={require('../../assets/images/no_data.png')} resizeMode={'contain'} style={{ width: 200, height: 200 }}/>
-                    <Text style={{ fontFamily: 'cairo', fontSize: 16, textAlign: "center", marginTop: 10, color: '#6d6c72' }}>{ i18n.t('noSearchResult') }</Text>
+                    <Text style={{ fontFamily: 'cairo', fontSize: 16, textAlign: "center", marginTop: 10, color: '#6d6c72' }}>{ i18n.t('noData') }</Text>
                 </View>
             );
         }
@@ -144,15 +149,15 @@ class Offers extends Component {
                                         <ListItem key={i} onPress={() => this.props.navigation.navigate('incomingOffers' , {product_id:offer.product_id})} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
                                             <Right style={{ flex: 0 }}>
                                                 <View style={{ top: 30 }}>
-                                                    <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} ></View>
+                                                    <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#acabae', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} ></View>
                                                     <View style={[styles.block, { transform: [{ rotate: '20deg' }] }]}>
-                                                        <Image source={{uri:offer.product_image}} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                        <Image source={{uri:offer.product_image}} style={[styles.image, { borderRadius: 10 }]} resizeMode={'contain'} />
                                                     </View>
                                                 </View>
                                             </Right>
                                             <Body style={{ marginHorizontal: 20 }}>
                                                 <TouchableOpacity onPress={() => this.props.navigation.navigate('incomingOffers' , {product_id:offer.product_id})}>
-                                                <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 15 , alignSelf:'flex-start'}}>{offer.product_name}</Text>
+                                                <Text style={{ color: '#6d6c72', fontFamily: 'cairo', fontSize: 15 , alignSelf:'flex-start'}}>{ offer.product_name ? offer.product_name.substring(0, 15) : '' }</Text>
                                                 {
                                                     this.state.type == 1 ? (<Text style={{ color: '#26b5c4', fontFamily: 'cairo'  , alignSelf:'flex-start'}}>{offer.offers_count} {i18n.t('offer')}</Text>) :
                                                      (<Text style={{ color: '#26b5c4', fontFamily: 'cairo' , alignSelf:'flex-start' }}>{offer.offer_type} </Text>)
@@ -187,7 +192,8 @@ const styles = {
         marginBottom: 60,
         width: 70,
         height: 70,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: '#fff'
     },
     image: {
         width: 100,

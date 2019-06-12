@@ -145,12 +145,12 @@ class BestProducts extends Component {
                         <Image source={row} style={{ width: 50, height: 50 }} resizeMode={'contain'} />
                     </TouchableOpacity>
                 </View>
-                <Content style={{ padding: 10 }}>
+                <Content>
 
                     { this.renderLoader() }
                     { this.renderNoData() }
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'center' , height: this.state.isGrid ? 'auto' : 0}}>
+                    <View style={{ flexDirection: 'row', padding: 10, justifyContent: 'center' , height: this.state.isGrid ? 'auto' : 0}}>
                         <FlatList
                             data={this.state.products}
                             renderItem={({ item }) => this.renderItems(item)}

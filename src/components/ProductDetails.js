@@ -291,8 +291,8 @@ class ProductDetails extends Component {
                             <Text style={{ marginHorizontal: 5, color: '#6d6c72', borderBottomWidth: 1, borderBottomColor: '#6d6c72', fontFamily: 'cairo', fontSize: 15, top: -1 }}>{ this.state.product.provider_name }</Text>
                         </TouchableOpacity>
 
-                        <Text style={{color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, marginBottom: 5, alignSelf: 'flex-start'}}>{ name }</Text>
-                        <Text style={{color: '#acabae', fontFamily: 'cairo', fontSize: 15, lineHeight: 20, alignSelf: 'flex-start'}}>{ this.state.product.desc }</Text>
+                        <Text style={{color: '#6d6c72', fontFamily: 'cairo', fontSize: 16, marginBottom: 5, marginTop: 10, alignSelf: 'flex-start', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}}>{ name }</Text>
+                        <Text style={{color: '#acabae', fontFamily: 'cairo', fontSize: 15, lineHeight: 20, alignSelf: 'flex-start', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr'}}>{ this.state.product.desc }</Text>
                         <Text style={{color: '#26b5c4', fontFamily: 'cairo', fontSize: 15, marginBottom: 5, alignSelf: 'flex-start'}}>{i18n.t('productPrice')} { this.state.product.price } {i18n.t('sr')}</Text>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between',}}>
                             <StarRating

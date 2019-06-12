@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions , I18nManager} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions , I18nManager, Platform} from "react-native";
 import {Container, Content, List, ListItem, Header, Left, Right, Body , Button} from 'native-base'
 import Swiper from 'react-native-swiper';
 import StarRating from 'react-native-star-rating';
@@ -99,18 +99,22 @@ class IncomingOffers extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{zIndex: 999, marginTop: 40, height: 10, backgroundColor: 'transparent' }} noShadow>
-                    <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, alignItems: 'center'}}>
+                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 45, height: Platform.OS === 'ios' ? 50 : 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
+                    <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
                         <TouchableOpacity onPress={() => this.props.navigation.openDrawer()} >
-                            <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
+                                <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25, top: 3 }} resizeMode={'contain'} />
                         </TouchableOpacity>
-                        <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20 , fontFamily:'cairo'}}>{i18n.t('incomingOffers')}</Text>
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 ,transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
+                    </Right>
+                    <Body style={{width: '100%', flex: 1, alignItems: 'center', alignSelf: 'flex-start'}}>
+                        <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('incomingOffers') }</Text>
+                    </Body>
+                    <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.goBack()}>
+                            <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'}/>
                         </TouchableOpacity>
-                    </View>
+                    </Left>
                 </Header>
-                <Content style={{ zIndex: -99, marginTop: -50 }}>
+                <Content style={{ zIndex: -99, marginTop: Platform.OS === 'ios' ? -100 : -60 }}>
                     { this.renderLoader() }
                     { this.renderNoData() }
                     <View>
@@ -119,7 +123,7 @@ class IncomingOffers extends Component {
                             this.state.images.map((img, i) => (
                                 <View style={styles.slide} key={i}>
                                     <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
-                                    <Image source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
+                                    <Image source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'contain'} />
                                 </View>
                             ))
                         }
@@ -141,9 +145,9 @@ class IncomingOffers extends Component {
                                         paddingRight: 7, paddingLeft: 7 , paddingVertical: 0 , marginBottom:17 }}>
                                         <Right style={{ flex: 0 , right:5 , alignSelf:'flex-start' , top:-15}}>
                                             <TouchableOpacity onPress={this.offerOneModal}>
-                                                <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
+                                                <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#acabae', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                                 <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                    <Image source={{uri:offer.avatar}} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                    <Image source={{uri:offer.avatar}} style={[styles.image, { borderRadius: 10 }]} resizeMode={'contain'} />
                                                 </View>
                                             </TouchableOpacity>
                                         </Right>
@@ -192,7 +196,7 @@ class IncomingOffers extends Component {
                                                 <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.price} رس</Text>
                                             </View>
                                             <View style={{flexDirection:'row'}}>
-                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('phone') }: </Text>
+                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('phoneNumber') }: </Text>
                                                 <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.phone}</Text>
                                             </View>
                                         </Body>
@@ -221,9 +225,9 @@ class IncomingOffers extends Component {
                                     <ListItem style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0 ,
                                         paddingRight: 7, paddingLeft: 7 , paddingVertical: 0 , marginBottom:10 }}>
                                         <Right style={{ flex: 0 , right:5 , alignSelf:'flex-start' , top:-15}}>
-                                            <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
+                                            <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#acabae', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'contain'} />
                                             </View>
                                         </Right>
                                         <Body style={{ marginHorizontal:10, alignSelf:'flex-start' , top:-10}}>
@@ -311,11 +315,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 50,
         height: 50,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        backgroundColor: '#fff'
     },
     image: {
-        width: '105%',
-        height: '105%',
+        width: Platform.OS === 'ios' ? '120%' : '105%',
+        height: Platform.OS === 'ios' ? '120%' : '105%',
         borderWidth: 4,
         transform: [{ rotate: '-15deg' }, { scale: 1.1 }]
     }
