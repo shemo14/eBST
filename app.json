@@ -6,7 +6,7 @@
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.0.0",
+    "version": "1.1.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -22,10 +22,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.aait.ebst"
+      "bundleIdentifier": "com.app.ebst"
     },
     "android": {
-      "package": "com.aait.ebst"
+      "package": "com.app.ebst"
     }
   }
 }
+

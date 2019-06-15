@@ -6,6 +6,7 @@ import i18n from '../../locale/i18n'
 import {DoubleBounce} from "react-native-loader";
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { Permissions, Notifications } from 'expo'
 import CONST from '../consts'
 
 const height = Dimensions.get('window').height;
@@ -28,14 +29,34 @@ class Register extends Component {
             isTrader: false,
             isSubmitted: false,
             countries: [],
-            selectedCountry: null
+            selectedCountry: null,
+            token: null
         }
     }
 
-    componentWillMount() {
+    async componentWillMount() {
         axios.post(CONST.url + 'countries', { lang: this.props.lang }).then(response => {
             this.setState({ countries: response.data.data })
         });
+
+        const { status: existingStatus } = await Permissions.getAsync(
+            Permissions.NOTIFICATIONS
+        );
+        let finalStatus = existingStatus;
+
+        if (existingStatus !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted') {
+            return;
+        }
+
+        let token = await Notifications.getExpoPushTokenAsync();
+        this.setState({ token })
+        AsyncStorage.setItem('deviceID', token);
+        alert(token);
     }
 
     activeInput(type){
@@ -134,40 +155,39 @@ class Register extends Component {
     };
 
     onRegister(){
+        alert(this.state.token)
         const err = this.validate();
         if (!err){
             this.setState({ isSubmitted: true });
-            AsyncStorage.getItem('deviceID').then(token => {
-                axios.post(CONST.url + 'register' ,{
-                    name: this.state.username,
-                    phone: this.state.phone,
-                    password: this.state.password,
-                    email: this.state.email,
-                    country_id: this.state.selectedCountry,
-                    lang: this.props.lang,
-                    type: this.state.isTrader ? 1 : 0,
-                    device_id: token
-                }).then(response => {
-                    this.setState({ isSubmitted: false });
+            axios.post(CONST.url + 'register' ,{
+                name: this.state.username,
+                phone: this.state.phone,
+                password: this.state.password,
+                email: this.state.email,
+                country_id: this.state.selectedCountry,
+                lang: this.props.lang,
+                type: this.state.isTrader ? 1 : 0,
+                device_id: this.state.token
+            }).then(response => {
+                this.setState({ isSubmitted: false });
 
-                    if (response.data.status == 200){
-                        const {phone, password } = this.state;
-                        this.props.navigation.navigate('confirmCode', { phone, password, token, code: response.data.data.code })
-                    }
+                if (response.data.status == 200){
+                    const {phone, password } = this.state;
+                    this.props.navigation.navigate('confirmCode', { phone, password, token: this.state.token, code: response.data.data.code })
+                }
 
-                    Toast.show({
-                        text: response.data.msg,
-                        type: response.data.status == 200 ? "success" : "danger",
-                        duration: 3000
-                    });
-                }).catch(e => {
-                    this.setState({ loader: false });
-                    Toast.show({
-                        text: 'يوجد خطأ ما الرجاء المحاولة مرة اخري',
-                        type: "danger",
-                        duration: 3000
-                    });
-                })
+                Toast.show({
+                    text: response.data.msg,
+                    type: response.data.status == 200 ? "success" : "danger",
+                    duration: 3000
+                });
+            }).catch(e => {
+                this.setState({ loader: false });
+                Toast.show({
+                    text: 'يوجد خطأ ما الرجاء المحاولة مرة اخري',
+                    type: "danger",
+                    duration: 3000
+                });
             })
         }
     }

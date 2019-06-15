@@ -122,7 +122,7 @@ class Login extends Component {
         let token = await Notifications.getExpoPushTokenAsync();
         this.setState({ token, userId: null })
         AsyncStorage.setItem('deviceID', token);
-        // alert(token);
+        alert(token);
         console.log('app lang', this.props.lang);
 
     }
