@@ -380,23 +380,29 @@ class AddProduct extends Component {
                                         <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
                                     </Item>
                                 </View>
-                                <View>
-                                    <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
-                                        <Picker
-                                            mode="dropdown"
-                                            style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
-                                            textStyle={{ color: "#acabae" }}
-                                            selectedValue={this.state.selectedType}
-                                            onValueChange={(value) => this.setType(value)}
-                                        >
-                                            <Picker.Item label={ i18n.t('buy') } value="1" />
-                                            <Picker.Item label={ i18n.t('auction') } value="2" />
-                                            <Picker.Item label={ i18n.t('exchange') } value="3" />
-                                            <Picker.Item label={ i18n.t('exchangeWithDifferencePrice') } value="4" />
-                                        </Picker>
-                                        <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
-                                    </Item>
-                                </View>
+                                {
+                                    this.props.user.type == 1 ?
+                                        (
+                                            <View>
+                                                <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#c5c5c5', height: 50, marginTop: 20, borderRadius: 30, width: '100%', paddingHorizontal: '30%' }} regular >
+                                                    <Picker
+                                                        mode="dropdown"
+                                                        style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", color: "#c5c5c5" , fontWeight: 'normal' }}
+                                                        textStyle={{ color: "#acabae" }}
+                                                        selectedValue={this.state.selectedType}
+                                                        onValueChange={(value) => this.setType(value)}
+                                                    >
+                                                        <Picker.Item label={ i18n.t('buy') } value="1" />
+                                                        <Picker.Item label={ i18n.t('auction') } value="2" />
+                                                        <Picker.Item label={ i18n.t('exchange') } value="3" />
+                                                        <Picker.Item label={ i18n.t('exchangeWithDifferencePrice') } value="4" />
+                                                    </Picker>
+                                                    <Image source={require('../../assets/images/gray_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
+                                                </Item>
+                                            </View>
+                                        ) : <View />
+                                }
+
                                 { this.renderProductOptions() }
                                 <View style={{ marginTop: 20 , alignItems: 'center', justifyContent: 'center' }}>
                                     { this.renderSubmit() }

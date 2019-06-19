@@ -328,13 +328,13 @@ class MyProducts extends Component {
                                                 style={styles.rowFront}
                                                 underlayColor={'#AAA'}>
                                                 <View style={{ flexDirection: 'row', height: 75, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, width: '95%', marginBottom: 10, marginTop: 17, }}>
-                                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('product', {id: data.id})}>
+                                                    <TouchableOpacity onPress={() => this.props.navigation.navigate('product', {id: data.id, comeFrom: this.props.navigation.state.routeName})}>
                                                         <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#c5c5c5', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
                                                         <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
                                                             <Image source={{ uri: data.image }} style={[styles.image, { borderRadius: 10 }]} resizeMode={'contain'} />
                                                         </View>
                                                     </TouchableOpacity>
-                                                    <TouchableOpacity style={{ marginHorizontal: 20, flex: 3 }} onPress={() => this.props.navigation.navigate('product', {id: data.id})}>
+                                                    <TouchableOpacity style={{ marginHorizontal: 20, flex: 3 }} onPress={() => this.props.navigation.navigate('product', {id: data.id, comeFrom: this.props.navigation.state.routeName,})}>
                                                         <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 16, alignSelf: 'flex-start' }}>{ data.name }</Text>
                                                         <View style={{ alignSelf: 'flex-start' }}>
                                                             <StarRating
@@ -346,7 +346,7 @@ class MyProducts extends Component {
                                                                 starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                                                             />
                                                         </View>
-                                                        <Text style={{ color: '#e2b705', fontFamily: 'cairo' }}>{data.price} {i18n.t('sr')}</Text>
+                                                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', alignSelf: 'flex-start' }}>{data.price} {i18n.t('sr')}</Text>
                                                     </TouchableOpacity>
                                                     <TouchableOpacity onPress={() => this.setLike(data.id, data.isLiked)} style={{ textAlign: 'right', flex: 0.5, marginHorizontal: 10 }}>
                                                         { this.renderHeart(data.isLiked, data.id) }

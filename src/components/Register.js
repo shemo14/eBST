@@ -30,7 +30,8 @@ class Register extends Component {
             isSubmitted: false,
             countries: [],
             selectedCountry: null,
-            token: null
+            token: null,
+            isAccepted: false
         }
     }
 
@@ -56,7 +57,7 @@ class Register extends Component {
         let token = await Notifications.getExpoPushTokenAsync();
         this.setState({ token })
         AsyncStorage.setItem('deviceID', token);
-        alert(token);
+      //  alert(token);
     }
 
     activeInput(type){
@@ -199,7 +200,7 @@ class Register extends Component {
             )
         }
 
-        if (this.state.username == '' || this.state.phone == '' || this.state.email == '' || this.state.password == '' || this.state.verifyPassword == ''){
+        if (this.state.username == '' || this.state.phone == '' || this.state.email == '' || this.state.password == '' || this.state.verifyPassword == '' || !this.state.isAccepted){
             return (
                 <Button disabled style={{ borderRadius: 25, width: 130, height: 50,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#999', marginBottom: 20 }}>
                     <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
@@ -219,12 +220,13 @@ class Register extends Component {
     }
 
     render() {
+        console.log(this.state.isAccepted);
         return (
             <Container>
                 <Header style={{zIndex: 9999999, marginTop: 40, height: 10, backgroundColor: 'transparent', borderBottomWidth: 0}} noShadow>
                     <Right style={{ width: '100%', flexDirection: 'row', paddingHorizontal: 20, alignItems: 'center'}}>
                         <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate(this.props.user ? 'notifications' : 'login')}>
-                            <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25,  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
+                            <Image source={I18nManager.isRTL ? require('../../assets/images/colored_back.png') : require('../../assets/images/back.png')} style={{ width: 25, height: 25,  transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </TouchableOpacity>
                     </Right>
                 </Header>
@@ -304,6 +306,11 @@ class Register extends Component {
                                     <TouchableOpacity onPress={() => this.setState({ isTrader: !this.state.isTrader })} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center'  }}>
                                         <CheckBox onPress={() => this.setState({ isTrader: !this.state.isTrader })} checked={this.state.isTrader} style={{marginHorizontal: 20, borderRadius: 2}} color='#26b5c4'/>
                                         <Text style={{fontFamily: 'cairo', color: '#6d6c72'}}>{ i18n.t('registerAsTrader') }</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={() => this.setState({ isAccepted: !this.state.isAccepted })} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center'  }}>
+                                        <CheckBox onPress={() => this.setState({ isAccepted: !this.state.isAccepted })} checked={this.state.isAccepted} style={{marginHorizontal: 20, borderRadius: 2}} color='#26b5c4'/>
+                                        <Text style={{fontFamily: 'cairo', color: '#6d6c72'}}>{ i18n.t('acceptTerms') }</Text>
                                     </TouchableOpacity>
                                 </Form>
                                 <View style={{marginTop: 30, justifyContent: 'center', alignItems: 'center'}}>

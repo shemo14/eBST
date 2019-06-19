@@ -26,7 +26,6 @@ class CategoryProducts extends Component {
             selectedCountry: undefined,
             starCount: null,
             isGrid:true,
-            itemId:this.props.navigation.state.params.id,
             productsType:this.props.navigation.state.params.type,
             name:this.props.navigation.state.params.name,
             products:[],
@@ -36,6 +35,8 @@ class CategoryProducts extends Component {
             fadeAnim: new Animated.Value(0),
             availabel: 0,
             countries: [],
+            categories: [],
+            selectedCategory: undefined,
             type: null,
         }
     }
@@ -43,10 +44,10 @@ class CategoryProducts extends Component {
     componentWillMount() {
         AsyncStorage.getItem('deviceID').then(deviceID => {
             axios({
-                url: CONST.url + 'category_products',
+                url: CONST.url + 'products',
                 method: 'POST',
                 headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
-                data: {category_id: this.state.itemId, device_id: deviceID, type: this.state.productsType, lang: this.props.lang}
+                data: {device_id: deviceID, type: this.state.productsType, lang: this.props.lang}
             }).then(response => {
                 this.setState({products: response.data.data, status: response.data.status})
             })
@@ -55,10 +56,14 @@ class CategoryProducts extends Component {
         axios.post(CONST.url + 'countries', { lang: this.props.lang }).then(response => {
             this.setState({ countries: response.data.data })
         });
+
+        axios.post(CONST.url + 'categories', { lang: this.props.lang }).then(response => {
+            this.setState({ categories: response.data.data })
+        })
     }
 
     renderType(){
-        if (this.state.productsType === 2){
+        if (this.state.productsType === 3){
             return(
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20, alignItems: 'center', width: '80%' }}>
                     <TouchableOpacity onPress={() => this.setFilterType(1)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
@@ -75,7 +80,6 @@ class CategoryProducts extends Component {
     }
 
     componentWillReceiveProps(newProps){
-        console.log('this is my category new props ...', newProps);
         this.setState({ name: newProps.navigation.state.params.name });
     }
 
@@ -115,7 +119,7 @@ class CategoryProducts extends Component {
 
     renderItems = (item) => {
         return (
-            <ProductBlock data={item} navigation={this.props.navigation} />
+            <ProductBlock type={this.state.productsType} data={item} navigation={this.props.navigation} />
         );
     }
 
@@ -169,7 +173,7 @@ class CategoryProducts extends Component {
     }
 
     productFilter(){
-        this.setState({status: null, refreshed: true, visibleModal: null})
+        this.setState({status: null, refreshed: true, visibleModal: null});
 
         AsyncStorage.getItem('deviceID').then(deviceID => {
             axios({
@@ -180,7 +184,8 @@ class CategoryProducts extends Component {
                     country_id: this.state.selectedCountry,
                     type: this.state.type,
                     rate: this.state.starCount,
-                    category_id: this.state.itemId,
+                    category_id: this.state.selectedCategory,
+                    lang: this.props.lang,
                     device_id: deviceID,
                     product_type: this.state.productsType
                 }
@@ -199,7 +204,12 @@ class CategoryProducts extends Component {
         console.log('this is onWillFocus', payload)
         const itemId = payload.action.params.id;
         const productsType = payload.action.params.type;
-        this.setState({ itemId, productsType, status: null })
+
+        if (productsType)
+            this.setState({ itemId, productsType, status: null });
+        else
+            this.setState({ itemId, status: null });
+
         this.componentWillMount()
     }
 
@@ -226,8 +236,8 @@ class CategoryProducts extends Component {
                         <Text style={{ color: '#fff', textAlign: 'center', marginLeft: 20, fontSize: 18, fontFamily: 'cairo' }}>{ this.state.name }</Text>
                         </Body>
                         <Animated.View style={{ width: this.state.fadeAnim, height: 40, borderRadius: 30, flexDirection: 'row' ,backgroundColor: 'rgba(255, 255, 255, 1)', borderWidth: this.state.availabel ? 1 : 0, marginTop: 32, position: 'absolute', borderColor: '#e2b705', marginLeft: 10 }}>
-                            <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: 30 }}>
-                                <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0 }} />
+                            <TouchableOpacity onPress={() => this.setAnimate()} style={{ alignItems: 'center', justifyContent: 'center', left: 5, top: 5, width: 30, height: this.state.availabel ? 30 : 0 }}>
+                                <Icon name={'close'} type={'EvilIcons'} style={{ color: '#acabae', fontSize: this.state.availabel ? 25 : 0, }} />
                             </TouchableOpacity>
                             <Input onChangeText={(search) => this.setState({ search })} onKeyPress={() => this.search()} placeholder={i18n.t('search') + '...'} placeholderTextColor={'#acabae'} style={{ width: '90%', height: this.state.availabel ? 35 : 0, paddingHorizontal: 5, backgroundColor: 'transparent', marginHorizontal: 3, color: '#6d6c72', fontFamily: 'cairo', textAlign: I18nManager.isRTL ? 'right' : 'left' }} />
                         </Animated.View>
@@ -275,7 +285,7 @@ class CategoryProducts extends Component {
                             this.state.products.map(
                                 (product , i) => {
                                     return(
-                                        <ProductRow key={i} data={product} navigation={this.props.navigation} />
+                                        <ProductRow type={this.state.productsType} key={i} data={product} navigation={this.props.navigation} />
                                     )
                                 }
                             )
@@ -284,7 +294,7 @@ class CategoryProducts extends Component {
                 </Content>
 
                 <Modal isVisible={this.state.visibleModal === 1} onBackdropPress={() => this.setState({ visibleModal: null })}>
-                    <View style={{ width: '115%', position: 'absolute', top: -20, backgroundColor: '#26b5c4', justifyContent: 'center', alignItems: 'center', height: 300, alignSelf: 'center' }}>
+                    <View style={{ width: '115%', position: 'absolute', top: -20, backgroundColor: '#26b5c4', justifyContent: 'center', alignItems: 'center', height: 320, alignSelf: 'center' }}>
                         <View style={{ width: '100%', height: 40, top: -8, position: 'absolute', flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginTop:  Platform.OS === 'ios' ? 35 : 15 }} noShadow>
                             <TouchableOpacity onPress={() => this.productFilter()}>
                                 <Image source={require('../../assets/images/check_mark.png')} style={{ width: 30, height: 30 }} resizeMode={'contain'} />
@@ -296,19 +306,40 @@ class CategoryProducts extends Component {
                         </View>
                         <View style={{ alignItems: 'center', marginTop: 20 }}>
                             <View>
-                                <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#fff', height: 50, marginTop: 5, borderRadius: 30, width: '80%', paddingHorizontal: '30%' }} regular >
+                                <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#fff', height: 50, marginTop: 10, borderRadius: 30, width: '80%', paddingHorizontal: '30%' }} regular >
                                     <Picker
                                         mode="dropdown"
                                         style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", fontWeight: 'normal', color: "#fff" }}
                                         placeholder={i18n.t('countries')}
                                         placeholderStyle={{ color: "#fff" }}
-                                        placeholderIconColor="#fff"
+                                        textStyle={{ color: "#fff" }}
                                         selectedValue={this.state.selectedCountry}
                                         onValueChange={(value) => this.setState({ selectedCountry: value })}
                                     >
                                         {
                                             this.state.countries.map((country, i) => (
                                                 <Picker.Item key={i} label={country.name} value={country.id} />
+                                            ))
+                                        }
+                                    </Picker>
+                                    <Image source={require('../../assets/images/white_dropdown.png')} style={{ width: 20, height: 20, right: 10 }} resizeMode={'contain'} />
+                                </Item>
+                            </View>
+
+                            <View>
+                                <Item style={{ borderWidth: 1, paddingRight: 0, paddingLeft: 10, borderColor: '#fff', height: 50, marginTop: 10, borderRadius: 30, width: '80%', paddingHorizontal: '30%' }} regular >
+                                    <Picker
+                                        mode="dropdown"
+                                        style={{ width: width - 100, backgroundColor: 'transparent', fontFamily: "cairoBold", fontWeight: 'normal', color: "#fff" }}
+                                        placeholder={i18n.t('categories')}
+                                        placeholderStyle={{ color: "#fff" }}
+                                        textStyle={{ color: "#fff" }}
+                                        selectedValue={this.state.selectedCategory}
+                                        onValueChange={(value) => this.setState({ selectedCategory: value })}
+                                    >
+                                        {
+                                            this.state.categories.map((category, i) => (
+                                                <Picker.Item key={i} label={category.name} value={category.id} />
                                             ))
                                         }
                                     </Picker>
@@ -337,7 +368,7 @@ class CategoryProducts extends Component {
                             {/*</View>*/}
 
                         </View>
-                        <View style={{ justifyContent: 'center', alignItems: 'center', width: '80%', borderRadius: 30, borderColor: '#fff', borderWidth: 1, height: 50, marginTop: 20 }}>
+                        <View style={{ justifyContent: 'center', alignItems: 'center', width: '80%', borderRadius: 30, borderColor: '#fff', borderWidth: 1, height: 50, marginTop: 10 }}>
                             <StarRating
                                 disabled={false}
                                 maxStars={5}

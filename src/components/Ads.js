@@ -60,7 +60,7 @@ class Ads extends Component {
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', justifyContent: 'center', height: 400, }}>
+                <View style={{ alignItems: 'center', justifyContent: 'center', height: height - 170, alignSelf:'center' , backgroundColor:'#fff' }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );

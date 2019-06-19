@@ -20,7 +20,8 @@ class AddAds extends Component {
             imageId: null,
             refreshed: false,
             base64: [],
-            isSubmitted: false
+            isSubmitted: false,
+            adsPrice: null
         }
     }
 
@@ -49,6 +50,11 @@ class AddAds extends Component {
         this.setState({ photos, refreshed: !this.state.refreshed, imageId: null })
     }
 
+    componentWillMount() {
+        axios.get(CONST.url + 'ads_price').then(response => {
+            this.setState({ adsPrice: response.data.data.ads_price })
+        })
+    }
 
     renderItems = (item, imageId) => {
 
@@ -169,6 +175,9 @@ class AddAds extends Component {
                 </Header>
 
                 <Content style={{ marginBottom:20}}>
+                    <View style={{ width: '95%', alignItems: 'center', margin: 10, alignSelf: 'center', borderWidth: 1, borderColor: '#6d6c72', padding: 5, borderRadius: 5 }}>
+                        <Text style={{ fontFamily :'cairo' , color:'#6d6c72', textAlign: 'center' }}>{ i18n.t('adsPrice') + ' ' + this.state.adsPrice + ' ' + i18n.t('RS') }</Text>
+                    </View>
                     <View style={{ padding: 10 }}>
                         <FlatList
                             data={this.state.photos}

@@ -59,14 +59,13 @@ class ProductBlock extends Component {
 
     
     render() {
-        console.log(this.props.data)
         return (
             <View style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, margin: 5, overflow: 'hidden' }}>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })} style={{ width: '100%' }}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id, comeFrom: this.props.navigation.state.routeName, type: this.props.type })} style={{ width: '100%' }}>
                     <Image source={{uri:this.props.data.image}} resizeMode={'contain'} style={{ width: '100%', height: 100, flex: 1 }} />
                 </TouchableOpacity>
                 <View style={{ width: '100%', padding: 5 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id })}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id, comeFrom: this.props.navigation.state.routeName, type: this.props.type  })}>
                         <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 17, alignSelf: 'flex-start' }}>{ this.props.data.name ? this.props.data.name.substring(0, 15) + '...' : ''}</Text>
                     </TouchableOpacity>
                     <View style={{ alignSelf: 'flex-start' }}>
@@ -80,8 +79,8 @@ class ProductBlock extends Component {
                             starStyle={{ color: '#26b5c4', marginHorizontal: 1 }}
                         />
                     </View>
-                    <View style={{ flexDirection: 'row', flex: 1, width: '100%' }}>
-                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', flex: 1, alignSelf: 'flex-start' }}>{ this.renderPrice(this.props.data.type, this.props.data.type_text) }</Text>
+                    <View style={{ flexDirection: 'row', flex: 1, width: '100%', justifyContent: 'space-between' }}>
+                        <Text style={{ color: '#e2b705', fontFamily: 'cairo', alignSelf: 'flex-start' }}>{ this.renderPrice(this.props.data.type, this.props.data.type_text) }</Text>
                         <TouchableOpacity onPress={() => this.setFav()} style={{ flex: 1, alignSelf: 'flex-start' }}>
                             <Image source={this.renderImage()} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />
                         </TouchableOpacity>

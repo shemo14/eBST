@@ -45,6 +45,8 @@ import ConfirmOrder from "../components/ConfirmOrder";
 import AcceptOrder from "../components/AcceptOrder";
 import ConfirmCode from "../components/ConfirmCode";
 import BestProducts from "../components/BestProducts";
+import Stores from "../components/Stores";
+import StoreProducts from "../components/StoreProducts";
 
 const width = Dimensions.get('window').width;
 const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
@@ -69,7 +71,9 @@ const DrawerNavigator = createDrawerNavigator({
     addProduct: AddProduct,
     editProduct: EditProduct,
     acceptOrder:AcceptOrder,
-    bestProducts:BestProducts
+    bestProducts:BestProducts,
+    storeProducts:StoreProducts,
+    stores:Stores
 }, {
     nitialRouteName: 'home',
     drawerPosition: I18nManager.isRTL ?'right' : 'left',
@@ -187,6 +191,13 @@ const AppNavigator = createStackNavigator({
             gesturesEnabled: false
         }
     },
+    stores:{
+        screen: Stores,
+        navigationOptions: {
+            header: null,
+            gesturesEnabled: false
+        }
+    },
     addAds:{
         screen: AddAds,
         navigationOptions: {
@@ -236,6 +247,13 @@ const AppNavigator = createStackNavigator({
             gesturesEnabled: false
         }
     },
+    storeProducts :{
+        screen: StoreProducts,
+        navigationOptions: {
+            header: null,
+            gesturesEnabled: false
+        }
+    },
     editProduct:{
         screen: EditProduct,
         navigationOptions: {
@@ -252,6 +270,13 @@ const AppNavigator = createStackNavigator({
     },
     editProfile:{
         screen: EditProfile,
+        navigationOptions: {
+            header: null,
+            gesturesEnabled: false
+        }
+    },
+    profile:{
+        screen: Profile,
         navigationOptions: {
             header: null,
             gesturesEnabled: false

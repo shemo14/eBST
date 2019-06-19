@@ -109,7 +109,7 @@ class IncomingOffers extends Component {
                         <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('incomingOffers') }</Text>
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
-                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.goBack()}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate('offers')}>
                             <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Left>
@@ -134,8 +134,8 @@ class IncomingOffers extends Component {
                     </View>
                     <View style={{padding:20 , marginTop:-70}}>
                         <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:14 , marginBottom:0 , alignSelf:'flex-start' }}>{this.state.productDet.name}</Text>
-                        <Text style={{color:'#26b5c4' ,  fontFamily:'cairo', fontSize:14, marginBottom:5 , alignSelf:'flex-start' }}>{ i18n.t('productPrice') } : {this.state.productDet.price}  { i18n.t('RS') }</Text>
-                        <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:14 ,lineHeight:20 , alignSelf:'flex-start' }}>{this.state.productDet.desc}</Text>
+                        <Text style={{color:'#26b5c4' ,  fontFamily:'cairo', fontSize:14, marginBottom:5 , alignSelf:'flex-start', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{ i18n.t('productPrice') } : {this.state.productDet.price}  { i18n.t('RS') }</Text>
+                        <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:14 ,lineHeight:20 , alignSelf: 'flex-start', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{this.state.productDet.desc}</Text>
                     
                         <View style={{marginTop:10}}>
                             <List style={{ width: '100%' }}>
@@ -179,12 +179,12 @@ class IncomingOffers extends Component {
                                         <Right style={{ flex: 0 , right:5 , alignSelf:'flex-start' , top:-15}}>
                                             <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
-                                                <Image source={require('../../assets/images/profile.jpg')} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+                                                <Image source={{ uri: this.state.offerDet.avatar }} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
                                         </Right>
                                         <Body style={{ marginHorizontal:10, alignSelf:'flex-start' , top:-10}}>
                                             <View style={{flexDirection:'row'}}>
-                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>اسم المبادل: </Text>
+                                                <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('exchanger') }: </Text>
                                                 <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.name}</Text>
                                             </View>
                                             <View style={{flexDirection:'row'}}>

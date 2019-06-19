@@ -25,6 +25,7 @@ const ar = {
     'categories': 'الأقسام',
     'tours': 'جولات',
     'products': 'المنتجات',
+    'exchanger': 'المبادل',
     'MyProducts': 'منتجاتي',
     'sr': 'ر.س',
     'productDet': 'تفاصيل المنتج',
@@ -90,7 +91,7 @@ const ar = {
     'terms' : 'الشروط و الاحكام',
     'settings' : 'الاعدادات',
     'confirmCode' : 'كود التفعيل',
-    'countries' : 'الدول',
+    'countries' : 'المناطق',
     'setOffer' : 'اضافة عرض',
     'guest': 'زائر',
     'update': 'تعديل',
@@ -102,6 +103,7 @@ const ar = {
     'registerAsTrader': 'التسجيل كتاجر',
     'codeNotCorrect' : 'كود التفعيل غير صحيح',
     'emailNotCorrect': 'البريد الالكتروني غير صحيح',
+    'adsPrice' : 'سعر الاعلان',
     'confirmSetOffer': 'تم ارسال العرض بنجاح',
     'offerType' : 'نوع العرض',
     'offerPrice' : 'عرش السعر',
@@ -109,6 +111,7 @@ const ar = {
     'accept' : 'قبول',
     'refuse' : 'رفض',
     'bestShow' : 'الاكثر تصفح',
+    'acceptTerms' : 'الموافقة علي الشروط و الاحكام',
     'myProducts': 'منتجاتي',
 }
 

@@ -35,7 +35,9 @@ class ProductDetails extends Component {
             commentReport: '',
             type: null,
             isSubmitted: false,
-            views: 0
+            views: 0,
+            comeFrom: this.props.navigation.state.params.comeFrom,
+            categoryType: this.props.navigation.state.params.type,
         };
     }
 
@@ -241,7 +243,11 @@ class ProductDetails extends Component {
     onFocus(payload){
         console.log('will focus',payload)
         const id = payload.action.params.id;
-        this.setState({ id, status: null })
+        if (payload.action.params.comeFrom)
+            this.setState({ id, status: null, comeFrom: payload.action.params.comeFrom })
+        else
+            this.setState({ id, status: null })
+
         this.componentWillMount()
     }
 
@@ -263,7 +269,7 @@ class ProductDetails extends Component {
                             <Image source={require('../../assets/images/menu.png')} style={{ width: 25, height: 25 }} resizeMode={'contain'} />
                         </Button>
                         {/* <Text style={{ textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo' }}>{ this.state.product.name }</Text> */}
-                        <Button transparent onPress={() => this.goBack()}>
+                        <Button transparent onPress={() => this.props.navigation.navigate(this.state.comeFrom, { id: this.state.id })}>
                             <Image source={require('../../assets/images/back.png')} style={{ width: 25, height: 25 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </Button>
                     </View>
