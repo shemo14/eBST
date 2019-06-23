@@ -24,6 +24,7 @@ const en = {
     'confirmOrder': 'Confirm Order',
     'verifyPassword': 'Password and password confirmation do not match',
     'username': 'username',
+    'maxAuction': 'Highest bidder for this product',
     'passwordLenght' : 'password less then 6 letters',
     'email': 'email address',
     'visitorRegister': 'register as a visitor',

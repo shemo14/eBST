@@ -156,14 +156,14 @@ class Ads extends Component {
                 <Modal isVisible={this.state.offerTwoModal} onBackdropPress={()=> this.setState({ offerTwoModal : false })}>
                     <View style={{ flex: 1 , padding:10 , position:'absolute' , width:'100%' ,overflow:'hidden'}}>
                         <View style={{width:'100%' ,  overflow:'hidden'}}>
-                            <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50 , bottom:-15}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12 , bottom:-15}} style={{ width: '100%', height: 180, overflow: 'hidden' }} showsButtons={false} autoplay={true}>
+                            <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50 , bottom:-15}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12 , bottom:-15}} style={{ width: '100%', height: 200, overflow: 'hidden' }} showsButtons={false} autoplay={true}>
                                 {
                                     this.state.adsImgs.map(
                                         (img , i) => {
                                             return(
                                                 <View key={i} style={styles.slide}>
                                                     <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
-                                                    <Image source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
+                                                    <Image source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'contain'} />
                                                 </View>
                                             )
                                         }

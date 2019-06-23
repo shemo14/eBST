@@ -111,29 +111,18 @@ class Login extends Component {
 
         let finalStatus = existingStatus;
 
-        alert('finalStatus 1 ....' + finalStatus);
-
         if (existingStatus !== 'granted') {
             const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
             finalStatus = status;
         }
 
-        alert('finalStatus 2 ....' + finalStatus);
-
-
-        let token = await Notifications.getDevicePushTokenAsync();
-        alert('dddd .. '  + token);
-
         if (finalStatus !== 'granted') {
             return;
         }
 
-        console.log(Notifications);
-
         token = await Notifications.getExpoPushTokenAsync();
         this.setState({ token, userId: null })
         AsyncStorage.setItem('deviceID', token);
-        alert('token 2 ...' + token);
 
         console.log('app lang', this.props.lang);
 

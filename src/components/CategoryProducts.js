@@ -68,11 +68,11 @@ class CategoryProducts extends Component {
                 <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 20, alignItems: 'center', width: '80%' }}>
                     <TouchableOpacity onPress={() => this.setFilterType(1)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
                         <CheckBox onPress={() => this.setFilterType(1)} checked={this.state.type === 1 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
-                        <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مزايدات</Text>
+                        <Text style={{ fontFamily: 'cairo', color: '#fff' }}>{ i18n.t('auction') }</Text>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.setFilterType(2)} style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, alignSelf: 'center' }}>
                         <CheckBox onPress={() => this.setFilterType(2)} checked={this.state.type === 2 ? true : false} style={{ marginHorizontal: 20, borderRadius: 2 }} color='#fff' />
-                        <Text style={{ fontFamily: 'cairo', color: '#fff' }}>مبادلات</Text>
+                        <Text style={{ fontFamily: 'cairo', color: '#fff' }}>{ i18n.t('exchange') }</Text>
                     </TouchableOpacity>
                 </View>
             )

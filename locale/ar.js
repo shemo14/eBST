@@ -29,6 +29,7 @@ const ar = {
     'MyProducts': 'منتجاتي',
     'sr': 'ر.س',
     'productDet': 'تفاصيل المنتج',
+    'maxAuction': 'اعلي قيمه مزايده تمت',
     'comments': 'التعليقات',
     'report': 'ابلاغ',
     'order': 'اطلب',

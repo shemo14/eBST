@@ -35,7 +35,8 @@ class SetOffer extends Component {
             isValid: true,
             type: this.props.navigation.state.params.type,
             id: this.props.navigation.state.params.id,
-            isSubmitted: false
+            isSubmitted: false,
+            maxAuction: null
         }
     }
 
@@ -46,6 +47,12 @@ class SetOffer extends Component {
     async componentDidMount(){
         await Permissions.askAsync(Permissions.CAMERA);
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    }
+
+    componentWillMount(){
+        axios.post(CONST.url + 'max_auction', { product_id: this.state.id }).then(response => {
+            this.setState({ maxAuction: response.data.data.max_auction })
+        })
     }
 
     renderSubmit(){
@@ -84,6 +91,7 @@ class SetOffer extends Component {
     }
 
     isNull = (val) => {
+        console.log(val)
         if (val === '' || val === ' ' || val.length === 0){
             return null;
         }
@@ -100,7 +108,7 @@ class SetOffer extends Component {
             data: {
                 name: this.isNull(this.state.name),
                 desc: this.isNull(this.state.desc),
-                price: this.isNull(this.state.price),
+                price: this.state.type == 2 ? this.isNull(this.state.auctionPrice) : this.isNull(this.state.price),
                 lang: this.props.lang,
                 type: this.state.type,
                 product_id: this.state.id,
@@ -250,7 +258,7 @@ class SetOffer extends Component {
                                     <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.nameStatus === 1 ? '#26b5c4' : '#c5c5c5', height: 50, padding: 5, flexDirection: 'row', marginTop: 20    }}>
                                         <Item floatingLabel style={{ borderBottomWidth: 0, top: -18, marginTop: 0 ,position:'absolute', width:'88%', paddingHorizontal: 10 }} bordered>
                                             <Label style={{ top:9, backgroundColor: '#fff', alignSelf: 'flex-start', fontFamily: 'cairo', color: '#acabae', fontSize: 13 }}>{ i18n.t('extraPrice') }</Label>
-                                            <Input value={this.state.extraPrice} onChangeText={(extraPrice) => this.setState({ extraPrice })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')}  style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
+                                            <Input value={this.state.price} onChangeText={(price) => this.setState({ price })} keyboardType={'number-pad'} onBlur={() => this.unActiveInput('extraPrice')} onFocus={() => this.activeInput('extraPrice')}  style={{ width: 200, color: '#26b5c4', textAlign: I18nManager.isRTL ? 'right' : 'left', fontSize: 15, top: 17 }}  />
                                         </Item>
                                     </View>
                                 ) : <View />
@@ -269,9 +277,13 @@ class SetOffer extends Component {
         const type = payload.action.params.type;
         this.setState({ id, type, photos: [], refreshed: false, name: '', nameStatus: 0, price: '', priceStatus: 0, extraPrice: '', extraPriceStatus: 0, auctionPrice: '', auctionPriceStatus: 0, desc: '', descStatus: 0, isValid: true, isSubmitted: false });
         base64   = []
+        this.componentWillMount();
     }
 
     render() {
+        console.log(this.state.price);
+
+
         if (this.state.imageBrowserOpen) {
             return(<ImageBrowser base64={true} max={5} callback={this.imageBrowserCallback}/>);
         }else if (this.state.cameraBrowserOpen) {
@@ -301,6 +313,14 @@ class SetOffer extends Component {
                 </Header>
                 <Content>
                     <KeyboardAvoidingView behavior={'padding'} style={{width:'100%', height: null, flex: 1,}}>
+                        {
+                            this.state.type ? 
+                            (
+                                <View style={{ width: '95%', alignItems: 'center', margin: 10, alignSelf: 'center', borderWidth: 1, borderColor: '#6d6c72', padding: 5, borderRadius: 5 }}>
+                                    <Text style={{ fontFamily :'cairo' , color:'#6d6c72', textAlign: 'center' }}>{ i18n.t('maxAuction') + ' ' + this.state.maxAuction + ' ' + i18n.t('RS') }</Text>
+                                </View>
+                            ) : <View />
+                        }
                         { this.renderForm() }
                         <View style={{ marginTop: 20 , alignItems: 'center', justifyContent: 'center' }}>
                             { this.renderSubmit() }
