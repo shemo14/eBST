@@ -12,6 +12,8 @@ import {NavigationEvents} from "react-navigation";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
+
 class Settings extends Component {
     constructor(props){
         super(props);
@@ -79,12 +81,19 @@ class Settings extends Component {
     onFocus(){
         this.componentWillMount()
     }
+    returnHeaderMarginTop(){
+        if(isIphoneX)
+            return -45;
+        else if(Platform.OS == 'ios')
+            return -18;
+        else return 0;    
+    }
 
     render() {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <NavigationEvents onWillFocus={() => this.onFocus()} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: this.returnHeaderMarginTop() }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>

@@ -10,8 +10,12 @@ import Modal from "react-native-modal";
 import Swiper from 'react-native-swiper';
 import {connect} from "react-redux";
 import {NavigationEvents} from "react-navigation";
+import ImageZoom from 'react-native-image-pan-zoom';
+
 
 const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
+
 class Ads extends Component {
     constructor(props){
         super(props);
@@ -114,11 +118,19 @@ class Ads extends Component {
         this.componentWillMount()
     }
 
+    returnHeaderMarginTop(){
+        if(isIphoneX)
+            return -45;
+        else if(Platform.OS == 'ios')
+            return -18;
+        else return 0;    
+    }
+
     render() {
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10 }}>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0  }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: this.returnHeaderMarginTop()  }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -156,14 +168,20 @@ class Ads extends Component {
                 <Modal isVisible={this.state.offerTwoModal} onBackdropPress={()=> this.setState({ offerTwoModal : false })}>
                     <View style={{ flex: 1 , padding:10 , position:'absolute' , width:'100%' ,overflow:'hidden'}}>
                         <View style={{width:'100%' ,  overflow:'hidden'}}>
-                            <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50 , bottom:-15}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12 , bottom:-15}} style={{ width: '100%', height: 200, overflow: 'hidden' }} showsButtons={false} autoplay={true}>
+                            <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50 , bottom:-15}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12 , bottom:-15}} style={{ width: '100%', height: 400, overflow: 'hidden' }} showsButtons={false} autoplay={true}>
                                 {
                                     this.state.adsImgs.map(
                                         (img , i) => {
                                             return(
                                                 <View key={i} style={styles.slide}>
-                                                    <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
-                                                    <Image source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'contain'} />
+                                                    <ImageZoom cropWidth={Dimensions.get('window').width}
+                                                    cropHeight={Dimensions.get('window').height}
+                                                    imageWidth={Dimensions.get('window').width}
+                                                    enableSwipeDown={true}
+                                                    onSwipeDown={()=> this.setState({ offerTwoModal : false })}
+                                                    imageHeight={300}>
+                                                        <Image enableHorizontalBounce={true} source={{uri:img}} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'contain'} />
+                                                    </ImageZoom>
                                                 </View>
                                             )
                                         }

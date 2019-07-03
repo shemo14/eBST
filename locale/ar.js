@@ -114,6 +114,7 @@ const ar = {
     'bestShow' : 'الاكثر تصفح',
     'acceptTerms' : 'الموافقة علي الشروط و الاحكام',
     'myProducts': 'منتجاتي',
+    'skip': 'تخطي',
 }
 
 export default ar;

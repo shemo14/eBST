@@ -112,7 +112,8 @@ const en = {
     'accept' : 'accept',
     'refuse' : 'refuse',
     'acceptTerms' : 'Accept Terms And Conditions',
-    'bestShow' : 'Best Browsing'
+    'bestShow' : 'Best Browsing',
+    'skip': 'skip',
 }
 
 export default en;

@@ -47,6 +47,7 @@ import ConfirmCode from "../components/ConfirmCode";
 import BestProducts from "../components/BestProducts";
 import Stores from "../components/Stores";
 import StoreProducts from "../components/StoreProducts";
+import Intro from "../components/Intro";
 
 const width = Dimensions.get('window').width;
 const CustomDrawerContentComponent = (props) => (<CustomDrawer { ...props }/>);
@@ -86,6 +87,7 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
+    
     initScreen:{
         screen: InitScreen,
         navigationOptions: {
@@ -123,6 +125,13 @@ const AppNavigator = createStackNavigator({
     },
     forgetPassword:{
         screen: ForgetPassword,
+        navigationOptions: {
+            header: null,
+            gesturesEnabled: false
+        }
+    },
+    intro:{
+        screen: Intro,
         navigationOptions: {
             header: null,
             gesturesEnabled: false

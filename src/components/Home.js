@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions , I18nManager, ActivityIndicator} from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, Dimensions , I18nManager, ActivityIndicator, Platform} from "react-native";
 import { Container, Content, Button, Footer, Icon, Header } from 'native-base'
 import Swiper from 'react-native-swiper';
 import FooterSection from './Footer';
@@ -10,10 +10,14 @@ import { DoubleBounce } from 'react-native-loader';
 import {NavigationEvents} from "react-navigation";
 import {connect} from "react-redux";
 import Modal from "react-native-modal";
+import ImageZoom from 'react-native-image-pan-zoom';
+
 
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
+
 class Home extends Component {
     constructor(props){
         super(props);
@@ -73,7 +77,7 @@ class Home extends Component {
                     </View>
                 </Header>
                 { this.renderLoader() }
-                <Content style={{ zIndex: -99, marginTop: -60 }}>
+                <Content style={{ zIndex: -99, marginTop:  isIphoneX ? -85 : -60 }}>
                     <View>
                         <Swiper key={this.state.adsImgs.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{ width: '100%', height: 300, flex: 1 }} showsButtons={false} autoplay={true}>
                             {
@@ -86,7 +90,7 @@ class Home extends Component {
                             }
                         </Swiper>
                         <View style={{ top: -110, width: '100%', height: 100 }}>
-                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>
+                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'cover'}/>
                         </View>
                     </View>
                     <View style={{ alignItems: 'center', top: -140, position: 'relative', height: 210, left: 10 }}>
@@ -114,10 +118,19 @@ class Home extends Component {
                     <View style={{ flex: 1 , padding:10 , position:'absolute' , width:'100%' ,overflow:'hidden'}}>
                         <View style={{width:'100%' ,  overflow:'hidden'}}>
                             <View style={styles.slide}>
-                                <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
                                 {
                                     this.state.imgUri ?
-                                        ( <Image source={{ uri: this.state.imgUri }} style={{ width: '100%', height: 300 }} resizeMode={'cover'} /> ) :
+                                        ( 
+                                            <ImageZoom cropWidth={Dimensions.get('window').width}
+                                                    cropHeight={Dimensions.get('window').height}
+                                                    imageWidth={Dimensions.get('window').width}
+                                                    enableSwipeDown={true}
+                                                    onSwipeDown={()=> this.setState({ modal : false, imgUri: null })}
+                                                    imageHeight={300}>
+                                                <Image source={{ uri: this.state.imgUri }} style={{ width: '100%', height: 300 }} resizeMode={'contain'} /> 
+                                            </ImageZoom>
+                                        
+                                        ) :
                                         (<View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
                                             <ActivityIndicator size="large" color="#4fb7c3" />
                                         </View>)

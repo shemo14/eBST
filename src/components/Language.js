@@ -14,7 +14,7 @@ class Language extends Component {
 
     onChooseLang(lang) {
         this.props.chooseLang(lang);
-        this.props.navigation.navigate('login');
+        this.props.navigation.navigate('intro');
     };
 
 

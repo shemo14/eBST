@@ -13,6 +13,7 @@ import {NavigationEvents} from "react-navigation";
 
 const height = Dimensions.get('window').height;
 const width = Dimensions.get('window').width;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
 
 class IncomingOffers extends Component {
     constructor(props){

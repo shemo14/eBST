@@ -110,12 +110,19 @@ class Categories extends Component {
         this.setState({ type, status: null })
         this.componentWillMount()
     }
+    returnHeaderMarginTop(){
+        if(isIphoneX)
+            return -45;
+        else if(Platform.OS == 'ios')
+            return -18;
+        else return 0;    
+    }
 
     render() {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: this.returnHeaderMarginTop()}} noShadow>
                     <ImageBackground source={  I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>

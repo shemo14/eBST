@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity , I18nManager, Platform, ImageEditor} from "react-native";
+import { View, Text, Image, ImageBackground, FlatList, ImageStore, Dimensions, TouchableOpacity , I18nManager, Platform, ImageEditor} from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
 import { Permissions } from "expo";
@@ -10,6 +10,9 @@ import { DoubleBounce } from 'react-native-loader';
 import {connect} from "react-redux";
 
 let base64   = [];
+const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
+
 class AddAds extends Component {
     constructor(props){
         super(props);
@@ -145,6 +148,13 @@ class AddAds extends Component {
             </Button>
         );
     }
+    returnHeaderMarginTop(){
+        if(isIphoneX)
+            return -45;
+        else if(Platform.OS == 'ios')
+            return -18;
+        else return 0;    
+    }
 
     render() {
         if (this.state.imageBrowserOpen) {
@@ -156,7 +166,7 @@ class AddAds extends Component {
 
         return (
             <Container style={{ paddingBottom: 20, marginBottom: 10, backgroundColor: 'transparent' }}>
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 , borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 , borderBottomWidth: 0, marginTop: this.returnHeaderMarginTop()}} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>

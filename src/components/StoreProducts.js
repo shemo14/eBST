@@ -183,15 +183,17 @@ class StoreProducts extends Component {
         return (<Image source={require('../../assets/images/gray_fav.png')} style={{ width: 20, height: 20, alignSelf: 'flex-end', flex: 0.5 }} resizeMode={'contain'} />);
     }
 
-    onFocus(){
-        this.setState({ status: null })
+    onFocus(payload){
+        console.log(payload);
+        const id = payload.action.params.id;
+        this.setState({ status: null, id })
         this.componentWillMount()
     }
 
     render() {
         return (
             <Container>
-                <NavigationEvents onWillFocus={() => this.onFocus()} />
+                <NavigationEvents onWillFocus={(payload) => this.onFocus(payload)} />
                 <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 45, height: Platform.OS === 'ios' ? 50 : 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
                     <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
                         <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.openDrawer()}>

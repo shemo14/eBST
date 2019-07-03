@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import { Image, ImageBackground, Dimensions } from "react-native";
+import { Image, ImageBackground, Dimensions, Platform } from "react-native";
 import {  Button, Footer, Icon, FooterTab } from 'native-base'
 import {connect} from "react-redux";
 
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
+
 class FooterSection extends Component {
     constructor(props){
         super(props);
@@ -29,7 +32,7 @@ class FooterSection extends Component {
             return(
                 <Button transparent>
                     <Image source={require('../../assets/images/border_blue.png')} style={{ width: 40, height: 40 }} resizeMode={'contain'}/>
-                    <Image style={{ width: 24, height: 24, position: 'absolute', left: 28}} resizeMode={'contain'} source={activePath}/>
+                    <Image style={{ width: 24, height: 24, position: 'absolute', left: isIphoneX ? 35 : 28}} resizeMode={'contain'} source={activePath}/>
                 </Button>
             );
         }
@@ -59,19 +62,6 @@ class FooterSection extends Component {
 
         return (
                 <Footer style={{ backgroundColor: 'fff' }}>
-                    {/* <ImageBackground style={{ width: width + 15, height: 65, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 30, paddingTop: 5 }} resizeMode={'stretch'} source={require('../../assets/images/footer.png')} >
-                        {  this.renderFooterTabs('home') }
-
-                        {  this.renderFooterTabs('offers') }
-
-                        <Button onPress={ () => this.props.navigation.navigate('addProduct') } style={{ backgroundColor: '#4fb7c3', borderRadius: 6, transform: [{ rotate: '45deg'}], bottom: 22, width: 45 , height: 45, alignItems: 'center', justifyContent: 'center', right: 4 }}>
-                            <Icon type={'FontAwesome'} name={'plus'} style={{ fontSize: 20, color: '#fff', transform: [{ rotate: '-45deg'}], textAlign: 'center', width: 30 }} />
-                        </Button>
-
-                        {  this.renderFooterTabs('ads') }
-
-                        {  this.renderFooterTabs('fav') }
-                    </ImageBackground> */}
                     <FooterTab style={{ backgroundColor: 'fff', borderTopWidth:2, borderTopColor:'#eee'  ,width: width , height: 65, flexDirection: 'row', justifyContent: 'space-between' , paddingBottom:10 }}>
                         
                         {  this.renderFooterTabs('home') }

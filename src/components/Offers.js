@@ -10,6 +10,7 @@ import { DoubleBounce } from 'react-native-loader';
 import {NavigationEvents} from "react-navigation";
 
 const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
 
 class Offers extends Component {
     constructor(props) {
@@ -92,6 +93,13 @@ class Offers extends Component {
         this.setState({ status: null })
         this.componentWillMount()
     }
+    returnHeaderMarginTop(){
+        if(isIphoneX)
+            return -45;
+        else if(Platform.OS == 'ios')
+            return -18;
+        else return 0;    
+    }
 
     render() {
 
@@ -103,7 +111,7 @@ class Offers extends Component {
         return (
             <Container>
                 <NavigationEvents onWillFocus={payload => this.onFocus(payload)} />
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0, borderBottomWidth: 0, marginTop: this.returnHeaderMarginTop()}} noShadow>
                     <ImageBackground source={ I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png') } style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -133,17 +141,7 @@ class Offers extends Component {
                     </View>
 
                     <View style={{ alignItems: 'center', paddingHorizontal: 15, width: '100%' }}>
-                        <GestureRecognizer
-                            onSwipe={(direction, state) => this.onSwipe(direction, state)}
-                            onSwipeLeft={(state) => this.onSwipeLeft(state)}
-                            onSwipeRight={(state) => this.onSwipeRight(state)}
-                            config={config}
-                            style={{
-                                flex: 1,
-                                width: '100%'
-                            }}
-                        >
-                            <List style={{ width: '100%' }}>
+                        <List style={{ width: '100%' }}>
                                 {
                                     this.state.showData.map((offer, i) => (
                                         <ListItem key={i} onPress={() => this.props.navigation.navigate('incomingOffers' , {product_id:offer.product_id})} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
@@ -175,7 +173,6 @@ class Offers extends Component {
                                 }
 
                             </List>
-                        </GestureRecognizer>
                     </View>
                 </Content>
             </Container>

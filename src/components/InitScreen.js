@@ -10,12 +10,17 @@ class InitScreen extends Component {
     }
 
     async componentWillMount() {
-        if (this.props.lang == null)
+        AsyncStorage.getItem('intro').then(intro => {
+            if (this.props.lang == null)
             this.props.navigation.navigate('language')
-        else if (this.props.auth == null || this.props.user == null)
-            this.props.navigation.navigate('login')
-        else
-            this.props.navigation.navigate('DrawerNavigator')
+            else if (intro == null){
+                this.props.navigation.navigate('intro')    
+            }    
+            else if (this.props.auth == null || this.props.user == null)
+                this.props.navigation.navigate('login')
+            else
+                this.props.navigation.navigate('DrawerNavigator')
+        })
     }
 
     render() {

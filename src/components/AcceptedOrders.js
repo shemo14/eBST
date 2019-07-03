@@ -9,6 +9,8 @@ import {connect} from "react-redux";
 import { DoubleBounce } from 'react-native-loader';
 
 const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
+
 class AcceptedOrders extends Component {
     constructor(props) {
         super(props);
@@ -84,6 +86,13 @@ class AcceptedOrders extends Component {
             this.componentWillMount()
         })
     }
+    returnHeaderMarginTop(){
+        if(isIphoneX)
+            return -45;
+        else if(Platform.OS == 'ios')
+            return -18;
+        else return 0;    
+    }
 
 
     render() {
@@ -95,7 +104,7 @@ class AcceptedOrders extends Component {
 
         return (
             <Container>
-                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 , borderBottomWidth: 0, marginTop: Platform.OS === 'ios' ? -18 : 0 }} noShadow>
+                <Header style={{ height: 170, backgroundColor: 'transparent', paddingLeft: 0, paddingRight: 0 , borderBottomWidth: 0, marginTop: this.returnHeaderMarginTop() }} noShadow>
                     <ImageBackground source={I18nManager.isRTL? require('../../assets/images/header.png') :require('../../assets/images/header2.png')} style={{ width: '100%', flexDirection: 'row' }} resizeMode={'stretch'}>
                         <Right style={{ flex: 0, alignSelf: 'flex-start', top: 30 }}>
                             <Button transparent onPress={() => this.props.navigation.openDrawer()}>
@@ -125,16 +134,7 @@ class AcceptedOrders extends Component {
                     </View>
 
                     <View style={{ alignItems: 'center', paddingHorizontal: 15, width: '100%' }}>
-                        <GestureRecognizer
-                            onSwipe={(direction, state) => this.onSwipe(direction, state)}
-                            onSwipeLeft={(state) => this.onSwipeLeft(state)}
-                            onSwipeRight={(state) => this.onSwipeRight(state)}
-                            config={config}
-                            style={{
-                                flex: 1,
-                                width: '100%'
-                            }}
-                        >
+                        
                             <List style={{ width: '100%' }}>
                                 {
                                     this.state.showData.map((offer, i) => (
@@ -167,7 +167,7 @@ class AcceptedOrders extends Component {
                                 }
 
                             </List>
-                        </GestureRecognizer>
+                    
                     </View>
                 </Content>
             </Container>

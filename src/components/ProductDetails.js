@@ -14,7 +14,8 @@ import { NavigationEvents } from 'react-navigation';
 
 
 const height = Dimensions.get('window').height;
-const width = Dimensions.get('window').width;
+const width  = Dimensions.get('window').width;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
 
 class ProductDetails extends Component {
     constructor(props) {
@@ -129,7 +130,7 @@ class ProductDetails extends Component {
     renderLoader(){
         if (this.state.status === null){
             return(
-                <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*45)/100 }}>
+                <View style={{ alignItems: 'center', height: height + 50, position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*45)/100 }}>
                     <DoubleBounce size={20} color="#26b5c4" />
                 </View>
             );
@@ -275,7 +276,7 @@ class ProductDetails extends Component {
                     </View>
                 </Header>
                 { this.renderLoader() }
-                <Content style={{zIndex: -99, marginTop: -60}}>
+                <Content style={{zIndex: -99, marginTop: isIphoneX ? -85 : -60}}>
                     <View>
                         <Swiper key={this.state.images.length} dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>
                             {
