@@ -12,8 +12,6 @@ import {connect} from "react-redux";
 import Modal from "react-native-modal";
 import ImageZoom from 'react-native-image-pan-zoom';
 
-
-
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
@@ -90,7 +88,7 @@ class Home extends Component {
                             }
                         </Swiper>
                         <View style={{ top: -110, width: '100%', height: 100 }}>
-                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'cover'}/>
+                            <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'stretch'}/>
                         </View>
                     </View>
                     <View style={{ alignItems: 'center', top: -140, position: 'relative', height: 210, left: 10 }}>
@@ -120,16 +118,16 @@ class Home extends Component {
                             <View style={styles.slide}>
                                 {
                                     this.state.imgUri ?
-                                        ( 
+                                        (
                                             <ImageZoom cropWidth={Dimensions.get('window').width}
                                                     cropHeight={Dimensions.get('window').height}
                                                     imageWidth={Dimensions.get('window').width}
                                                     enableSwipeDown={true}
                                                     onSwipeDown={()=> this.setState({ modal : false, imgUri: null })}
                                                     imageHeight={300}>
-                                                <Image source={{ uri: this.state.imgUri }} style={{ width: '100%', height: 300 }} resizeMode={'contain'} /> 
+                                                <Image source={{ uri: this.state.imgUri }} style={{ width: '100%', height: 300 }} resizeMode={'contain'} />
                                             </ImageZoom>
-                                        
+
                                         ) :
                                         (<View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
                                             <ActivityIndicator size="large" color="#4fb7c3" />

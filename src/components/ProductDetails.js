@@ -1,5 +1,16 @@
 import React, {Component} from "react";
-import {View, Text, StyleSheet, Image, TouchableOpacity, Dimensions, AsyncStorage , I18nManager, Platform} from "react-native";
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	Dimensions,
+	AsyncStorage,
+	I18nManager,
+	Platform,
+	ActivityIndicator
+} from "react-native";
 import {Container, Content, List, ListItem, Header, Left, Right, Body, Textarea, Form, Button, Toast} from 'native-base'
 import Swiper from 'react-native-swiper';
 import StarRating from 'react-native-star-rating';
@@ -10,6 +21,7 @@ import axios from 'axios'
 import CONST from '../consts'
 import {connect} from "react-redux";
 import { NavigationEvents } from 'react-navigation';
+import ImageZoom from 'react-native-image-pan-zoom';
 
 
 
@@ -39,6 +51,8 @@ class ProductDetails extends Component {
             views: 0,
             comeFrom: this.props.navigation.state.params.comeFrom,
             categoryType: this.props.navigation.state.params.type,
+			imgUri: '',
+            modal: false
         };
     }
 
@@ -242,12 +256,12 @@ class ProductDetails extends Component {
     }
 
     onFocus(payload){
-        console.log('will focus',payload)
+        console.log('will focus',payload);
         const id = payload.action.params.id;
         if (payload.action.params.comeFrom)
-            this.setState({ id, status: null, comeFrom: payload.action.params.comeFrom })
+            this.setState({ id, status: null, comeFrom: payload.action.params.comeFrom });
         else
-            this.setState({ id, status: null })
+            this.setState({ id, status: null });
 
         this.componentWillMount()
     }
@@ -277,21 +291,41 @@ class ProductDetails extends Component {
                 </Header>
                 { this.renderLoader() }
                 <Content style={{zIndex: -99, marginTop: isIphoneX ? -85 : -60}}>
-                    <View>
-                        <Swiper key={this.state.images.length} dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>
-                            {
-                                this.state.images.map((img, i) => (
-                                    <View key={i} style={styles.slide}>
-                                        <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }}/>
-                                        <Image source={{ uri: img }} style={{width: '100%', height: 300, position: 'absolute', zIndex: 1}} resizeMode={'contain'}/>
-                                    </View>
-                                ))
-                            }
-                        </Swiper>
-                        <View style={{top: -210, width: '100%', height: 0}}>
-                            <Image source={require('../../assets/images/slider.png')} style={{width: '100%' , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>
-                        </View>
-                    </View>
+                    {/*<View>*/}
+                        {/*<Swiper key={this.state.images.length} dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>*/}
+                            {/*{*/}
+                                {/*this.state.images.map((img, i) => (*/}
+                                    {/*<TouchableOpacity onPress={() => this.setState({ modal: !this.state.modal, imgUri: img })} key={i} style={styles.slide}>*/}
+                                        {/*<View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }}/>*/}
+                                        {/*<Image source={{ uri: img }} style={{width: '100%', height: 300, position: 'absolute', zIndex: 1}} resizeMode={'cover'}/>*/}
+                                    {/*</TouchableOpacity>*/}
+                                {/*))*/}
+                            {/*}*/}
+                        {/*</Swiper>*/}
+                        {/*<View style={{top: -210, width: '100%', height: 0}}>*/}
+                            {/*<Image source={require('../../assets/images/slider.png')} style={{width: '100%' , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>*/}
+                        {/*</View>*/}
+                    {/*</View>*/}
+
+
+					<View>
+						<Swiper key={this.state.images.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{ width: '100%', height: 300, flex: 1 }} showsButtons={false} autoplay={true}>
+							{
+								this.state.images.map((img, i) => (
+									<TouchableOpacity onPress={() => this.setState({ modal: !this.state.modal, imgUri: img })} style={styles.slide} key={i}>
+										<View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
+										<Image source={{ uri: img }} style={{width: '100%', height: 300, position: 'absolute', zIndex: 1}} resizeMode={'cover'}/>
+									</TouchableOpacity>
+								))
+							}
+						</Swiper>
+						<View style={{ top: -110, width: '100%', height: 0 }}>
+							<Image source={require('../../assets/images/slider.png')} style={{ width: '100%', height: 115 , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'stretch'}/>
+						</View>
+					</View>
+
+
+
                     <View style={{padding: 20, marginTop: -80}}>
                         <TouchableOpacity style={{flexDirection: 'row', marginBottom: 15}}>
                             <Image source={require('../../assets/images/gray_store.png')} style={{width: 25, height: 25}} resizeMode={'contain'}/>
@@ -327,8 +361,7 @@ class ProductDetails extends Component {
                                            style={{width: 20, height: 20}} resizeMode={'contain'}/>
                                 </TouchableOpacity>
                                 <TouchableOpacity onPress={() => this.redHeart()}>
-                                    <Image source={this.renderImage()} style={{width: 20, height: 20}}
-                                           resizeMode={'contain'}/>
+                                    <Image source={this.renderImage()} style={{width: 20, height: 20}} resizeMode={'contain'}/>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -428,6 +461,33 @@ class ProductDetails extends Component {
                                 </TouchableOpacity>
                             </View>
                         </Modal>
+
+                        {/* Slider Image */}
+						<Modal isVisible={this.state.modal} onBackdropPress={()=> this.setState({ modal : false, imgUri: null })}>
+							<View style={{ flex: 1 , padding:10 , position:'absolute' , width:'100%' ,overflow:'hidden'}}>
+								<View style={{width:'100%' ,  overflow:'hidden'}}>
+									<View style={styles.slide}>
+										{
+											this.state.imgUri ?
+												(
+													<ImageZoom cropWidth={Dimensions.get('window').width}
+														cropHeight={Dimensions.get('window').height}
+														imageWidth={Dimensions.get('window').width}
+														enableSwipeDown={true}
+														onSwipeDown={()=> this.setState({ modal : false, imgUri: null })}
+														imageHeight={300}>
+														<Image source={{ uri: this.state.imgUri }} style={{ width: '100%', height: 300 }} resizeMode={'contain'} />
+													</ImageZoom>
+
+												) :
+												(<View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+													<ActivityIndicator size="large" color="#4fb7c3" />
+												</View>)
+										}
+									</View>
+								</View>
+							</View>
+						</Modal>
                     </View>
                 </Content>
             </Container>

@@ -5,8 +5,10 @@ import styles from '../../assets/styles'
 import i18n from '../../locale/i18n'
 import {DoubleBounce} from "react-native-loader";
 import axios from 'axios';
-import { connect } from 'react-redux';
-import { Permissions, Notifications } from 'expo'
+import { userLogin, profile } from '../actions'
+import {connect} from "react-redux";
+import { Notifications } from 'expo'
+import * as Permissions from 'expo-permissions';
 import CONST from '../consts'
 
 const height = Dimensions.get('window').height;
@@ -156,7 +158,6 @@ class Register extends Component {
     };
 
     onRegister(){
-        alert(this.state.token)
         const err = this.validate();
         if (!err){
             this.setState({ isSubmitted: true });
@@ -174,7 +175,9 @@ class Register extends Component {
 
                 if (response.data.status == 200){
                     const {phone, password } = this.state;
-                    this.props.navigation.navigate('confirmCode', { phone, password, token: this.state.token, code: response.data.data.code })
+
+					this.setState({ isSubmitted: true });
+					this.props.userLogin({ phone, password, token: this.state.token }, this.props.lang);
                 }
 
                 Toast.show({
@@ -192,6 +195,27 @@ class Register extends Component {
             })
         }
     }
+
+	componentWillReceiveProps(newProps){
+		if (newProps.auth !== null && newProps.auth.status === 200){
+			if (this.state.userId === null){
+				this.setState({ userId: newProps.auth.data.id });
+				this.props.profile(newProps.auth.data.token);
+			}
+
+			this.props.navigation.navigate('drawerNavigation');
+		}
+
+		if (this.props.profile !== null) {
+			Toast.show({
+				text: newProps.auth.msg,
+				type: newProps.auth.status == 200 ? "success" : "danger",
+				duration: 3000
+			});
+		}
+
+		this.setState({ isSubmitted: false });
+	}
 
     renderSubmit(){
         if (this.state.isSubmitted){
@@ -325,10 +349,13 @@ class Register extends Component {
     }
 }
 
-const mapStateToProps = ({ lang }) => {
+const mapStateToProps = ({ auth, profile, lang }) => {
     return {
-        lang: lang.lang,
+		loading: auth.loading,
+		auth: auth.user,
+		user: profile.user,
+		lang: lang.lang
     };
 };
 
-export default connect(mapStateToProps, {})(Register);
+export default connect(mapStateToProps, {userLogin, profile})(Register);

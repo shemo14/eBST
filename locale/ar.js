@@ -115,6 +115,7 @@ const ar = {
     'acceptTerms' : 'الموافقة علي الشروط و الاحكام',
     'myProducts': 'منتجاتي',
     'skip': 'تخطي',
+    'commonQuestions': 'الاسئلة الشائعة',
 }
 
 export default ar;

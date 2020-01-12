@@ -5,7 +5,8 @@ import styles from '../../assets/styles'
 import i18n from '../../locale/i18n'
 import { connect } from 'react-redux';
 import { userLogin, profile } from '../actions'
-import { Permissions, Notifications } from 'expo'
+import { Notifications } from 'expo'
+import * as Permissions from 'expo-permissions';
 import {DoubleBounce} from "react-native-loader";
 import {NavigationEvents} from "react-navigation";
 
@@ -120,7 +121,8 @@ class Login extends Component {
             return;
         }
 
-        token = await Notifications.getExpoPushTokenAsync();
+        const token = await Notifications.getExpoPushTokenAsync();
+        console.log(token);
         this.setState({ token, userId: null })
         AsyncStorage.setItem('deviceID', token);
 

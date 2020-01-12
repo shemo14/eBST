@@ -52,17 +52,17 @@ class ProductBlock extends Component {
     renderPrice(type, typeText){
         if(type == 1)
             return this.props.data.price + ' ' + i18n.t('sr')
-        
-        if(typeText)    
+
+        if(typeText)
             return I18nManager.isRTL ? typeText.substring(0, 6) : typeText.substring(0, 8);
     }
 
-    
+
     render() {
         return (
             <View style={{ alignItems: 'center', justifyContent: 'center', alignSelf: 'center', flex: 1, borderColor: '#c5c5c5', borderWidth: 1, borderRadius: 3, margin: 5, overflow: 'hidden' }}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id, comeFrom: this.props.navigation.state.routeName, type: this.props.type })} style={{ width: '100%' }}>
-                    <Image source={{uri:this.props.data.image}} resizeMode={'contain'} style={{ width: '100%', height: 100, flex: 1 }} />
+                    <Image source={{uri:this.props.data.image}} resizeMode={'cover'} style={{ width: '100%', height: 100, flex: 1 }} />
                 </TouchableOpacity>
                 <View style={{ width: '100%', padding: 5 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('product', { id: this.props.data.id, comeFrom: this.props.navigation.state.routeName, type: this.props.type  })}>

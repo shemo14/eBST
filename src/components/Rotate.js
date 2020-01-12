@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, Text, View, StyleSheet } from 'react-native';
-import { Constants } from 'expo';
+import Constants from 'expo-constants';
+
 
 export default class Rotate extends Component {
   render() {
@@ -21,7 +22,7 @@ export default class Rotate extends Component {
             </View>
 
             <View>
-                <View style={{ width: 207, height: 207, borderWidth: 5, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2, right: -4 }} ></View>                                    
+                <View style={{ width: 207, height: 207, borderWidth: 5, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2, right: -4 }} ></View>
                 <View style={[styles.block, { transform: [{ rotate: '20deg' }] }]}>
                     <Image
                     source={require('../../assets/images/photo.png')}

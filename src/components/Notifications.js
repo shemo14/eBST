@@ -128,7 +128,7 @@ class Notifications extends Component {
                                                         <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize:13 }}>{ notification.time }</Text>
                                                     </View>
                                                     <View style={{width:'100%'}}>
-                                                        <Text style={{ color: '#6d6c72', fontFamily: 'cairo' , fontSize:12 }}>{ notification.body }</Text>
+                                                        <Text style={{ color: '#6d6c72', fontFamily: 'cairo' , fontSize:12, alignSelf: 'flex-start' }}>{ notification.body }</Text>
                                                     </View>
                                                 </View>
                                             </TouchableOpacity>

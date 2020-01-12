@@ -63,7 +63,7 @@ class StoreProducts extends Component {
             axios({
                 url: CONST.url + 'show_store',
                 method: 'POST',
-                headers: {Authorization: this.props.user.token},
+                headers: this.props.user != null ? {Authorization: this.props.user.token} : null,
                 data: {lang: this.props.lang, id: this.state.id, device_id: deviceID}
             }).then(response => {
                 this.setState({

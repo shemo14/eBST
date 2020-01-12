@@ -137,7 +137,7 @@ class CategoryProducts extends Component {
     }
 
     renderNoData(){
-        if (this.state.products.length === 0 && this.state.status != null){
+        if ((this.state.products).length == 0 && this.state.status != null){
             return(
                 <View style={{ width: '100%', flex: 1, alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                     <Image source={require('../../assets/images/no_data.png')} resizeMode={'contain'} style={{ width: 200, height: 200 }}/>
@@ -220,7 +220,7 @@ class CategoryProducts extends Component {
             return -45;
         else if(Platform.OS == 'ios')
             return -18;
-        else return 0;    
+        else return 0;
     }
 
     render() {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Image, View, Text, TouchableOpacity, ImageBackground, AsyncStorage ,I18nManager } from 'react-native';
 import {Container, Content} from 'native-base';
-import { DrawerItems } from 'react-navigation';
+import { DrawerItems } from 'react-navigation-drawer';
 import {connect} from "react-redux";
 import i18n from '../../locale/i18n'
 import { logout, tempAuth } from '../actions'

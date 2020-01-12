@@ -4,7 +4,7 @@ import { Container, Content, Button, Icon, Header, Left, Right, Body, Item, Labe
 import i18n from '../../locale/i18n'
 import {connect} from "react-redux";
 import {CameraBrowser, ImageBrowser} from "expo-multiple-imagepicker";
-import {Permissions} from "expo";
+import * as Permissions from 'expo-permissions';
 import {DoubleBounce} from "react-native-loader";
 import axios from "axios";
 import CONST from "../consts";
@@ -287,7 +287,7 @@ class SetOffer extends Component {
             return -45;
         else if(Platform.OS == 'ios')
             return -18;
-        else return 0;    
+        else return 0;
     }
 
     render() {
@@ -324,7 +324,7 @@ class SetOffer extends Component {
                 <Content>
                     <KeyboardAvoidingView behavior={'padding'} style={{width:'100%', height: null, flex: 1,}}>
                         {
-                            this.state.type ? 
+                            this.state.type ?
                             (
                                 <View style={{ width: '95%', alignItems: 'center', margin: 10, alignSelf: 'center', borderWidth: 1, borderColor: '#6d6c72', padding: 5, borderRadius: 5 }}>
                                     <Text style={{ fontFamily :'cairo' , color:'#6d6c72', textAlign: 'center' }}>{ i18n.t('maxAuction') + ' ' + this.state.maxAuction + ' ' + i18n.t('RS') }</Text>

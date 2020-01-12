@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity , KeyboardAvoidingView, Dimensions , I18nManager, Platform, ImageEditor} from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label, Textarea, Picker, Toast } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
-import { Permissions } from "expo";
+import * as Permissions from 'expo-permissions';
 import i18n from '../../locale/i18n'
 import axios from 'axios'
 import CONST from '../consts'
@@ -308,7 +308,7 @@ class AddProduct extends Component {
             return -45;
         else if(Platform.OS == 'ios')
             return -18;
-        else return 0;    
+        else return 0;
     }
 
     render() {
@@ -421,7 +421,7 @@ class AddProduct extends Component {
                         </View>
                     </KeyboardAvoidingView>
                 </Content>
-               
+
             </Container>
         );
     }

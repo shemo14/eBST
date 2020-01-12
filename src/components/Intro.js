@@ -47,15 +47,14 @@ class Intro extends Component {
                                 style={[{height }]} showsButtons={false} >
                             {
                                 this.state.introImgs.map((intro, i) => (
-                                   
+
                                 <View style={{flex:1 , justifyContent:'center' , alignItems:'center'}} key={i}>
                                     <View style={[{backgroundColor:'#fff' , justifyContent:'center' , alignItems:'center'}]}>
                                         <Image source={require('../../assets/images/blue_bg.png')} style={[{height:290 , width, position:'absolute' , top:0}]} resizeMode={'contain'} />
                                         <Image source={{ uri: intro.image }}  style={[{height:250 , width:250 , top:25}]} resizeMode={'contain'} />
-
                                     </View>
 
-                                    <View style={[{height:200 , overflow:'hidden', paddingHorizontal:30  }]}>
+                                    <View style={[{ overflow:'hidden', paddingHorizontal:30  }]}>
                                         <Text style={{fontFamily:'cairoBold' , color:'#26b5c4', alignSelf:'center' , marginTop:70 , fontSize:25}}>{intro.title}</Text>
                                         <Text style={{fontFamily:'cairo' , color:'#000', alignSelf:'center' , textAlign:'center', marginTop:20}}>{intro.desc}</Text>
                                     </View>
@@ -67,7 +66,7 @@ class Intro extends Component {
                                 </View>
                                 ))
                             }
-                            
+
                         </Swiper>
                     </View>
                 </Content>

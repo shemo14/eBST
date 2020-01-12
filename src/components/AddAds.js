@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, ImageBackground, FlatList, ImageStore, Dimensions, TouchableOpacity , I18nManager, Platform, ImageEditor} from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
-import { Permissions } from "expo";
+import * as Permissions from 'expo-permissions';
 import i18n from '../../locale/i18n'
 import axios from 'axios'
 import CONST from '../consts'
@@ -31,7 +31,7 @@ class AddAds extends Component {
     static navigationOptions = () => ({
         header: null
     });
-    
+
     async componentDidMount(){
         await Permissions.askAsync(Permissions.CAMERA);
 		await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -153,7 +153,7 @@ class AddAds extends Component {
             return -45;
         else if(Platform.OS == 'ios')
             return -18;
-        else return 0;    
+        else return 0;
     }
 
     render() {

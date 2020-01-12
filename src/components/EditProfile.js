@@ -16,8 +16,10 @@ import axios from "axios";
 import CONST from "../consts";
 import {DoubleBounce} from "react-native-loader";
 import {connect} from "react-redux";
-import {ImagePicker, Permissions } from 'expo';
+import * as ImagePicker from 'expo-image-picker';
 import { updateProfile } from '../actions/ProfileAction'
+import * as Permissions from 'expo-permissions';
+import Constants from 'expo-constants';
 
 
 const height = Dimensions.get('window').height;
@@ -49,7 +51,11 @@ class EditProfile extends Component {
         });
     }
 
-    renderLoader(){
+    componentDidMount() {
+		this.getPermissionAsync();
+	}
+
+	renderLoader(){
         if (this.state.status === null){
             return(
                 <View style={{ alignItems: 'center', height , position: 'absolute', backgroundColor: '#fff', zIndex: 999, width: '100%', paddingTop: (height*45)/100 }}>
@@ -117,6 +123,15 @@ class EditProfile extends Component {
         await Permissions.askAsync(Permissions.CAMERA_ROLL);
 
     };
+
+	getPermissionAsync = async () => {
+		if (Constants.platform.ios) {
+			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+			if (status !== 'granted') {
+				alert('Sorry, we need camera roll permissions to make this work!');
+			}
+		}
+	}
 
     _pickImage = async () => {
         this.askPermissionsAsync();

@@ -8,6 +8,8 @@ import CONST from "../consts";
 import {DoubleBounce} from "react-native-loader";
 
 const height = Dimensions.get('window').height;
+const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
+
 class Policy extends Component {
     constructor(props){
         super(props);

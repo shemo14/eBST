@@ -114,6 +114,7 @@ const en = {
     'acceptTerms' : 'Accept Terms And Conditions',
     'bestShow' : 'Best Browsing',
     'skip': 'skip',
+	'commonQuestions': 'Common Questions',
 }
 
 export default en;

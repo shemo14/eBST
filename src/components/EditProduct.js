@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Image, ImageBackground, FlatList, ImageStore, TouchableOpacity, I18nManager , KeyboardAvoidingView, Dimensions, Platform, ImageEditor} from "react-native";
 import { Container, Content, Button, Icon, Header, Left, Right, Body, Form, Item, Input, Label, Textarea, Picker, Toast } from 'native-base'
 import {ImageBrowser,CameraBrowser} from 'expo-multiple-imagepicker';
-import { Permissions } from "expo";
+import * as Permissions from 'expo-permissions';
 import i18n from '../../locale/i18n'
 import axios from 'axios'
 import CONST from '../consts'
@@ -10,7 +10,7 @@ import { DoubleBounce } from 'react-native-loader';
 import {connect} from 'react-redux';
 
 const height = Dimensions.get('window').height;
-const width  = Dimensions.get('window').width; 
+const width  = Dimensions.get('window').width;
 const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
 
 
@@ -331,7 +331,7 @@ class EditProduct extends Component {
             return -45;
         else if(Platform.OS == 'ios')
             return -18;
-        else return 0;    
+        else return 0;
     }
 
     render() {
