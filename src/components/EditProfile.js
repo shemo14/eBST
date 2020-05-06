@@ -172,7 +172,7 @@ class EditProfile extends Component {
     render() {
         return (
             <Container>
-                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 45, height: Platform.OS === 'ios' ? 50 : 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
+                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 30, height: Platform.OS === 'ios' ? 50 : 30, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
                     <Body style={{width: '100%', alignItems: 'center', alignSelf: 'flex-start'}}>
                         <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('editAcc') }</Text>
                     </Body>
@@ -252,7 +252,7 @@ class EditProfile extends Component {
                                 {
                                     this.state.isTrader ? (
                                         <View style={{ borderRadius: 35, borderWidth: 1, borderColor: this.state.descStatus === 1 ? '#26b5c4' : '#c5c5c5', padding: 10, flexDirection: 'row', marginTop: 20  }}>
-                                            <Textarea onChangeText={desc => this.setState({ desc })} value={this.state.desc} onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign:I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('productDesc')} />
+                                            <Textarea onChangeText={desc => this.setState({ desc })} value={this.state.desc} onChangeText={(desc) => this.setState({ desc })} placeholderTextColor={'#acabae'} rowSpan={3} style={{fontFamily: 'cairo', width:'100%' , textAlign:I18nManager.isRTL ? 'right' : 'left', color: '#26b5c4', fontSize: 12}} placeholder={i18n.t('storeDesc')} />
                                         </View>
                                     ) : (<View/>)
                                 }

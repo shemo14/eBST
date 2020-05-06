@@ -6,7 +6,7 @@
     "privacy": "public",
     "sdkVersion": "35.0.0",
     "platforms": ["ios", "android"],
-    "version": "1.2.9",
+    "version": "1.3.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -31,7 +31,7 @@
     },
     "android": {
       "package": "com.app.ebst",
-      "versionCode": 4
+      "versionCode": 6
     }
   }
 }

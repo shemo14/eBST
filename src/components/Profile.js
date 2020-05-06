@@ -128,9 +128,9 @@ class Profile extends Component {
     render() {
         return (
             <Container>
-                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 45, height: Platform.OS === 'ios' ? 50 : 10, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
-                    <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile')} style={{ width: 30, height: 30 }}>
+                <Header style={{ zIndex: 3, marginTop: Platform.OS === 'ios' ? 15 : 30, height: Platform.OS === 'ios' ? 50 : 30, backgroundColor: 'transparent', paddingHorizontal: 10, borderBottomWidth: 0 }} noShadow>
+                    <Right style={{flex: 0, alignSelf: 'flex-start', marginHorizontal: 10, height: 40}}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('editProfile')} style={{ width: 40, height: 40, }}>
                             <Image source={require('../../assets/images/white_edit.png')} style={{width: 25, height: 25, top: 3}} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Right>
@@ -138,7 +138,7 @@ class Profile extends Component {
                         <Text style={{textAlign: 'center', color: '#fff', fontSize: 20, fontFamily: 'cairo'}}>{ i18n.t('profile') }</Text>
                     </Body>
                     <Left style={{flex: 0, alignSelf: 'flex-start', flexDirection: 'row'}}>
-                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.goBack()}>
+                        <TouchableOpacity style={{ width: 30, height: 30 }} onPress={() => this.props.navigation.navigate('home')}>
                             <Image source={require('../../assets/images/back.png')} style={{width: 25, height: 25, transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'}/>
                         </TouchableOpacity>
                     </Left>

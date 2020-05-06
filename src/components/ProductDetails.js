@@ -291,22 +291,6 @@ class ProductDetails extends Component {
                 </Header>
                 { this.renderLoader() }
                 <Content style={{zIndex: -99, marginTop: isIphoneX ? -85 : -60}}>
-                    {/*<View>*/}
-                        {/*<Swiper key={this.state.images.length} dotStyle={{backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{width: '100%', height: 300}} showsButtons={false} autoplay={true}>*/}
-                            {/*{*/}
-                                {/*this.state.images.map((img, i) => (*/}
-                                    {/*<TouchableOpacity onPress={() => this.setState({ modal: !this.state.modal, imgUri: img })} key={i} style={styles.slide}>*/}
-                                        {/*<View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }}/>*/}
-                                        {/*<Image source={{ uri: img }} style={{width: '100%', height: 300, position: 'absolute', zIndex: 1}} resizeMode={'cover'}/>*/}
-                                    {/*</TouchableOpacity>*/}
-                                {/*))*/}
-                            {/*}*/}
-                        {/*</Swiper>*/}
-                        {/*<View style={{top: -210, width: '100%', height: 0}}>*/}
-                            {/*<Image source={require('../../assets/images/slider.png')} style={{width: '100%' , transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}]}} resizeMode={'contain'}/>*/}
-                        {/*</View>*/}
-                    {/*</View>*/}
-
 
 					<View>
 						<Swiper key={this.state.images.length} dotStyle={{ backgroundColor: '#fff', borderRadius: 50, left: 80, bottom: 30 }} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12, left: 80, bottom: 30 }} containerStyle={{ width: '100%', height: 300, flex: 1 }} showsButtons={false} autoplay={true}>

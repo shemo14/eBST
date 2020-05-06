@@ -1,17 +1,17 @@
 import React, { Component } from "react";
 import {
-    View,
-    Text,
-    StyleSheet,
-    Image,
-    TouchableOpacity,
-    TouchableHighlight,
-    ListView,
-    ImageBackground,
-    Animated,
-    Dimensions,
-    I18nManager,
-    Platform, AsyncStorage
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	TouchableOpacity,
+	TouchableHighlight,
+	ListView,
+	ImageBackground,
+	Animated,
+	Dimensions,
+	I18nManager,
+	Platform, AsyncStorage, ActivityIndicator
 } from "react-native";
 import { Container, Content, Header, Left, Right, Body, Button, Icon, Input } from 'native-base'
 import StarRating from 'react-native-star-rating';
@@ -24,6 +24,8 @@ import CONST from "../consts";
 import _ from 'lodash'
 import ProductRow from './ProductRow';
 import {NavigationEvents} from "react-navigation";
+import ImageZoom from 'react-native-image-pan-zoom';
+import Modal from "react-native-modal";
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -51,6 +53,8 @@ class StoreProducts extends Component {
             rate: 0,
             likesIDs: _.uniq(likesIDs),
             search: '',
+			imgUri: '',
+			modal: false
         };
     }
 
@@ -212,10 +216,10 @@ class StoreProducts extends Component {
                 </Header>
                 <Content style={{ zIndex: -1, marginTop: Platform.OS === 'ios' ? -100 : -60 }} onScroll={e => this.setState({ scrollY: e.nativeEvent.contentOffset.y })}>
                     <View style={{ height: 300 }}>
-                        <View style={styles.slide}>
+                        <TouchableOpacity onPress={() => this.setState({ modal: !this.state.modal })} style={styles.slide}>
                             <View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 2 }} />
                             <Image source={{ uri: this.state.image }} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
-                        </View>
+                        </TouchableOpacity>
                         <View style={{ top: -210, width: '100%', height: 0, zIndex: 4 }}>
                             <Image source={require('../../assets/images/slider.png')} style={{ width: '100%', transform: I18nManager.isRTL ? [{rotateY : '0deg'}] : [{rotateY : '-180deg'}] }} resizeMode={'contain'} />
                         </View>
@@ -290,6 +294,33 @@ class StoreProducts extends Component {
                                 ))
                             }
                         </View>
+
+						{/* Slider Image */}
+						<Modal isVisible={this.state.modal} onBackdropPress={()=> this.setState({ modal : false, imgUri: null })}>
+							<View style={{ flex: 1 , padding:10 , position:'absolute' , width:'100%' ,overflow:'hidden'}}>
+								<View style={{width:'100%' ,  overflow:'hidden'}}>
+									<View style={styles.slide}>
+										{
+											this.state.image ?
+												(
+													<ImageZoom cropWidth={Dimensions.get('window').width}
+														cropHeight={Dimensions.get('window').height}
+														imageWidth={Dimensions.get('window').width}
+														enableSwipeDown={true}
+														onSwipeDown={()=> this.setState({ modal : false, imgUri: null })}
+														imageHeight={300}>
+														<Image source={{ uri: this.state.image }} style={{ width: '100%', height: 300 }} resizeMode={'contain'} />
+													</ImageZoom>
+
+												) :
+												(<View style={{ justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+													<ActivityIndicator size="large" color="#4fb7c3" />
+												</View>)
+										}
+									</View>
+								</View>
+							</View>
+						</Modal>
                     </View>
                 </Content>
             </Container>

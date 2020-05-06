@@ -247,6 +247,7 @@ class AddProduct extends Component {
                     category_id: this.state.selectedCategory,
                     images: JSON.stringify(base64)
                 }}).then(response => {
+				this.setState({ isSubmitted: false });
                 if (response.data.status === 200){
                     this.props.navigation.navigate('confirmOrder', { title: i18n.t('addProduct'), msg: i18n.t('confirmAddProduct') });
                 }

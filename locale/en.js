@@ -115,6 +115,7 @@ const en = {
     'bestShow' : 'Best Browsing',
     'skip': 'skip',
 	'commonQuestions': 'Common Questions',
+	'storeDesc': 'Store info',
 }
 
 export default en;

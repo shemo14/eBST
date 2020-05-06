@@ -98,7 +98,7 @@ class Offers extends Component {
             return -45;
         else if(Platform.OS == 'ios')
             return -18;
-        else return 0;    
+        else return 0;
     }
 
     render() {
@@ -147,7 +147,7 @@ class Offers extends Component {
                                         <ListItem key={i} onPress={() => this.props.navigation.navigate('incomingOffers' , {product_id:offer.product_id})} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
                                             <Right style={{ flex: 0 }}>
                                                 <View style={{ top: 30 }}>
-                                                    <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#acabae', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} ></View>
+                                                    <View style={{ width: 75.7, height: 75.7, borderWidth: 3, borderColor: '#acabae', borderRadius: 10, transform: [{ rotate: '20deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.9 }} />
                                                     <View style={[styles.block, { transform: [{ rotate: '20deg' }] }]}>
                                                         <Image source={{uri:offer.product_image}} style={[styles.image, { borderRadius: 10 }]} resizeMode={'contain'} />
                                                     </View>
@@ -160,7 +160,7 @@ class Offers extends Component {
                                                     this.state.type == 1 ? (<Text style={{ color: '#26b5c4', fontFamily: 'cairo'  , alignSelf:'flex-start'}}>{offer.offers_count} {i18n.t('offer')}</Text>) :
                                                      (<Text style={{ color: '#26b5c4', fontFamily: 'cairo' , alignSelf:'flex-start' }}>{offer.offer_type} </Text>)
                                                 }
-                                                
+
                                                 </TouchableOpacity>
                                             </Body>
                                             <Left style={{ position: 'absolute', right: -13, top: -13 }}>

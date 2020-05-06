@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import {View, Text, Image, ImageBackground, TouchableOpacity, I18nManager, Dimensions, Platform} from "react-native";
+import {
+	View,
+	Text,
+	Image,
+	ImageBackground,
+	TouchableOpacity,
+	I18nManager,
+	Dimensions,
+	Platform,
+	StyleSheet
+} from "react-native";
 import { Container, Content, Button, Header, Right, Body, Left, List, ListItem, Icon } from 'native-base';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import i18n from '../../locale/i18n'
@@ -7,6 +17,8 @@ import axios from 'axios'
 import CONST from '../consts'
 import {connect} from "react-redux";
 import { DoubleBounce } from 'react-native-loader';
+import Swiper from "react-native-swiper";
+import Modal from "react-native-modal";
 
 const height = Dimensions.get('window').height;
 const isIphoneX = Platform.OS === 'ios' && height == 812 || height == 896;
@@ -21,6 +33,8 @@ class AcceptedOrders extends Component {
             receiveShow: true,
             type:1,
             status: null,
+            selectedOrder: [],
+			offerOneModal: false,
         }
     }
 
@@ -44,6 +58,10 @@ class AcceptedOrders extends Component {
     onSwipeRight() {
         this.setState({ type:0, receiveShow: false , status:null});
         this.componentWillMount();
+    }
+
+    showOrderDetails(selectedOrder){
+        this.setState({ offerOneModal: !this.state.offerOneModal, selectedOrder })
     }
 
     onSwipe(gestureName, gestureState) {
@@ -91,7 +109,7 @@ class AcceptedOrders extends Component {
             return -45;
         else if(Platform.OS == 'ios')
             return -18;
-        else return 0;    
+        else return 0;
     }
 
 
@@ -134,15 +152,15 @@ class AcceptedOrders extends Component {
                     </View>
 
                     <View style={{ alignItems: 'center', paddingHorizontal: 15, width: '100%' }}>
-                        
+
                             <List style={{ width: '100%' }}>
                                 {
                                     this.state.showData.map((offer, i) => (
                                         <ListItem key={i} onPress={() => console.log('ops')} style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0, height: 80, marginBottom: 15 }}>
-                                        
+
                                             <Body style={{ marginHorizontal: 20 }}>
                                                 {/*onPress={() => this.props.navigation.navigate("exchangeAndPriceOrderDetails")}*/}
-                                                <TouchableOpacity>
+                                                <TouchableOpacity onPress={() => this.showOrderDetails(offer)}>
                                                     <View style={{flexDirection:'row'}}>
                                                         <Text style={{ color: '#acabae', fontFamily: 'cairo', fontSize: 15 }}>{ i18n.t('orderNumber') } : </Text>
                                                         <Text style={{ color: '#26b5c4', fontFamily: 'cairo' }}>{offer.id}</Text>
@@ -165,9 +183,40 @@ class AcceptedOrders extends Component {
                                         </ListItem>
                                     ))
                                 }
-
                             </List>
-                    
+						<Modal isVisible={this.state.offerOneModal} onBackdropPress={()=> this.setState({ offerOneModal : false })}>
+							<View style={{ flex: 1 , backgroundColor:'#fff' , padding:10 , position:'absolute' , width:'100%'}}>
+								<List>
+									<ListItem style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0 ,
+										paddingRight: 7, paddingLeft: 7 , paddingVertical: 0 , marginBottom:17 }}>
+										<Right style={{ flex: 0 , right:5 , alignSelf:'flex-start' , top:-15}}>
+											<View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} />
+											<View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
+												<Image source={{ uri: this.state.selectedOrder.product_image }} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
+											</View>
+										</Right>
+										<Body style={{ marginHorizontal:10, alignSelf:'flex-start' , top:-10}}>
+										<View style={{flexDirection:'row'}}>
+											<Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('exchanger') }: </Text>
+											<Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.selectedOrder.product_name}</Text>
+										</View>
+										<View style={{flexDirection:'row'}}>
+											<Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('offerType') }: </Text>
+											<Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.selectedOrder.offer_type}</Text>
+										</View>
+										<View style={{flexDirection:'row'}}>
+											<Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('offerPrice') }: </Text>
+											<Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.selectedOrder.price ? this.state.selectedOrder.price : 0 }  { i18n.t('RS') }</Text>
+										</View>
+										<View style={{flexDirection:'row'}}>
+											<Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('phoneNumber') }: </Text>
+											<Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.selectedOrder.phone}</Text>
+										</View>
+										</Body>
+									</ListItem>
+								</List>
+							</View>
+						</Modal>
                     </View>
                 </Content>
             </Container>
@@ -176,24 +225,27 @@ class AcceptedOrders extends Component {
 }
 
 
-
-const styles = {
-    block: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 60,
-        width: 70,
-        height: 70,
-        overflow: 'hidden'
-    },
-    image: {
-        width: 100,
-        height: 100,
-        borderWidth: 4,
-        transform: [{ rotate: '-20deg' }, { scale: 1.1 }]
-    },
-};
-
+const styles = StyleSheet.create({
+	slide: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	block: {
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: 50,
+		height: 50,
+		overflow: 'hidden',
+		backgroundColor: '#fff'
+	},
+	image: {
+		width: Platform.OS === 'ios' ? '120%' : '105%',
+		height: Platform.OS === 'ios' ? '120%' : '105%',
+		borderWidth: 4,
+		transform: [{ rotate: '-15deg' }, { scale: 1.1 }]
+	}
+});
 
 
 

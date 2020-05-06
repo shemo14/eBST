@@ -87,14 +87,6 @@ const DrawerNavigator = createDrawerNavigator({
 });
 
 const AppNavigator = createStackNavigator({
-
-		initScreen:{
-			screen: InitScreen,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
 		DrawerNavigator: {
 			screen: DrawerNavigator,
 			navigationOptions: {
@@ -102,55 +94,7 @@ const AppNavigator = createStackNavigator({
 				gesturesEnabled: false
 			}
 		},
-		language:{
-			screen: Language,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
-		login:{
-			screen: Login,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
-		register:{
-			screen: Register,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
-		forgetPassword:{
-			screen: ForgetPassword,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
-		intro:{
-			screen: Intro,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
-		verify:{
-			screen: Verify,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
-		confirmCode:{
-			screen: ConfirmCode,
-			navigationOptions: {
-				header: null,
-				gesturesEnabled: false
-			}
-		},
+
 		setOffer:{
 			screen: SetOffer,
 			navigationOptions: {
@@ -375,5 +319,70 @@ const AppNavigator = createStackNavigator({
 		}
 	});
 
-export default createAppContainer(AppNavigator);
+
+const authNavigation = createStackNavigator({
+	language:{
+		screen: Language,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+	login:{
+		screen: Login,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+	register:{
+		screen: Register,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+	forgetPassword:{
+		screen: ForgetPassword,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+	intro:{
+		screen: Intro,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+	verify:{
+		screen: Verify,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+	confirmCode:{
+		screen: ConfirmCode,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+});
+
+const navigator = createSwitchNavigator({
+	initScreen:{
+		screen: InitScreen,
+		navigationOptions: {
+			header: null,
+			gesturesEnabled: false
+		}
+	},
+	authNavigation,
+	AppNavigator
+});
+
+export default createAppContainer(navigator);
 

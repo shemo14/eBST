@@ -26,15 +26,16 @@ class IncomingOffers extends Component {
             productDet:[],
             offers:[],
             offerDet:[],
-            status:null
+            status:null,
+            exchange: [],
+            offerImages: []
         };
     }
 
     offerOneModal = (offer_id) => {
-        // console.log("offer_id" , offer_id);
         this.setState({ offerOneModal: !this.state.offerOneModal });
         axios({ method: 'POST', url: CONST.url + 'offer_details', headers: {Authorization: this.props.user.token }, data: {offer_id, lang: this.props.lang}}).then(response => {
-            this.setState({offerDet:response.data.data , status:response.data.status })
+            this.setState({offerDet:response.data.data , status:response.data.status, exchange: response.data.data.exchange, offerImages: response.data.data.images })
         })
     }
     offerTwoModal = () => this.setState({ offerTwoModal: !this.state.offerTwoModal });
@@ -137,7 +138,7 @@ class IncomingOffers extends Component {
                         <Text style={{color:'#6d6c72', fontFamily:'cairo', fontSize:14 , marginBottom:0 , alignSelf:'flex-start' }}>{this.state.productDet.name}</Text>
                         <Text style={{color:'#26b5c4' ,  fontFamily:'cairo', fontSize:14, marginBottom:5 , alignSelf:'flex-start', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{ i18n.t('productPrice') } : {this.state.productDet.price}  { i18n.t('RS') }</Text>
                         <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:14 ,lineHeight:20 , alignSelf: 'flex-start', writingDirection: I18nManager.isRTL ? 'rtl' : 'ltr' }}>{this.state.productDet.desc}</Text>
-                    
+
                         <View style={{marginTop:10}}>
                             <List style={{ width: '100%' }}>
                             {
@@ -178,7 +179,7 @@ class IncomingOffers extends Component {
                                     <ListItem style={{ borderRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0 ,
                                         paddingRight: 7, paddingLeft: 7 , paddingVertical: 0 , marginBottom:17 }}>
                                         <Right style={{ flex: 0 , right:5 , alignSelf:'flex-start' , top:-15}}>
-                                            <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} ></View>
+                                            <View style={{ width: 55.6, height: 56.2, borderWidth: 3, borderColor: '#fff', borderRadius: 10, transform: [{ rotate: '15deg' }], position: 'absolute', zIndex: 99999, top: -2.9, right: -2.6 }} />
                                             <View style={[styles.block, { transform: [{ rotate: '15deg' }] }]}>
                                                 <Image source={{ uri: this.state.offerDet.avatar }} style={[styles.image, { borderRadius: 10 }]} resizeMode={'stretch'} />
                                             </View>
@@ -194,7 +195,7 @@ class IncomingOffers extends Component {
                                             </View>
                                             <View style={{flexDirection:'row'}}>
                                                 <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('offerPrice') }: </Text>
-                                                <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.price} رس</Text>
+                                                <Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{this.state.offerDet.price}  { i18n.t('RS') }</Text>
                                             </View>
                                             <View style={{flexDirection:'row'}}>
                                                 <Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ i18n.t('phoneNumber') }: </Text>
@@ -202,13 +203,45 @@ class IncomingOffers extends Component {
                                             </View>
                                         </Body>
                                     </ListItem>
+
+                                    {
+										this.state.exchange && this.state.exchange.length != [] ?
+                                            <View>
+												<ListItem style={{ borderTopRightRadius: 5,borderTopLeftRadius: 5 , borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0 ,
+													paddingRight: 0, paddingLeft: 0 , paddingTop: 0 , paddingBottom:0 , overflow:'hidden' , borderBottomWidth:0 }}>
+													<View style={{width:'100%'}}>
+														<Swiper dotStyle={{ backgroundColor: '#fff', borderRadius: 50 , bottom:-15}} activeDotStyle={{ borderRadius: 50, borderWidth: 2, borderColor: '#4db7c8', backgroundColor: '#fff', width: 12, height: 12 , bottom:-15}} style={{ width: '100%', height: 180 }} showsButtons={false} autoplay={true}>
+															{
+																this.state.offerImages.map((img, i) => (
+																	<View key={i} style={styles.slide}>
+																		<View style={{ backgroundColor: '#000', opacity: 0.2, width: '100%', height: 300, position: 'absolute', zIndex: 999 }} />
+																		<Image source={{ uri: img }} style={{ width: '100%', height: 300, position: 'absolute', zIndex: 1 }} resizeMode={'cover'} />
+																	</View>
+																))
+															}
+														</Swiper>
+													</View>
+												</ListItem>
+												<ListItem style={{ flexDirection:'column' ,  borderBottomRightRadius: 5,borderBottomLeftRadius: 5, borderWidth: 1, borderColor: '#acabae', width: '100%', marginLeft: 0 ,
+													paddingRight: 7, paddingLeft: 7 , paddingTop: 5 , paddingBottom:5 , marginBottom:10 , overflow:'hidden' , borderTopWidth:0 }}>
+													<View style={{flexDirection:'row' , justifyContent:'space-between' , width:'100%' , marginBottom:5}}>
+														<Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12}}>{ this.state.exchange.name }</Text>
+														<Text style={{color:'#26b5c4', fontFamily:'cairo', fontSize:12}}>{ this.state.exchange.extra_price == null ? 0 : this.state.exchange.extra_price } { i18n.t('RS') }</Text>
+													</View>
+													<View style={{ width:'100%'}}>
+														<Text style={{color:'#acabae', fontFamily:'cairo', fontSize:12 ,lineHeight:18 }}>{ this.state.exchange.desc }</Text>
+													</View>
+												</ListItem>
+                                            </View> : <View />
+                                    }
+
                                 </List>
                                 <View style={{flexDirection:'row' , marginTop: 20 , justifyContent:'center' }}>
                                     <View style={{marginHorizontal:7}}>
                                         <Button onPress={() => this.offerActiond(2)} style={{  borderColor:'#26b5c4' , borderWidth:1 ,borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
-                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
+                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}/>
                                             <Text style={{color:'#fff' , fontSize:14, fontFamily: 'cairo',}}>{ i18n.t('accept') }</Text>
-                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
+                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}/>
                                         </Button>
                                     </View>
                                     <View style={{marginHorizontal:7}}>
@@ -283,9 +316,9 @@ class IncomingOffers extends Component {
                                 <View style={{flexDirection:'row' , marginTop:5, marginBottom:5, justifyContent:'center' }}>
                                     <View style={{marginHorizontal:7}}>
                                         <Button onPress={() => this.acceptOrderTwo()} style={{  borderColor:'#26b5c4' , borderWidth:1 ,borderRadius: 25, width: 130, height: 45,  alignItems: 'center', justifyContent: 'center', alignSelf: 'center' , backgroundColor:'#26b5c4' }}>
-                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}}></View>
+                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:-14 , left:-14}} />
                                             <Text style={{color:'#fff' , fontSize:14, fontFamily: 'cairo',}}>قبول</Text>
-                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}}></View>
+                                            <View style={{backgroundColor:'#fff' , height:1 , width:30 , top:14 , right:-14}} />
                                         </Button>
                                     </View>
                                     <View style={{marginHorizontal:7}}>

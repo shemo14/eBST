@@ -107,7 +107,7 @@ const ar = {
     'adsPrice' : 'سعر الاعلان',
     'confirmSetOffer': 'تم ارسال العرض بنجاح',
     'offerType' : 'نوع العرض',
-    'offerPrice' : 'عرش السعر',
+    'offerPrice' : 'عرض السعر',
     'RS' : 'رس',
     'accept' : 'قبول',
     'refuse' : 'رفض',
@@ -116,6 +116,7 @@ const ar = {
     'myProducts': 'منتجاتي',
     'skip': 'تخطي',
     'commonQuestions': 'الاسئلة الشائعة',
+    'storeDesc': 'وصف المتجر',
 }
 
 export default ar;
